@@ -483,8 +483,23 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
                 px = _snap(cx + 130)
             result.placements[name] = Placement(x=px, y=py)
 
+    # Place input passives in a compact group
+    if input_passives:
+        # Find the leftmost placed component
+        min_x = min((p.x for p in result.placements.values()), default=300)
+        ip_x = _snap(min_x - 150)
+        ip_y = MID_Y
+        # Group into series chains for vertical stacking
+        chains = _find_resistor_chains(circuit, input_passives)
+        for chain in chains:
+            for name in chain:
+                result.placements[name] = Placement(x=_snap(ip_x), y=_snap(ip_y))
+                ip_y += 100
+            ip_x -= 150
+            ip_y = MID_Y
+
     # Place remaining passives near connections
-    for name in input_passives + other_passives:
+    for name in other_passives:
         if name in result.placements:
             continue
         pos = _find_centroid_of_neighbors(circuit, name, result)
@@ -558,6 +573,42 @@ def _place_block(result: PlacedCircuit, block: BuildingBlock, center_x: float, y
         result.placements[c2] = Placement(x=_snap(center_x + half_w), y=_snap(y), flip=int(flip_second))
         block.center_x = center_x
         block.center_y = y
+
+
+def _find_resistor_chains(circuit: Circuit, passive_names: list) -> list[list[str]]:
+    """Group passives into series chains (pin2 of one = pin1 of another)."""
+    name_set = set(passive_names)
+    # Build graph: net -> list of passives connected to it
+    net_to_passives = defaultdict(list)
+    for name in passive_names:
+        comp = circuit.components[name]
+        for pin in ["pin1", "pin2"]:
+            net = comp.pins.get(pin, "")
+            if net and _classify_net(circuit, net) not in ("supply", "ground"):
+                net_to_passives[net].append((name, pin))
+
+    # Find chains by following connections
+    visited = set()
+    chains = []
+    for name in passive_names:
+        if name in visited:
+            continue
+        chain = [name]
+        visited.add(name)
+        # BFS to find connected passives
+        queue = [name]
+        while queue:
+            current = queue.pop(0)
+            comp = circuit.components[current]
+            for pin in ["pin1", "pin2"]:
+                net = comp.pins.get(pin, "")
+                for other_name, other_pin in net_to_passives.get(net, []):
+                    if other_name not in visited and other_name in name_set:
+                        visited.add(other_name)
+                        chain.append(other_name)
+                        queue.append(other_name)
+        chains.append(chain)
+    return chains
 
 
 def _has_placed_neighbors(circuit: Circuit, comp_name: str, pin_name: str, placed: PlacedCircuit) -> bool:
