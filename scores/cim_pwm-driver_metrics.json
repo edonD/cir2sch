@@ -1,7 +1,7 @@
 {
   "name": "cim_pwm-driver",
   "components": 44,
-  "wires": 14,
+  "wires": 12,
   "labels": 0,
   "wire_crossings_estimate": 0,
   "bounding_box_area": 132000.0,

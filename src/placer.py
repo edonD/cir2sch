@@ -879,8 +879,8 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
             result.placements[name] = Placement(x=_snap(ox), y=_snap(oy))
             oy += V_SPACING
 
-    # === Stage 7: Resolve overlaps ===
-    _resolve_overlaps(result)
+    # === Stage 7: Resolve overlaps (only for non-block components) ===
+    _resolve_overlaps(result, frozen=block_comps | context_placed)
 
     return result
 
@@ -1008,29 +1008,50 @@ def _find_centroid_of_neighbors(circuit: Circuit, comp_name: str, placed: Placed
     return None
 
 
-def _resolve_overlaps(placed: PlacedCircuit):
+def _resolve_overlaps(placed: PlacedCircuit, frozen: set = None):
+    """Resolve component overlaps. Frozen components are not moved."""
+    if frozen is None:
+        frozen = set()
     names = list(placed.placements.keys())
     n = len(names)
     min_dx = 120
     min_dy = 70
-    # Fewer iterations for larger circuits to prevent cascading
     max_iters = 20 if n > 30 else 40
 
     for _ in range(max_iters):
         moved = False
         for i in range(len(names)):
             for j in range(i + 1, len(names)):
+                # Skip if both are frozen
+                if names[i] in frozen and names[j] in frozen:
+                    continue
                 p1, p2 = placed.placements[names[i]], placed.placements[names[j]]
                 dx = abs(p2.x - p1.x)
                 dy = abs(p2.y - p1.y)
                 if dx < min_dx and dy < min_dy:
                     push = (min_dx - dx) / 2 + 10
-                    if p2.x >= p1.x:
-                        p1.x = _snap(p1.x - push)
-                        p2.x = _snap(p2.x + push)
+                    i_frozen = names[i] in frozen
+                    j_frozen = names[j] in frozen
+                    if i_frozen and not j_frozen:
+                        # Only push j
+                        if p2.x >= p1.x:
+                            p2.x = _snap(p2.x + push * 2)
+                        else:
+                            p2.x = _snap(p2.x - push * 2)
+                    elif j_frozen and not i_frozen:
+                        # Only push i
+                        if p1.x >= p2.x:
+                            p1.x = _snap(p1.x + push * 2)
+                        else:
+                            p1.x = _snap(p1.x - push * 2)
                     else:
-                        p1.x = _snap(p1.x + push)
-                        p2.x = _snap(p2.x - push)
+                        # Push both
+                        if p2.x >= p1.x:
+                            p1.x = _snap(p1.x - push)
+                            p2.x = _snap(p2.x + push)
+                        else:
+                            p1.x = _snap(p1.x + push)
+                            p2.x = _snap(p2.x - push)
                     moved = True
         if not moved:
             break
