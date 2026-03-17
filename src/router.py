@@ -165,8 +165,8 @@ def route_nets(placed: PlacedCircuit) -> tuple[list[Wire], list[Label]]:
         ys = [y for x, y in positions]
         span = (max(xs) - min(xs)) + (max(ys) - min(ys))
 
-        # For nets with 5+ connections or large span, use labels
-        if len(conns) > 4 or span > LABEL_DISTANCE:
+        # For nets with 4+ connections or large span, use labels
+        if len(conns) > 3 or span > LABEL_DISTANCE:
             for (x, y) in positions:
                 labels.append(Label(x=x, y=y, net=net_name))
             continue
