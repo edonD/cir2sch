@@ -785,16 +785,29 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
             max_x = max((p.x for p in result.placements.values()), default=cur_x)
             result.placements[name] = Placement(x=_snap(max_x + H_SPACING), y=_snap(PMOS_Y))
 
-    # Place inline passives between their connected components
+    # Place inline passives between their two pin connections
     for name in inline_passives:
-        pos = _find_centroid_of_neighbors(circuit, name, result)
-        if pos:
-            cx, cy = pos
-            px = _snap(cx)
-            py = _snap(cy)
-            if _is_occupied(result, px, py, 100):
-                px = _snap(cx + 130)
-            result.placements[name] = Placement(x=px, y=py)
+        comp = circuit.components[name]
+        pos1 = _find_pin_centroid(circuit, name, "pin1", result)
+        pos2 = _find_pin_centroid(circuit, name, "pin2", result)
+        if pos1 and pos2:
+            # Place at midpoint between the two pin connections
+            cx = (pos1[0] + pos2[0]) / 2
+            cy = (pos1[1] + pos2[1]) / 2
+        elif pos1 or pos2:
+            pos = pos1 or pos2
+            cx, cy = pos[0] + 100, pos[1]
+        else:
+            pos = _find_centroid_of_neighbors(circuit, name, result)
+            if pos:
+                cx, cy = pos
+            else:
+                continue
+        px = _snap(cx)
+        py = _snap(cy)
+        if _is_occupied(result, px, py, 100):
+            px = _snap(cx + 130)
+        result.placements[name] = Placement(x=px, y=py)
 
     # Place input passives in a compact group
     if input_passives:
