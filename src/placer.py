@@ -850,7 +850,7 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
         src_y_start = max(all_y) + 150
         src_x_start = min(all_x)
         # Use enough columns to fit in 2 rows max
-        src_cols = max(4, (len(sources) + 1) // 2)
+        src_cols = len(sources)  # All in one row
         for i, name in enumerate(sources):
             if name not in result.placements:
                 row = i // src_cols
