@@ -662,8 +662,10 @@ def _find_centroid_of_neighbors(circuit: Circuit, comp_name: str, placed: Placed
 
 def _resolve_overlaps(placed: PlacedCircuit):
     names = list(placed.placements.keys())
-    min_dx = 150
-    min_dy = 90
+    # Tighter spacing for small circuits
+    n = len(names)
+    min_dx = 130 if n <= 20 else 150
+    min_dy = 70 if n <= 20 else 90
 
     for _ in range(40):
         moved = False

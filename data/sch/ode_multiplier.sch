@@ -28,11 +28,11 @@ C {sky130_fd_pr/nfet_01v8.sym} 1500 -150 0 0 {name=Xtail
 spiceprefix=X}
 C {sky130_fd_pr/nfet_01v8.sym} 300 -150 0 0 {name=Xbot1
 spiceprefix=X}
-C {sky130_fd_pr/nfet_01v8.sym} 860 -150 0 0 {name=Xbot2
+C {sky130_fd_pr/nfet_01v8.sym} 880 -150 0 0 {name=Xbot2
 spiceprefix=X}
 C {devices/res.sym} 1030 -150 0 0 {name=Rdeg1
 value={rdegen_val}}
-C {devices/res.sym} 1180 -150 0 0 {name=Rdeg2
+C {devices/res.sym} 1160 -150 0 0 {name=Rdeg2
 value={rdegen_val}}
 C {sky130_fd_pr/nfet_01v8.sym} 170 -400 0 0 {name=Xtop1
 spiceprefix=X}
@@ -50,18 +50,18 @@ N 20 350 20 -10 {lab=yp_int}
 N 20 -10 20 -150 {lab=yp_int}
 N 20 -150 280 -150 {lab=yp_int}
 N 1500 -180 1500 -120 {lab=tail_node}
-N 1500 -120 1180 -120 {lab=tail_node}
-N 1180 -120 1030 -120 {lab=tail_node}
+N 1500 -120 1160 -120 {lab=tail_node}
+N 1160 -120 1030 -120 {lab=tail_node}
 N 300 -180 300 -370 {lab=mid1}
 N 300 -370 170 -370 {lab=mid1}
 N 170 -370 430 -370 {lab=mid1}
 N 300 -120 300 -180 {lab=src_b1}
 N 300 -180 1030 -180 {lab=src_b1}
-N 860 -180 860 -370 {lab=mid2}
-N 860 -370 770 -370 {lab=mid2}
+N 880 -180 880 -370 {lab=mid2}
+N 880 -370 770 -370 {lab=mid2}
 N 770 -370 1030 -370 {lab=mid2}
-N 860 -120 860 -180 {lab=src_b2}
-N 860 -180 1180 -180 {lab=src_b2}
+N 880 -120 880 -180 {lab=src_b2}
+N 880 -180 1160 -180 {lab=src_b2}
 N 170 -430 170 -520 {lab=outn}
 N 170 -520 270 -520 {lab=outn}
 N 270 -520 270 -430 {lab=outn}
@@ -88,12 +88,12 @@ C {devices/lab_pin.sym} 20 290 0 0 {name=l_yp sig_type=std_logic lab=yp}
 C {devices/lab_pin.sym} 20 390 0 0 {name=l_yn sig_type=std_logic lab=yn}
 C {devices/lab_pin.sym} 20 450 0 0 {name=l_yn_int sig_type=std_logic lab=yn_int}
 C {devices/lab_pin.sym} 20 90 0 0 {name=l_yn_int sig_type=std_logic lab=yn_int}
-C {devices/lab_pin.sym} 840 -150 0 0 {name=l_yn_int sig_type=std_logic lab=yn_int}
+C {devices/lab_pin.sym} 860 -150 0 0 {name=l_yn_int sig_type=std_logic lab=yn_int}
 C {devices/lab_pin.sym} 1480 -150 0 0 {name=l_vbias_n sig_type=std_logic lab=vbias_n}
 C {devices/gnd.sym} 1500 -120 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 1520 -150 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 320 -150 0 0 {name=l_vss lab=VSS}
-C {devices/gnd.sym} 880 -150 0 0 {name=l_vss lab=VSS}
+C {devices/gnd.sym} 900 -150 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 190 -400 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 410 -400 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 790 -400 0 0 {name=l_vss lab=VSS}
