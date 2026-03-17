@@ -984,8 +984,10 @@ def _resolve_overlaps(placed: PlacedCircuit):
     n = len(names)
     min_dx = 120
     min_dy = 70
+    # Fewer iterations for larger circuits to prevent cascading
+    max_iters = 20 if n > 30 else 40
 
-    for _ in range(40):
+    for _ in range(max_iters):
         moved = False
         for i in range(len(names)):
             for j in range(i + 1, len(names)):
