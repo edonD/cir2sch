@@ -16,78 +16,81 @@ w=8u
 l=0.15u
 model=sky130_fd_pr__pfet_01v8
 spiceprefix=X}
-C {devices/capa.sym} 810 -310 0 0 {name=XCp
+C {devices/capa.sym} 600 -310 0 0 {name=XCp
 W=50u
 L=50u}
-C {devices/nmos4.sym} 720 -220 0 0 {name=XSWp_n
+C {devices/nmos4.sym} 500 -220 0 0 {name=XSWp_n
 w=55u
 l=0.15u
 model=sky130_fd_pr__nfet_01v8_lvt
 spiceprefix=X}
-C {devices/pmos4.sym} 720 -400 0 0 {name=XSWp_p
+C {devices/pmos4.sym} 500 -400 0 0 {name=XSWp_p
 w=99u
 l=0.15u
 model=sky130_fd_pr__pfet_01v8
 spiceprefix=X}
-C {devices/capa.sym} 1070 -310 0 0 {name=XCn
+C {devices/capa.sym} 860 -310 0 0 {name=XCn
 W=50u
 L=50u}
-C {devices/nmos4.sym} 1220 -220 0 0 {name=XSWn_n
+C {devices/nmos4.sym} 780 -220 0 0 {name=XSWn_n
 w=55u
 l=0.15u
 model=sky130_fd_pr__nfet_01v8_lvt
 spiceprefix=X}
-C {devices/pmos4.sym} 1220 -400 0 0 {name=XSWn_p
+C {devices/pmos4.sym} 780 -400 0 0 {name=XSWn_p
 w=99u
 l=0.15u
 model=sky130_fd_pr__pfet_01v8
 spiceprefix=X}
-C {devices/res.sym} 950 -310 0 0 {name=Rinp
+C {devices/res.sym} 720 -310 0 0 {name=Rinp
 value=0.1}
-C {devices/res.sym} 1290 -310 0 0 {name=Rinn
+C {devices/res.sym} 980 -310 0 0 {name=Rinn
 value=0.1}
-N 240 -250 240 -430 {lab=reset_b}
-N 200 -220 200 -400 {lab=reset}
-N 810 -340 810 -250 {lab=outp}
-N 810 -250 740 -250 {lab=outp}
-N 810 -340 810 -430 {lab=outp}
-N 810 -430 740 -430 {lab=outp}
-N 810 -340 810 -280 {lab=outp}
-N 810 -280 950 -280 {lab=outp}
-N 810 -280 810 -190 {lab=vcm}
-N 810 -190 740 -190 {lab=vcm}
-N 810 -280 810 -370 {lab=vcm}
-N 810 -370 740 -370 {lab=vcm}
-N 810 -280 1070 -280 {lab=vcm}
-N 1070 -280 1070 -190 {lab=vcm}
-N 1070 -190 1240 -190 {lab=vcm}
-N 1240 -190 1240 -370 {lab=vcm}
-N 1070 -340 1070 -250 {lab=outn}
-N 1070 -250 1240 -250 {lab=outn}
-N 1240 -250 1240 -280 {lab=outn}
-N 1240 -280 1290 -280 {lab=outn}
-N 1240 -250 1240 -430 {lab=outn}
+N 600 -340 600 -250 {lab=outp}
+N 600 -250 520 -250 {lab=outp}
+N 600 -340 600 -430 {lab=outp}
+N 600 -430 520 -430 {lab=outp}
+N 600 -340 600 -280 {lab=outp}
+N 600 -280 720 -280 {lab=outp}
+N 600 -280 600 -190 {lab=vcm}
+N 600 -190 520 -190 {lab=vcm}
+N 600 -280 600 -370 {lab=vcm}
+N 600 -370 520 -370 {lab=vcm}
+N 600 -280 860 -280 {lab=vcm}
+N 860 -280 860 -190 {lab=vcm}
+N 860 -190 800 -190 {lab=vcm}
+N 860 -280 860 -370 {lab=vcm}
+N 860 -370 800 -370 {lab=vcm}
+N 860 -340 860 -250 {lab=outn}
+N 860 -250 800 -250 {lab=outn}
+N 860 -340 860 -430 {lab=outn}
+N 860 -430 800 -430 {lab=outn}
+N 860 -340 860 -280 {lab=outn}
+N 860 -280 980 -280 {lab=outn}
 C {devices/lab_pin.sym} 240 -250 0 0 {name=l_reset_b sig_type=std_logic lab=reset_b}
-C {devices/lab_pin.sym} 700 -400 0 0 {name=l_reset_b sig_type=std_logic lab=reset_b}
-C {devices/lab_pin.sym} 1200 -400 0 0 {name=l_reset_b sig_type=std_logic lab=reset_b}
 C {devices/lab_pin.sym} 200 -220 0 0 {name=l_reset sig_type=std_logic lab=reset}
-C {devices/lab_pin.sym} 700 -220 0 0 {name=l_reset sig_type=std_logic lab=reset}
-C {devices/lab_pin.sym} 1200 -220 0 0 {name=l_reset sig_type=std_logic lab=reset}
 C {devices/gnd.sym} 240 -190 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 240 -220 0 0 {name=l_vss lab=VSS}
-C {devices/gnd.sym} 740 -220 0 0 {name=l_vss lab=VSS}
-C {devices/gnd.sym} 1240 -220 0 0 {name=l_vss lab=VSS}
+C {devices/gnd.sym} 520 -220 0 0 {name=l_vss lab=VSS}
+C {devices/gnd.sym} 800 -220 0 0 {name=l_vss lab=VSS}
 C {devices/vdd.sym} 240 -370 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 240 -400 0 0 {name=l_vdd lab=VDD}
-C {devices/vdd.sym} 740 -400 0 0 {name=l_vdd lab=VDD}
-C {devices/vdd.sym} 1240 -400 0 0 {name=l_vdd lab=VDD}
-C {devices/lab_pin.sym} 810 -280 0 0 {name=l_vcm sig_type=std_logic lab=vcm}
-C {devices/lab_pin.sym} 950 -340 0 0 {name=l_inp sig_type=std_logic lab=inp}
-C {devices/lab_pin.sym} 1290 -340 0 0 {name=l_inn sig_type=std_logic lab=inn}
+C {devices/vdd.sym} 520 -400 0 0 {name=l_vdd lab=VDD}
+C {devices/vdd.sym} 800 -400 0 0 {name=l_vdd lab=VDD}
+C {devices/lab_pin.sym} 600 -280 0 0 {name=l_vcm sig_type=std_logic lab=vcm}
+C {devices/lab_pin.sym} 720 -340 0 0 {name=l_inp sig_type=std_logic lab=inp}
+C {devices/lab_pin.sym} 980 -340 0 0 {name=l_inn sig_type=std_logic lab=inn}
+C {devices/lab_pin.sym} 240 -430 0 0 {name=l_reset_b sig_type=std_logic lab=reset_b}
+C {devices/lab_pin.sym} 240 -400 0 0 {name=l_reset_b sig_type=std_logic lab=reset_b}
+C {devices/lab_pin.sym} 480 -400 0 0 {name=l_reset_b sig_type=std_logic lab=reset_b}
+C {devices/lab_pin.sym} 760 -400 0 0 {name=l_reset_b sig_type=std_logic lab=reset_b}
+C {devices/lab_pin.sym} 200 -400 0 0 {name=l_reset sig_type=std_logic lab=reset}
+C {devices/lab_pin.sym} 480 -220 0 0 {name=l_reset sig_type=std_logic lab=reset}
+C {devices/lab_pin.sym} 760 -220 0 0 {name=l_reset sig_type=std_logic lab=reset}
 C {devices/ipin.sym} 100 -310 0 0 {name=p_inp lab=inp}
 C {devices/ipin.sym} 100 -270 0 0 {name=p_inn lab=inn}
 C {devices/ipin.sym} 100 -220 0 0 {name=p_reset lab=reset}
 C {devices/ipin.sym} 100 -440 0 0 {name=p_vbias_n lab=vbias_n}
 C {devices/ipin.sym} 100 -150 0 0 {name=p_vcm lab=vcm}
-C {devices/opin.sym} 1450 -310 0 0 {name=p_outp lab=outp}
-C {devices/opin.sym} 1450 -270 0 0 {name=p_outn lab=outn}
+C {devices/opin.sym} 1140 -310 0 0 {name=p_outp lab=outp}
+C {devices/opin.sym} 1140 -270 0 0 {name=p_outn lab=outn}

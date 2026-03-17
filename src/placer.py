@@ -555,7 +555,7 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
                             _place_block(result, block, cur_x, PMOS_Y)
                         else:
                             _place_block(result, block, cur_x, NMOS_Y)
-                        cur_x += H_SPACING * 2 + BLOCK_GAP
+                        cur_x += H_SPACING + BLOCK_GAP
                 continue
 
         # For NMOS-only groups with multiple blocks, detect stacking
@@ -570,14 +570,14 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
         px = cur_x
         for block in p_blocks:
             _place_block(result, block, px, PMOS_Y)
-            px += H_SPACING * 2 + BLOCK_GAP
+            px += H_SPACING + BLOCK_GAP
 
         # Place top NMOS blocks above bottom ones (between PMOS and NMOS bands)
         top_y = MID_Y  # Between PMOS and NMOS
         tx = cur_x
         for block in top_n:
             _place_block(result, block, tx, top_y)
-            tx += H_SPACING * 2 + BLOCK_GAP
+            tx += H_SPACING + BLOCK_GAP
 
         # Place bottom NMOS blocks at NMOS_Y
         nx = cur_x
@@ -600,7 +600,7 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
                         result.placements[load_name] = Placement(x=_snap(lx), y=_snap(PMOS_Y))
                         context_placed.add(load_name)
 
-            nx += H_SPACING * 2 + BLOCK_GAP
+            nx += H_SPACING + BLOCK_GAP
 
         cur_x = max(px, tx, nx)
 
