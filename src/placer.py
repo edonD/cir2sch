@@ -1025,8 +1025,14 @@ def _find_resistor_chains(circuit: Circuit, passive_names: list) -> list[list[st
             if net and _classify_net(circuit, net) not in ("supply", "ground"):
                 net_to_passives[net].append((name, pin))
 
-    # Identify hub nets (connected to > 2 passives) — don't follow through these
-    hub_nets = {net for net, conns in net_to_passives.items() if len(conns) > 2}
+    # Identify hub nets — don't follow through these
+    # A hub is a net with > 2 passive connections OR > 4 total connections
+    hub_nets = set()
+    for net, conns in net_to_passives.items():
+        if len(conns) > 2:
+            hub_nets.add(net)
+        elif net in circuit.nets and len(circuit.nets[net].connections) > 4:
+            hub_nets.add(net)
 
     # Find chains by following connections, stopping at hub nets
     visited = set()
