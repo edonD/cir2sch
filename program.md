@@ -90,23 +90,37 @@ The sch and cir files must be 1:1 matched by filename. This is the future traini
 
 # Autonomous Experiment Loop
 
+## Strategy: ONE CIRCUIT AT A TIME
+
+Do NOT iterate across all 7 circuits per round. Instead, pick the worst-scoring circuit and focus on it exclusively until it reaches 8/10 or higher on all criteria. Only then move to the next worst circuit.
+
+**Work order:**
+1. Start with the simplest circuit (e.g., `cim_bitcell` or `cim_pwm-driver`) — get it to 8/10+
+2. Move to the next simplest — carry over what you learned
+3. Work up to the complex ones (`ode_multiplier`, `cim_adc`, `cim_array`) last
+4. After all circuits are at 8/10+, do a final polish pass across all of them
+
+**For each circuit, the inner loop is:**
+
+1. **Run** the pipeline on just that circuit: `python evaluate.py --file <name>`
+2. **Render** it: `bash render.sh <name>`
+3. **Look at the render.** Read the PNG. Honestly judge it.
+4. **Identify ONE specific problem** — e.g., "the diff pair is not symmetric" or "the tail current source overlaps the input label"
+5. **Fix that one problem** in `src/placer.py` or `src/router.py`
+6. **Re-run, re-render, re-evaluate.** Did it get better?
+7. If yes: commit + push. If no: revert.
+8. **Repeat on the same circuit** until it scores 8/10+ on presentation-readiness
+9. Then verify the fix didn't break the other circuits: run all 7 briefly
+10. Move to the next circuit.
+
 **LOOP FOREVER:**
 
-1. **Think.** Look at the current renders. What's the worst schematic? What specific placement or routing issue makes it bad? Pick one thing to fix.
-
-2. **Modify.** Change `src/placer.py`, `src/router.py`, or other pipeline files. Make targeted improvements — don't rewrite everything at once.
-
-3. **Commit.** `git add -A && git commit -m '<what you changed>'`
-
-4. **Run.** `python evaluate.py > run.log 2>&1`
-
-5. **Look at every render.** Open each PNG. Score each schematic honestly. Write scores to `scores/`.
-
-6. **Decide.**
-   - If the aggregate score improved: **keep.** Update README.md with the new scores and renders.
-   - If equal or worse: **revert.** `git reset --hard HEAD~1`. Try something different.
-
-7. **Repeat.**
+1. **Pick the worst circuit.** Run all 7 quickly to find which one needs the most work.
+2. **Focus on it.** Run the inner loop above — iterate 5-20 times on just that one circuit.
+3. **When it hits 8/10+**, commit with a message like "ode_gm-cell: 8.2/10, diff pair symmetric, clean routing"
+4. **Verify no regressions.** Run all 7, check nothing got worse.
+5. **Move to the next worst circuit.**
+6. **Repeat.**
 
 ## Visual Self-Evaluation (CRITICAL)
 
