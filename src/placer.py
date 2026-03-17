@@ -512,9 +512,9 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
                 # Place outward from latch center at the latch NMOS level
                 latch_nmos_level = PMOS_Y + 180
                 direction = -1 if lx < latch_center_x else 1
-                for offset in [direction * 160, direction * 200, direction * 260]:
+                for offset in [direction * 140, direction * 170, direction * 220]:
                     ax = _snap(lx + offset)
-                    if not _is_occupied(result, ax, _snap(latch_nmos_level), 120):
+                    if not _is_occupied(result, ax, _snap(latch_nmos_level), 110):
                         result.placements[name] = Placement(x=ax, y=_snap(latch_nmos_level))
                         access_placed.add(name)
                         context_placed.add(name)
