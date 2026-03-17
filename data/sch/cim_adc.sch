@@ -25,7 +25,7 @@ l={Lcomp_in}u
 nf=2
 model=sky130_fd_pr__nfet_01v8
 spiceprefix=X}
-C {devices/pmos4.sym} 550 -400 0 0 {name=XMr1
+C {devices/pmos4.sym} 540 -400 0 0 {name=XMr1
 w=2u
 l=0.15u
 model=sky130_fd_pr__pfet_01v8
@@ -69,7 +69,7 @@ N 660 0 660 -120 {lab=ntail}
 N 660 -120 730 -120 {lab=ntail}
 N 730 -120 550 -120 {lab=ntail}
 N 550 -180 550 -430 {lab=d1}
-N 550 -430 570 -430 {lab=d1}
+N 550 -430 560 -430 {lab=d1}
 N 550 -180 550 -190 {lab=d1}
 N 550 -190 220 -190 {lab=d1}
 N 180 -400 180 -220 {lab=outn}
@@ -83,7 +83,7 @@ N 220 -400 380 -400 {lab=outp}
 N 380 -400 380 -220 {lab=outp}
 N 380 -220 400 -220 {lab=outp}
 C {devices/lab_pin.sym} 620 30 0 0 {name=l_clk sig_type=std_logic lab=clk}
-C {devices/lab_pin.sym} 530 -400 0 0 {name=l_clk sig_type=std_logic lab=clk}
+C {devices/lab_pin.sym} 520 -400 0 0 {name=l_clk sig_type=std_logic lab=clk}
 C {devices/gnd.sym} 660 60 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 660 30 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 550 -150 0 0 {name=l_vss lab=VSS}
@@ -95,8 +95,8 @@ C {devices/lab_pin.sym} 730 -180 0 0 {name=l_d2 sig_type=std_logic lab=d2}
 C {devices/lab_pin.sym} 730 -430 0 0 {name=l_d2 sig_type=std_logic lab=d2}
 C {devices/lab_pin.sym} 440 -190 0 0 {name=l_d2 sig_type=std_logic lab=d2}
 C {devices/lab_pin.sym} 770 -150 0 0 {name=l_inm sig_type=std_logic lab=inm}
-C {devices/vdd.sym} 570 -370 0 0 {name=l_vdd lab=VDD}
-C {devices/vdd.sym} 570 -400 0 0 {name=l_vdd lab=VDD}
+C {devices/vdd.sym} 560 -370 0 0 {name=l_vdd lab=VDD}
+C {devices/vdd.sym} 560 -400 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 730 -370 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 730 -400 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 1050 -370 0 0 {name=l_vdd lab=VDD}
