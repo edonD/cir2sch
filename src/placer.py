@@ -712,13 +712,16 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
         else:
             other_passives.append(name)
 
-    # Place supply-connected passives near the signal-side component
+    # Place supply-connected passives near the signal-side component centroid
     for name in supply_passives:
         comp = circuit.components[name]
         pin1_type = _classify_net(circuit, comp.pins.get("pin1", ""))
         pin2_type = _classify_net(circuit, comp.pins.get("pin2", ""))
         signal_pin = "pin2" if pin1_type in ("supply", "ground") else "pin1"
-        pos = _find_pin_neighbor_pos(circuit, name, signal_pin, result)
+        # Use centroid of all placed neighbors on the signal pin
+        pos = _find_pin_centroid(circuit, name, signal_pin, result)
+        if not pos:
+            pos = _find_pin_neighbor_pos(circuit, name, signal_pin, result)
         if pos:
             cx, cy = pos
             # Capacitors: place near signal connection, not at supply rail
@@ -893,6 +896,22 @@ def _has_placed_neighbors(circuit: Circuit, comp_name: str, pin_name: str, place
             if cn != comp_name and cn in placed.placements:
                 return True
     return False
+
+
+def _find_pin_centroid(circuit: Circuit, comp_name: str, pin_name: str, placed: PlacedCircuit) -> tuple | None:
+    """Find centroid of all placed components connected to a specific pin."""
+    comp = circuit.components[comp_name]
+    net_name = comp.pins.get(pin_name, "")
+    if net_name in circuit.nets:
+        positions = []
+        for cn, pn in circuit.nets[net_name].connections:
+            if cn != comp_name and cn in placed.placements:
+                p = placed.placements[cn]
+                positions.append((p.x, p.y))
+        if positions:
+            return (sum(x for x, y in positions) / len(positions),
+                    sum(y for x, y in positions) / len(positions))
+    return None
 
 
 def _find_pin_neighbor_pos(circuit: Circuit, comp_name: str, pin_name: str, placed: PlacedCircuit) -> tuple | None:
