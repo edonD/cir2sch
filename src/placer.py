@@ -873,10 +873,23 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
                     cx, cy = pos
                 else:
                     continue
-            # Stack vertically — offset y to avoid overlapping transistors at same level
-            # Try placing to the right at a slight y offset, then further right
+            # Also find non-shared pin positions for y midpoint calculation
+            ext_positions = []
+            for name in chain:
+                for pin in ["pin1", "pin2"]:
+                    net = circuit.components[name].pins.get(pin, "")
+                    if net not in shared:
+                        pos = _find_pin_centroid(circuit, name, pin, result)
+                        if pos:
+                            ext_positions.append(pos)
+
+            # Stack vertically — place between shared and non-shared endpoints
             base_x = _snap(cx + 120)
-            base_y = _snap(cy + 40)  # Slightly below the gate connection
+            if ext_positions:
+                ext_cy = sum(p[1] for p in ext_positions) / len(ext_positions)
+                base_y = _snap((cy + ext_cy) / 2)  # Midpoint between shared and external
+            else:
+                base_y = _snap(cy + 40)
             for i, name in enumerate(chain):
                 px = base_x
                 py = _snap(base_y + i * 80)
