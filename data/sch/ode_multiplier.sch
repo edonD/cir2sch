@@ -86,6 +86,10 @@ N 900 -310 1040 -310 {lab=xn_int}
 N 800 -280 410 -280 {lab=xn_int}
 N 190 -120 190 -150 {lab=yp_int}
 N 190 -150 90 -150 {lab=yp_int}
+N 470 -120 470 -150 {lab=yn_int}
+N 470 -150 350 -150 {lab=yn_int}
+N 470 -120 470 -230 {lab=yn_int}
+N 470 -230 840 -230 {lab=yn_int}
 N 240 0 240 -30 {lab=tail_node}
 N 240 -30 300 -30 {lab=tail_node}
 N 300 -30 300 -50 {lab=tail_node}
@@ -121,11 +125,6 @@ C {devices/gnd.sym} 760 -280 0 0 {name=l_vss lab=VSS}
 C {devices/lab_pin.sym} 190 -310 0 0 {name=l_outn sig_type=std_logic lab=outn}
 C {devices/vdd.sym} 580 -580 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 700 -580 0 0 {name=l_vdd lab=VDD}
-C {devices/lab_pin.sym} 470 -120 0 0 {name=l_yn_int sig_type=std_logic lab=yn_int}
-C {devices/lab_pin.sym} 470 -150 0 0 {name=l_yn_int sig_type=std_logic lab=yn_int}
-C {devices/lab_pin.sym} 350 -150 0 0 {name=l_yn_int sig_type=std_logic lab=yn_int}
-C {devices/lab_pin.sym} 470 -230 0 0 {name=l_yn_int sig_type=std_logic lab=yn_int}
-C {devices/lab_pin.sym} 840 -230 0 0 {name=l_yn_int sig_type=std_logic lab=yn_int}
 C {devices/ipin.sym} -10 30 0 0 {name=p_vbias_n lab=vbias_n}
 C {devices/ipin.sym} -10 -590 0 0 {name=p_vbias_p lab=vbias_p}
 C {devices/ipin.sym} -10 -245 0 0 {name=p_vcm lab=vcm}

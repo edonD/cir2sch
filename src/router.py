@@ -282,7 +282,8 @@ def route_nets(placed: PlacedCircuit) -> tuple[list[Wire], list[Label]]:
                 for w in trial_wires
             )
             # Array circuits: bus wires naturally cross, allow all crossings
-            max_crossings = 999 if is_array_circuit else 1
+            # Non-array: allow a small number of crossings for cleaner routing
+            max_crossings = 999 if is_array_circuit else 2
             if cross_count <= max_crossings:
                 wires.extend(trial_wires)
             else:
@@ -299,19 +300,27 @@ def route_nets(placed: PlacedCircuit) -> tuple[list[Wire], list[Label]]:
 
 
 def _eliminate_crossings(wires: list[Wire], labels: list[Label]) -> tuple[list[Wire], list[Label]]:
-    """Remove wires that create crossings, replacing them with labels."""
-    # Find all crossing pairs
-    crossing_nets = set()
+    """Remove nets that create too many crossings, replacing them with labels.
+
+    Only eliminates nets with > 2 crossings to allow minor crossings for cleaner routing.
+    """
+    from collections import defaultdict
+    # Count crossings per net
+    net_crossings = defaultdict(int)
     for i, w1 in enumerate(wires):
         for w2 in wires[i+1:]:
-            if _segments_cross(w1.x1, w1.y1, w1.x2, w1.y2, w2.x1, w2.y1, w2.x2, w2.y2):
-                # Convert the net with fewer total wires to labels
-                count1 = sum(1 for w in wires if w.net == w1.net)
-                count2 = sum(1 for w in wires if w.net == w2.net)
-                if count1 <= count2:
-                    crossing_nets.add(w1.net)
-                else:
-                    crossing_nets.add(w2.net)
+            if w1.net != w2.net and _segments_cross(w1.x1, w1.y1, w1.x2, w1.y2, w2.x1, w2.y1, w2.x2, w2.y2):
+                net_crossings[w1.net] += 1
+                net_crossings[w2.net] += 1
+
+    # Only eliminate nets with many crossings (> 2)
+    crossing_nets = set()
+    for net, count in net_crossings.items():
+        if count > 2:
+            # Find which net in each crossing pair to remove (the smaller one)
+            wire_count = sum(1 for w in wires if w.net == net)
+            if wire_count <= 3:  # Small nets are more likely label candidates
+                crossing_nets.add(net)
 
     if not crossing_nets:
         return wires, labels

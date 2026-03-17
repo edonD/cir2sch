@@ -75,9 +75,13 @@ N 180 -400 180 -220 {lab=qb}
 N 180 -400 180 -430 {lab=qb}
 N 180 -430 400 -430 {lab=qb}
 N 400 -430 400 -250 {lab=qb}
+N 510 -180 510 240 {lab=blw}
+N 510 240 460 240 {lab=blw}
 N 470 -150 730 -150 {lab=wwl}
 N 730 -150 730 240 {lab=wwl}
 N 730 240 720 240 {lab=wwl}
+N 690 -180 690 240 {lab=blbw}
+N 690 240 590 240 {lab=blbw}
 N 350 50 350 90 {lab=mid_rd}
 N 310 120 310 240 {lab=wl}
 N 310 240 850 240 {lab=wl}
@@ -106,9 +110,3 @@ C {devices/gnd.sym} 350 120 0 0 {name=l_vss lab=VSS}
 C {devices/lab_pin.sym} 690 -120 0 0 {name=l_qb sig_type=std_logic lab=qb}
 C {devices/lab_pin.sym} 350 -10 0 0 {name=l_bl sig_type=std_logic lab=bl}
 C {devices/lab_pin.sym} 980 240 0 0 {name=l_bl sig_type=std_logic lab=bl}
-C {devices/lab_pin.sym} 510 -180 0 0 {name=l_blw sig_type=std_logic lab=blw}
-C {devices/lab_pin.sym} 510 240 0 0 {name=l_blw sig_type=std_logic lab=blw}
-C {devices/lab_pin.sym} 460 240 0 0 {name=l_blw sig_type=std_logic lab=blw}
-C {devices/lab_pin.sym} 690 -180 0 0 {name=l_blbw sig_type=std_logic lab=blbw}
-C {devices/lab_pin.sym} 690 240 0 0 {name=l_blbw sig_type=std_logic lab=blbw}
-C {devices/lab_pin.sym} 590 240 0 0 {name=l_blbw sig_type=std_logic lab=blbw}
