@@ -114,14 +114,21 @@ def render_xschem(placed: PlacedCircuit, wires: list[Wire], labels: list[Label],
     lines.append("S {}")
     lines.append("E {}")
 
+    # Find top-left corner of the placement for title positioning
+    all_y = [p.y for p in placed.placements.values()] if placed.placements else [-700]
+    all_x = [p.x for p in placed.placements.values()] if placed.placements else [50]
+    title_y = min(all_y) - 100
+    title_x = min(all_x) - 50
+
     # Title annotation
     if title or placed.circuit.title:
         t = title or placed.circuit.title
-        lines.append(f'T {{{t}}} 50 -700 0 0 0.6 0.6 {{}}')
+        lines.append(f'T {{{t}}} {title_x} {title_y} 0 0 0.5 0.5 {{}}')
 
-    # Section comment annotations
-    for i, comment in enumerate(placed.circuit.comments):
-        lines.append(f'T {{{comment}}} 50 {-660 + i * 30} 0 0 0.4 0.4 {{}}')
+    # Section comment annotations — limit to 3 most important, skip "===" lines
+    filtered_comments = [c for c in placed.circuit.comments if not c.startswith('=')]
+    for i, comment in enumerate(filtered_comments[:3]):
+        lines.append(f'T {{{comment}}} {title_x} {title_y + 30 + i * 25} 0 0 0.35 0.35 {{}}')
 
     # Component instances
     for comp_name, comp in placed.circuit.components.items():
