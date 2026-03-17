@@ -17,9 +17,9 @@ from dataclasses import dataclass, field
 from parser import Circuit, Component, Net
 
 GRID = 10
-H_SPACING = 260
-V_SPACING = 200
-BLOCK_GAP = 80
+H_SPACING = 220
+V_SPACING = 180
+BLOCK_GAP = 60
 
 # Y bands
 VDD_Y = -550
