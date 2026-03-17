@@ -229,11 +229,25 @@ def route_nets(placed: PlacedCircuit) -> tuple[list[Wire], list[Label]]:
 
         net_type = _classify_net(circuit, net_name)
 
-        # Supply and ground: always use labels
+        # Supply and ground: use labels
         if net_type in ("supply", "ground"):
-            for cn, pn in conns:
-                x, y = _get_pin_position(placed, cn, pn)
-                labels.append(Label(x=x, y=y, net=net_name))
+            if is_array_circuit and len(conns) > 10:
+                # For array circuits, thin out supply labels — keep only non-array-cell labels
+                # plus one label per row at the leftmost array cell
+                seen_rows = set()
+                for cn, pn in conns:
+                    x, y = _get_pin_position(placed, cn, pn)
+                    if _is_array_component(cn):
+                        # Only place one supply label per row (at leftmost column)
+                        row_key = y // 100  # group by approximate row
+                        if row_key in seen_rows:
+                            continue
+                        seen_rows.add(row_key)
+                    labels.append(Label(x=x, y=y, net=net_name))
+            else:
+                for cn, pn in conns:
+                    x, y = _get_pin_position(placed, cn, pn)
+                    labels.append(Label(x=x, y=y, net=net_name))
             continue
 
         # Compute positions

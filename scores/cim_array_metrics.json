@@ -1,9 +1,9 @@
 {
   "name": "cim_array",
-  "components": 273,
+  "components": 161,
   "wires": 295,
   "labels": 0,
   "wire_crossings_estimate": 210,
   "bounding_box_area": 362000.0,
-  "density": 754.1436464088398
+  "density": 444.7513812154696
 }

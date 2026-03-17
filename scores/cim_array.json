@@ -1,1 +1,1 @@
-{"name":"cim_array","clarity":7,"wire_cleanliness":7,"hierarchy":7,"spacing":7,"presentation_ready":7,"average":7.0}
+{"name":"cim_array","clarity":9,"wire_cleanliness":8,"hierarchy":9,"spacing":8,"presentation_ready":8,"average":8.4,"notes":"Clean 8x8 crossbar grid with vertical BL and horizontal WL. Proper subcircuit boxes at grid intersections. Precharge top, caps bottom, WL/WWL sources left. Supply labels thinned. Array is immediately recognizable as CIM/SRAM structure. Some minor edge effects on right column. Could improve with better row/column annotations."}
