@@ -92,13 +92,13 @@ The sch and cir files must be 1:1 matched by filename. This is the future traini
 
 ## Strategy: ONE CIRCUIT AT A TIME
 
-Do NOT iterate across all 7 circuits per round. Instead, pick the worst-scoring circuit and focus on it exclusively until it reaches 8/10 or higher on all criteria. Only then move to the next worst circuit.
+Do NOT iterate across all 7 circuits per round. Instead, pick the worst-scoring circuit and focus on it exclusively until it reaches 10/10 or higher on all criteria. Only then move to the next worst circuit.
 
 **Work order:**
-1. Start with the simplest circuit (e.g., `cim_bitcell` or `cim_pwm-driver`) — get it to 8/10+
+1. Start with the simplest circuit (e.g., `cim_bitcell` or `cim_pwm-driver`) — get it to 10/10+
 2. Move to the next simplest — carry over what you learned
 3. Work up to the complex ones (`ode_multiplier`, `cim_adc`, `cim_array`) last
-4. After all circuits are at 8/10+, do a final polish pass across all of them
+4. After all circuits are at 10/10+, do a final polish pass across all of them
 
 **For each circuit, the inner loop is:**
 
@@ -109,7 +109,7 @@ Do NOT iterate across all 7 circuits per round. Instead, pick the worst-scoring 
 5. **Fix that one problem** in `src/placer.py` or `src/router.py`
 6. **Re-run, re-render, re-evaluate.** Did it get better?
 7. If yes: commit + push. If no: revert.
-8. **Repeat on the same circuit** until it scores 8/10+ on presentation-readiness
+8. **Repeat on the same circuit** until it scores 10/10+ on presentation-readiness
 9. Then verify the fix didn't break the other circuits: run all 7 briefly
 10. Move to the next circuit.
 
@@ -117,7 +117,7 @@ Do NOT iterate across all 7 circuits per round. Instead, pick the worst-scoring 
 
 1. **Pick the worst circuit.** Run all 7 quickly to find which one needs the most work.
 2. **Focus on it.** Run the inner loop above — iterate 5-20 times on just that one circuit.
-3. **When it hits 8/10+**, commit with a message like "ode_gm-cell: 8.2/10, diff pair symmetric, clean routing"
+3. **When it hits 10/10+**, commit with a message like "ode_gm-cell: 8.2/10, diff pair symmetric, clean routing"
 4. **Verify no regressions.** Run all 7, check nothing got worse.
 5. **Move to the next worst circuit.**
 6. **Repeat.**
