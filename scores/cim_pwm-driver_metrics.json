@@ -1,9 +1,9 @@
 {
   "name": "cim_pwm-driver",
-  "components": 51,
-  "wires": 6,
+  "components": 43,
+  "wires": 14,
   "labels": 0,
   "wire_crossings_estimate": 0,
   "bounding_box_area": 130000.0,
-  "density": 392.3076923076923
+  "density": 330.7692307692308
 }

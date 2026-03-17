@@ -51,6 +51,14 @@ value=100f}
 N 210 -30 210 -150 {lab=pwm_in}
 N 210 -150 280 -150 {lab=pwm_in}
 N 280 -150 280 -400 {lab=pwm_in}
+N 300 -180 300 -430 {lab=n1}
+N 300 -180 300 -150 {lab=n1}
+N 300 -150 880 -150 {lab=n1}
+N 880 -150 880 -400 {lab=n1}
+N 900 -180 900 -430 {lab=n2}
+N 900 -180 900 -150 {lab=n2}
+N 900 -150 1480 -150 {lab=n2}
+N 1480 -150 1480 -400 {lab=n2}
 N 1500 -180 1500 -430 {lab=wl}
 N 1500 -180 1500 20 {lab=wl}
 N 1500 20 1600 20 {lab=wl}
@@ -82,11 +90,3 @@ C {devices/lab_pin.sym} 0 -230 0 0 {name=l_in0 sig_type=std_logic lab=in0}
 C {devices/lab_pin.sym} 150 -230 0 0 {name=l_in1 sig_type=std_logic lab=in1}
 C {devices/lab_pin.sym} 480 -230 0 0 {name=l_in2 sig_type=std_logic lab=in2}
 C {devices/lab_pin.sym} 50 -30 0 0 {name=l_in3 sig_type=std_logic lab=in3}
-C {devices/lab_pin.sym} 300 -180 0 0 {name=l_n1 sig_type=std_logic lab=n1}
-C {devices/lab_pin.sym} 300 -430 0 0 {name=l_n1 sig_type=std_logic lab=n1}
-C {devices/lab_pin.sym} 880 -150 0 0 {name=l_n1 sig_type=std_logic lab=n1}
-C {devices/lab_pin.sym} 880 -400 0 0 {name=l_n1 sig_type=std_logic lab=n1}
-C {devices/lab_pin.sym} 900 -180 0 0 {name=l_n2 sig_type=std_logic lab=n2}
-C {devices/lab_pin.sym} 900 -430 0 0 {name=l_n2 sig_type=std_logic lab=n2}
-C {devices/lab_pin.sym} 1480 -150 0 0 {name=l_n2 sig_type=std_logic lab=n2}
-C {devices/lab_pin.sym} 1480 -400 0 0 {name=l_n2 sig_type=std_logic lab=n2}
