@@ -283,7 +283,7 @@ def route_nets(placed: PlacedCircuit) -> tuple[list[Wire], list[Label]]:
             )
             # Array circuits: bus wires naturally cross, allow all crossings
             # Non-array: allow a small number of crossings for cleaner routing
-            max_crossings = 999 if is_array_circuit else 2
+            max_crossings = 999 if is_array_circuit else 3
             if cross_count <= max_crossings:
                 wires.extend(trial_wires)
             else:
@@ -313,11 +313,10 @@ def _eliminate_crossings(wires: list[Wire], labels: list[Label]) -> tuple[list[W
                 net_crossings[w1.net] += 1
                 net_crossings[w2.net] += 1
 
-    # Only eliminate nets with many crossings (> 2)
+    # Only eliminate nets with many crossings (> 3)
     crossing_nets = set()
     for net, count in net_crossings.items():
-        if count > 2:
-            # Find which net in each crossing pair to remove (the smaller one)
+        if count > 3:
             wire_count = sum(1 for w in wires if w.net == net)
             if wire_count <= 3:  # Small nets are more likely label candidates
                 crossing_nets.add(net)

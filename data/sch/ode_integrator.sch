@@ -50,6 +50,9 @@ N 240 -250 240 -430 {lab=reset_b}
 N 240 -430 240 -400 {lab=reset_b}
 N 240 -400 400 -400 {lab=reset_b}
 N 400 -400 600 -400 {lab=reset_b}
+N 200 -220 200 -400 {lab=reset}
+N 200 -220 400 -220 {lab=reset}
+N 400 -220 600 -220 {lab=reset}
 N 540 -340 540 -250 {lab=outp}
 N 540 -250 440 -250 {lab=outp}
 N 440 -250 440 -200 {lab=outp}
@@ -77,10 +80,6 @@ C {devices/vdd.sym} 440 -400 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 640 -400 0 0 {name=l_vdd lab=VDD}
 C {devices/lab_pin.sym} 480 -260 0 0 {name=l_inp sig_type=std_logic lab=inp}
 C {devices/lab_pin.sym} 740 -260 0 0 {name=l_inn sig_type=std_logic lab=inn}
-C {devices/lab_pin.sym} 200 -220 0 0 {name=l_reset sig_type=std_logic lab=reset}
-C {devices/lab_pin.sym} 200 -400 0 0 {name=l_reset sig_type=std_logic lab=reset}
-C {devices/lab_pin.sym} 400 -220 0 0 {name=l_reset sig_type=std_logic lab=reset}
-C {devices/lab_pin.sym} 600 -220 0 0 {name=l_reset sig_type=std_logic lab=reset}
 C {devices/ipin.sym} 100 -230 0 0 {name=p_inp lab=inp}
 C {devices/ipin.sym} 100 -190 0 0 {name=p_inn lab=inn}
 C {devices/ipin.sym} 100 -265 0 0 {name=p_reset lab=reset}
