@@ -1,9 +1,9 @@
 {
   "name": "cim_adc",
-  "components": 51,
-  "wires": 11,
+  "components": 49,
+  "wires": 12,
   "labels": 0,
   "wire_crossings_estimate": 0,
-  "bounding_box_area": 150000.0,
-  "density": 340.0
+  "bounding_box_area": 130000.0,
+  "density": 376.9230769230769
 }

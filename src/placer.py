@@ -55,6 +55,21 @@ def _snap(val: float) -> int:
     return round(val / GRID) * GRID
 
 
+def _find_resistor_connected_net(circuit: Circuit, net_name: str) -> set:
+    """Find nets reachable from net_name through a single resistor."""
+    result = set()
+    if net_name not in circuit.nets:
+        return result
+    for cn, pn in circuit.nets[net_name].connections:
+        comp = circuit.components.get(cn)
+        if comp and comp.type == "resistor":
+            other_pin = "pin2" if pn == "pin1" else "pin1"
+            other_net = comp.pins.get(other_pin, "")
+            if other_net and _classify_net(circuit, other_net) == "signal":
+                result.add(other_net)
+    return result
+
+
 def detect_building_blocks(circuit: Circuit) -> list[BuildingBlock]:
     """Detect common analog building blocks from the circuit topology."""
     blocks = []
@@ -86,17 +101,41 @@ def detect_building_blocks(circuit: Circuit) -> list[BuildingBlock]:
                 blocks.append(BuildingBlock(type="inverter", components=[pname, nname]))
                 used.update([nname, pname])
 
-    # Differential pairs
+    # Differential pairs (including degenerated: sources connect through resistors)
     for fets, suffix in [(mosfets_n, "n"), (mosfets_p, "p")]:
         for name1, m1 in list(fets.items()):
             for name2, m2 in list(fets.items()):
                 if name1 >= name2 or name1 in used or name2 in used:
                     continue
+                g1, g2 = m1.pins["gate"], m2.pins["gate"]
+                if g1 == g2 or g1 == m1.pins["drain"] or g2 == m2.pins["drain"]:
+                    continue
+                # Direct shared source
                 if m1.pins["source"] == m2.pins["source"]:
-                    g1, g2 = m1.pins["gate"], m2.pins["gate"]
-                    if g1 != g2 and g1 != m1.pins["drain"] and g2 != m2.pins["drain"]:
-                        blocks.append(BuildingBlock(type=f"diff_pair_{suffix}", components=[name1, name2]))
-                        used.update([name1, name2])
+                    blocks.append(BuildingBlock(type=f"diff_pair_{suffix}", components=[name1, name2]))
+                    used.update([name1, name2])
+                    continue
+                # Degenerated: sources connect through resistors to common node
+                s1_nets = _find_resistor_connected_net(circuit, m1.pins["source"])
+                s2_nets = _find_resistor_connected_net(circuit, m2.pins["source"])
+                if s1_nets & s2_nets:
+                    blocks.append(BuildingBlock(type=f"diff_pair_{suffix}", components=[name1, name2]))
+                    used.update([name1, name2])
+
+    # Matched load pairs (same gate, same type, not diode-connected)
+    for name1, m1 in list(all_fets.items()):
+        for name2, m2 in list(all_fets.items()):
+            if name1 >= name2 or name1 in used or name2 in used:
+                continue
+            if m1.type != m2.type:
+                continue
+            if m1.pins["gate"] == m2.pins["gate"]:
+                d1 = m1.pins["gate"] == m1.pins["drain"]
+                d2 = m2.pins["gate"] == m2.pins["drain"]
+                if not d1 and not d2:
+                    mt = "matched_pair_n" if m1.type == "mosfet_n" else "matched_pair_p"
+                    blocks.append(BuildingBlock(type=mt, components=[name1, name2]))
+                    used.update([name1, name2])
 
     # Current mirrors
     for name1, m1 in list(all_fets.items()):
@@ -180,7 +219,13 @@ def _group_connected_blocks(circuit: Circuit, blocks: list[BuildingBlock]) -> li
 
 def _is_p_type(block: BuildingBlock) -> bool:
     """Check if a block is PMOS-based."""
-    return "_p" in block.type or block.type == "inverter"
+    return block.type.endswith("_p") or block.type == "inverter"
+
+
+def _is_symmetric_block(block: BuildingBlock) -> bool:
+    """Check if a block should have its second component flipped (symmetric pair)."""
+    return block.type.startswith("diff_pair") or block.type.startswith("cross_coupled") or \
+           block.type.startswith("matched_pair")
 
 
 def _sort_nmos_blocks_by_stacking(circuit: Circuit, n_blocks: list[BuildingBlock]) -> tuple[list, list]:
@@ -238,14 +283,27 @@ def _sort_nmos_blocks_by_stacking(circuit: Circuit, n_blocks: list[BuildingBlock
 
 
 def _find_tail_source(circuit: Circuit, diff_pair_block: BuildingBlock) -> str | None:
+    """Find tail current source for a diff pair, including degenerated pairs."""
     c1 = circuit.components[diff_pair_block.components[0]]
     shared_source = c1.pins["source"]
+
+    # Direct connection: drain == shared source
     for name, comp in circuit.components.items():
         if name in diff_pair_block.components:
             continue
         if comp.type in ("mosfet_n", "mosfet_p"):
             if comp.pins["drain"] == shared_source:
                 return name
+
+    # Degenerated: source connects through resistor to common node with tail
+    common_nets = _find_resistor_connected_net(circuit, shared_source)
+    for common_net in common_nets:
+        for name, comp in circuit.components.items():
+            if name in diff_pair_block.components:
+                continue
+            if comp.type in ("mosfet_n", "mosfet_p"):
+                if comp.pins["drain"] == common_net:
+                    return name
     return None
 
 
@@ -765,7 +823,7 @@ def _place_block(result: PlacedCircuit, block: BuildingBlock, center_x: float, y
         block.center_y = (inv_pmos_y + inv_nmos_y) / 2
     else:
         c1, c2 = block.components[0], block.components[1]
-        flip_second = block.type.startswith("diff_pair") or block.type.startswith("cross_coupled")
+        flip_second = _is_symmetric_block(block)
         result.placements[c1] = Placement(x=_snap(center_x - half_w), y=_snap(y))
         result.placements[c2] = Placement(x=_snap(center_x + half_w), y=_snap(y), flip=int(flip_second))
         block.center_x = center_x
