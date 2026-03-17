@@ -1,7 +1,7 @@
 {
   "name": "ode_gm-cell",
   "components": 26,
-  "wires": 12,
+  "wires": 11,
   "labels": 0,
   "wire_crossings_estimate": 0,
   "bounding_box_area": 130000.0,
