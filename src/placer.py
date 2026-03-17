@@ -595,9 +595,9 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
         px = cur_x
         for block in p_blocks:
             _place_block(result, block, px, PMOS_Y)
-            # Use tighter spacing for single-column blocks (inverter/tgate)
+            # Single-column blocks need less space than diff pairs
             if block.type in ("inverter", "tgate"):
-                px += 160  # Compact spacing for single-column blocks
+                px += 200  # Moderate spacing for single-column blocks
             else:
                 px += H_SPACING + BLOCK_GAP
 
@@ -627,6 +627,8 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
         # Place top NMOS blocks aligned above their bottom stacking partners
         top_y = MID_Y
         tx = cur_x
+        # Track the rightmost x of placed top blocks to avoid overlap
+        top_right_x = cur_x - H_SPACING
         for block in top_n:
             block_sources = set()
             for cn in block.components:
@@ -642,10 +644,15 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
                     break
 
             if aligned_x is not None:
+                # Ensure no overlap with previously placed top blocks
+                min_x = top_right_x + H_SPACING + BLOCK_GAP
+                if aligned_x < min_x:
+                    aligned_x = min_x
                 _place_block(result, block, aligned_x, top_y)
             else:
                 _place_block(result, block, tx, top_y)
-            tx = max(tx, max(result.placements[c].x for c in block.components)) + BLOCK_GAP + H_SPACING // 2
+            top_right_x = max(result.placements[c].x for c in block.components)
+            tx = top_right_x + BLOCK_GAP + H_SPACING // 2
 
         cur_x = max(px, tx, nx)
 
