@@ -213,6 +213,40 @@ def render_xschem(placed: PlacedCircuit, wires: list[Wire], labels: list[Label],
         else:
             lines.append(f'C {{devices/lab_pin.sym}} {label.x} {label.y} 0 0 {{name=l_{label.net} sig_type=std_logic lab={display_name}}}')
 
+    # Interface pins for subcircuit-based schematics
+    if placed.circuit.interface_pins:
+        all_x = [p.x for p in placed.placements.values()] if placed.placements else [0]
+        all_y = [p.y for p in placed.placements.values()] if placed.placements else [0]
+        left_x = min(all_x) - 120
+        right_x = max(all_x) + 160
+        top_y = min(all_y) - 40
+        bot_y = max(all_y) + 40
+
+        # Classify pins as input/output/supply based on naming
+        for i, pin_name in enumerate(placed.circuit.interface_pins):
+            low = pin_name.lower()
+            if low in ('vdd', 'vcc', 'avdd', 'vss', 'gnd', '0'):
+                continue  # Skip supply pins — already shown as VDD/GND symbols
+
+            # Determine pin type and position
+            if any(kw in low for kw in ['in', 'clk', 'reset', 'bias', 'vcm']):
+                # Input: place on the left
+                sym = "devices/ipin.sym"
+                px = left_x
+                py = top_y + i * 40
+            elif any(kw in low for kw in ['out']):
+                # Output: place on the right
+                sym = "devices/opin.sym"
+                px = right_x
+                py = top_y + i * 40
+            else:
+                # Bidirectional
+                sym = "devices/iopin.sym"
+                px = left_x
+                py = top_y + i * 40
+
+            lines.append(f'C {{{sym}}} {px} {py} 0 0 {{name=p_{pin_name} lab={pin_name}}}')
+
     return "\n".join(lines) + "\n"
 
 

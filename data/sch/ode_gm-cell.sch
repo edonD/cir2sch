@@ -61,3 +61,10 @@ C {devices/vdd.sym} 60 -370 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 60 -400 0 0 {name=l_vdd lab=VDD}
 C {devices/lab_pin.sym} 460 -180 0 0 {name=l_pcm_int sig_type=std_logic lab=pcm_int}
 C {devices/gnd.sym} 400 80 0 0 {name=l_0 lab=GND}
+C {devices/ipin.sym} -80 -440 0 0 {name=p_inp lab=inp}
+C {devices/ipin.sym} -80 -400 0 0 {name=p_inn lab=inn}
+C {devices/opin.sym} 900 -360 0 0 {name=p_outp lab=outp}
+C {devices/opin.sym} 900 -320 0 0 {name=p_outn lab=outn}
+C {devices/ipin.sym} -80 -280 0 0 {name=p_vbias_n lab=vbias_n}
+C {devices/ipin.sym} -80 -240 0 0 {name=p_vbias_p lab=vbias_p}
+C {devices/ipin.sym} -80 -200 0 0 {name=p_vcm lab=vcm}

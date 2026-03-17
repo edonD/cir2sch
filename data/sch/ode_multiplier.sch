@@ -99,3 +99,12 @@ C {devices/gnd.sym} 790 -400 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 1010 -400 0 0 {name=l_vss lab=VSS}
 C {devices/vdd.sym} 530 -580 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 270 -580 0 0 {name=l_vdd lab=VDD}
+C {devices/iopin.sym} -100 -590 0 0 {name=p_xp lab=xp}
+C {devices/iopin.sym} -100 -550 0 0 {name=p_xn lab=xn}
+C {devices/iopin.sym} -100 -510 0 0 {name=p_yp lab=yp}
+C {devices/iopin.sym} -100 -470 0 0 {name=p_yn lab=yn}
+C {devices/opin.sym} 1660 -430 0 0 {name=p_outp lab=outp}
+C {devices/opin.sym} 1660 -390 0 0 {name=p_outn lab=outn}
+C {devices/ipin.sym} -100 -350 0 0 {name=p_vbias_n lab=vbias_n}
+C {devices/ipin.sym} -100 -310 0 0 {name=p_vbias_p lab=vbias_p}
+C {devices/ipin.sym} -100 -270 0 0 {name=p_vcm lab=vcm}
