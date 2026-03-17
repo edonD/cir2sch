@@ -1,9 +1,1 @@
-{
-  "name": "cim_adc",
-  "components": 47,
-  "wires": 16,
-  "labels": 0,
-  "wire_crossings_estimate": 0,
-  "bounding_box_area": 120000.0,
-  "density": 391.6666666666667
-}
+{"name":"cim_adc","clarity":4,"wire_cleanliness":6,"hierarchy":4,"spacing":4,"presentation_ready":3,"average":4.2,"notes":"StrongARM comparator blocks visible. 0 crossings. PMOS reset devices too spread. Cross-coupled pairs stacked."}

@@ -1,9 +1,1 @@
-{
-  "name": "cim_pwm-driver",
-  "components": 43,
-  "wires": 27,
-  "labels": 0,
-  "wire_crossings_estimate": 0,
-  "bounding_box_area": 120000.0,
-  "density": 358.33333333333337
-}
+{"name":"cim_pwm-driver","clarity":6,"wire_cleanliness":7,"hierarchy":7,"spacing":5,"presentation_ready":5,"average":6.0,"notes":"Three-stage inverter chain visible left-to-right. PMOS top, NMOS bottom. 0 crossings. Output cap at right. Sources compact."}

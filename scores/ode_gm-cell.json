@@ -1,9 +1,1 @@
-{
-  "name": "ode_gm-cell",
-  "components": 22,
-  "wires": 20,
-  "labels": 0,
-  "wire_crossings_estimate": 3,
-  "bounding_box_area": 120000.0,
-  "density": 183.33333333333334
-}
+{"name":"ode_gm-cell","clarity":7,"wire_cleanliness":6,"hierarchy":7,"spacing":7,"presentation_ready":6,"average":6.6,"notes":"Clear OTA: PMOS loads top, NMOS diff pair bottom, tail source visible. Degeneration resistors inline. CMFB placed between signal nodes. 2 crossings."}

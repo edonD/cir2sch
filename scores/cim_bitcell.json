@@ -1,9 +1,1 @@
-{
-  "name": "cim_bitcell",
-  "components": 54,
-  "wires": 10,
-  "labels": 0,
-  "wire_crossings_estimate": 1,
-  "bounding_box_area": 120000.0,
-  "density": 450.0
-}
+{"name":"cim_bitcell","clarity":4,"wire_cleanliness":5,"hierarchy":4,"spacing":4,"presentation_ready":3,"average":4.0,"notes":"Cross-coupled pairs visible. Access and read port transistors spread wide. Sources compact. 0 crossings."}
