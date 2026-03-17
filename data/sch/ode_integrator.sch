@@ -63,11 +63,9 @@ N 740 -200 740 -250 {lab=outn}
 N 740 -250 640 -250 {lab=outn}
 N 640 -250 640 -430 {lab=outn}
 C {devices/gnd.sym} 240 -190 0 0 {name=l_vss lab=VSS}
-C {devices/gnd.sym} 240 -220 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 440 -220 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 640 -220 0 0 {name=l_vss lab=VSS}
 C {devices/vdd.sym} 240 -370 0 0 {name=l_vdd lab=VDD}
-C {devices/vdd.sym} 240 -400 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 440 -400 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 640 -400 0 0 {name=l_vdd lab=VDD}
 C {devices/lab_pin.sym} 480 -260 0 0 {name=l_inp sig_type=std_logic lab=inp}

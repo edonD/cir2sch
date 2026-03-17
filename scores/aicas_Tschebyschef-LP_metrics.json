@@ -1,9 +1,9 @@
 {
   "name": "aicas_Tschebyschef-LP",
-  "components": 11,
-  "wires": 3,
+  "components": 9,
+  "wires": 0,
   "labels": 0,
   "wire_crossings_estimate": 0,
   "bounding_box_area": 120000.0,
-  "density": 91.66666666666667
+  "density": 75.0
 }

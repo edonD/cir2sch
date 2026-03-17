@@ -4,18 +4,6 @@ K {}
 V {}
 S {}
 E {}
-C {devices/vsource.sym} 110 90 0 0 {name=VDD0
-value=0}
-C {devices/vsource.sym} 240 90 0 0 {name=VSS0
-value=0}
-C {devices/vsource.sym} 370 90 0 0 {name=VDD_A0
-value=0}
-C {devices/vsource.sym} 500 90 0 0 {name=VSS_A0
-value=0}
-C {devices/vsource.sym} 110 220 0 0 {name=VDD_B0
-value=0}
-C {devices/vsource.sym} 240 220 0 0 {name=VSS_B0
-value=0}
 C {devices/res.sym} 1100 -60 0 0 {name=RA0
 value=0.266535044422507}
 C {devices/res.sym} 1240 -60 0 0 {name=RB0
@@ -548,26 +536,11 @@ C {devices/res.sym} 5260 -90 0 0 {name=RCROSS1
 value=0.001}
 C {devices/res.sym} 5000 -90 0 0 {name=RCROSS2
 value=0.001}
-C {devices/vsource.sym} 370 220 0 0 {name=VSLEW_CONTROL
-value=(PULSE}
-C {devices/vsource.sym} 500 220 0 0 {name=VDDPOWER
+C {devices/vsource.sym} 110 90 0 0 {name=VDDPOWER
 value=0}
-C {devices/vsource.sym} 110 350 0 0 {name=VARACTOR_V
-value=2.5}
-N 240 60 240 250 {lab=VSS0}
-N 240 60 240 120 {lab=VSS0}
-N 240 120 500 120 {lab=VSS0}
-N 370 60 370 -120 {lab=VDD_A0}
-N 370 -120 590 -120 {lab=VDD_A0}
 N 590 -120 590 -150 {lab=VDD_A0}
-N 500 60 500 -120 {lab=VSS_A0}
-N 500 -120 310 -120 {lab=VSS_A0}
 N 310 -120 310 -150 {lab=VSS_A0}
-N 110 190 110 -120 {lab=VDD_B0}
-N 110 -120 410 -120 {lab=VDD_B0}
 N 410 -120 410 -150 {lab=VDD_B0}
-N 240 190 240 -120 {lab=VSS_B0}
-N 240 -120 130 -120 {lab=VSS_B0}
 N 130 -120 130 -150 {lab=VSS_B0}
 N 1100 -30 1100 -180 {lab=A1}
 N 1100 -180 1150 -180 {lab=A1}
@@ -1019,7 +992,6 @@ N 13230 -150 13230 -180 {lab=B23}
 N 13230 -180 13010 -180 {lab=B23}
 N 13930 -250 13930 -160 {lab=B24}
 N 13930 -160 14040 -160 {lab=B24}
-C {devices/vdd.sym} 110 120 0 0 {name=l_VDD lab=VDD}
 C {devices/vdd.sym} 970 -120 0 0 {name=l_VDD lab=VDD}
 C {devices/vdd.sym} 970 -150 0 0 {name=l_VDD lab=VDD}
 C {devices/vdd.sym} 1150 -120 0 0 {name=l_VDD lab=VDD}
@@ -1112,8 +1084,7 @@ C {devices/vdd.sym} 13290 -120 0 0 {name=l_VDD lab=VDD}
 C {devices/vdd.sym} 13290 -150 0 0 {name=l_VDD lab=VDD}
 C {devices/vdd.sym} 13470 -120 0 0 {name=l_VDD lab=VDD}
 C {devices/vdd.sym} 13470 -150 0 0 {name=l_VDD lab=VDD}
-C {devices/vdd.sym} 500 190 0 0 {name=l_VDD lab=VDD}
-C {devices/gnd.sym} 240 120 0 0 {name=l_0 lab=GND}
+C {devices/vdd.sym} 110 60 0 0 {name=l_VDD lab=VDD}
 C {devices/gnd.sym} 690 -120 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 690 -150 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 870 -120 0 0 {name=l_0 lab=GND}
@@ -1206,8 +1177,6 @@ C {devices/gnd.sym} 13010 -120 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 13010 -150 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 13190 -120 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 13190 -150 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 370 250 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 110 380 0 0 {name=l_0 lab=GND}
 C {devices/lab_pin.sym} 1100 -90 0 0 {name=l_LCA0 sig_type=std_logic lab=LCA0}
 C {devices/lab_pin.sym} 1240 -90 0 0 {name=l_LCB0 sig_type=std_logic lab=LCB0}
 C {devices/lab_pin.sym} 5000 -120 0 0 {name=l_B0 sig_type=std_logic lab=B0}
@@ -1262,10 +1231,4 @@ C {devices/lab_pin.sym} 14040 -220 0 0 {name=l_A24 sig_type=std_logic lab=A24}
 C {devices/lab_pin.sym} 5000 -60 0 0 {name=l_A24 sig_type=std_logic lab=A24}
 C {devices/lab_pin.sym} 13930 -310 0 0 {name=l_LCB23 sig_type=std_logic lab=LCB23}
 C {devices/lab_pin.sym} 5260 -60 0 0 {name=l_B24 sig_type=std_logic lab=B24}
-C {devices/lab_pin.sym} 370 190 0 0 {name=l_VSLEW sig_type=std_logic lab=VSLEW}
-C {devices/lab_pin.sym} 500 250 0 0 {name=l_VRAMP sig_type=std_logic lab=VRAMP}
-C {devices/lab_pin.sym} 110 320 0 0 {name=l_VARACTOR_V sig_type=std_logic lab=VARACTOR_V}
-C {devices/lab_pin.sym} 370 120 0 0 {name=l_VDD0 sig_type=std_logic lab=VDD0}
-C {devices/lab_pin.sym} 110 120 0 0 {name=l_VDD0 sig_type=std_logic lab=VDD0}
-C {devices/lab_pin.sym} 110 250 0 0 {name=l_VDD0 sig_type=std_logic lab=VDD0}
-C {devices/lab_pin.sym} 110 60 0 0 {name=l_VDD0 sig_type=std_logic lab=VDD0}
+C {devices/lab_pin.sym} 110 120 0 0 {name=l_VRAMP sig_type=std_logic lab=VRAMP}

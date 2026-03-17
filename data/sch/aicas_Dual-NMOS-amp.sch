@@ -19,8 +19,6 @@ l=0.18u
 model=Tcase2}
 C {devices/res.sym} 260 50 0 0 {name=R8
 value=0.8}
-C {devices/vsource.sym} 220 200 0 0 {name=V1
-value=36}
 C {devices/res.sym} 320 -150 0 0 {name=R7
 value=0.1}
 C {devices/capa.sym} 820 -70 0 0 {name=C4
@@ -35,10 +33,6 @@ C {devices/capa.sym} 560 -120 0 0 {name=C1
 value=1u}
 C {devices/capa.sym} 1960 -280 0 0 {name=C2
 value=0.33u}
-C {devices/vsource.sym} 350 200 0 0 {name=Vin1
-value=0}
-C {devices/vsource.sym} 480 200 0 0 {name=Vamb1
-value=25}
 C {devices/res.sym} 760 50 0 0 {name=Rl1
 value=8}
 C {devices/res.sym} 1180 -310 0 0 {name=R13
@@ -115,10 +109,7 @@ N 1420 -200 1530 -200 {lab=Net-_C6-Pad1_}
 C {devices/gnd.sym} 660 -370 0 0 {name=l_GND lab=GND}
 C {devices/gnd.sym} 2210 -320 0 0 {name=l_GND lab=GND}
 C {devices/gnd.sym} 260 80 0 0 {name=l_GND lab=GND}
-C {devices/gnd.sym} 220 230 0 0 {name=l_GND lab=GND}
 C {devices/gnd.sym} 560 -90 0 0 {name=l_GND lab=GND}
-C {devices/gnd.sym} 350 230 0 0 {name=l_GND lab=GND}
-C {devices/gnd.sym} 480 230 0 0 {name=l_GND lab=GND}
 C {devices/gnd.sym} 760 80 0 0 {name=l_GND lab=GND}
 C {devices/gnd.sym} 980 -370 0 0 {name=l_GND lab=GND}
 C {devices/gnd.sym} 1200 -370 0 0 {name=l_GND lab=GND}
@@ -140,12 +131,9 @@ C {devices/lab_pin.sym} 1360 -90 0 0 {name=l_Net-_R3-Pad2_ sig_type=std_logic la
 C {devices/lab_pin.sym} 2150 -280 0 0 {name=l_Net-_R17-Pad2_ sig_type=std_logic lab=Net-_R17-Pad2_}
 C {devices/lab_pin.sym} 440 -30 0 0 {name=l_Net-_R17-Pad2_ sig_type=std_logic lab=Net-_R17-Pad2_}
 C {devices/vdd.sym} 2210 -280 0 0 {name=l_VCC lab=VCC}
-C {devices/vdd.sym} 220 170 0 0 {name=l_VCC lab=VCC}
 C {devices/vdd.sym} 460 -180 0 0 {name=l_VCC lab=VCC}
 C {devices/vdd.sym} 560 -150 0 0 {name=l_VCC lab=VCC}
 C {devices/vdd.sym} 1570 -580 0 0 {name=l_VCC lab=VCC}
 C {devices/lab_pin.sym} 1960 -250 0 0 {name=l_in sig_type=std_logic lab=in}
-C {devices/lab_pin.sym} 350 170 0 0 {name=l_in sig_type=std_logic lab=in}
-C {devices/lab_pin.sym} 480 170 0 0 {name=l_Net-_R11-Pad1_ sig_type=std_logic lab=Net-_R11-Pad1_}
 C {devices/lab_pin.sym} 1180 -280 0 0 {name=l_Tcase2 sig_type=std_logic lab=Tcase2}
 C {devices/lab_pin.sym} 1420 -280 0 0 {name=l_Tcase1 sig_type=std_logic lab=Tcase1}

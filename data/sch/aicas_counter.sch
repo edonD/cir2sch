@@ -6,12 +6,6 @@ S {}
 E {}
 C {devices/capa.sym} 1100 -280 0 0 {name=Conversion
 value=counter}
-C {devices/vsource.sym} 440 -130 0 0 {name=vclk
-value=pulse(}
-C {devices/vsource.sym} 570 -130 0 0 {name=vreset
-value=pulse(}
-C {devices/vsource.sym} 700 -130 0 0 {name=vhigh
-value=1.0}
 C {devices/res.sym} 440 -400 0 0 {name=r1
 value=1k}
 C {devices/res.sym} 660 -400 0 0 {name=r2
@@ -20,19 +14,14 @@ C {devices/res.sym} 880 -400 0 0 {name=r3
 value=1k}
 C {counter.sym} 1320 -300 0 0 {name=x1}
 T {x1} 1300 -280 0 0 0.25 0.25 {}
-N 440 -160 440 -430 {lab=100}
-N 570 -160 570 -430 {lab=200}
-N 570 -430 660 -430 {lab=200}
-N 700 -160 700 -430 {lab=300}
-N 700 -430 880 -430 {lab=300}
 C {devices/lab_pin.sym} 1100 -310 0 0 {name=l_of sig_type=std_logic lab=of}
 C {devices/lab_pin.sym} 1100 -250 0 0 {name=l_Pspice sig_type=std_logic lab=Pspice}
-C {devices/gnd.sym} 440 -100 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 570 -100 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 700 -100 0 0 {name=l_0 lab=GND}
+C {devices/lab_pin.sym} 440 -430 0 0 {name=l_100 sig_type=std_logic lab=100}
 C {devices/gnd.sym} 440 -370 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 660 -370 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 880 -370 0 0 {name=l_0 lab=GND}
+C {devices/lab_pin.sym} 660 -430 0 0 {name=l_200 sig_type=std_logic lab=200}
+C {devices/lab_pin.sym} 880 -430 0 0 {name=l_300 sig_type=std_logic lab=300}
 C {devices/lab_pin.sym} 1290 -360 0 0 {name=l_hi sig_type=std_logic lab=hi}
 C {devices/lab_pin.sym} 1350 -360 0 0 {name=l_clr sig_type=std_logic lab=clr}
 C {devices/lab_pin.sym} 1290 -340 0 0 {name=l_clock sig_type=std_logic lab=clock}

@@ -1,9 +1,9 @@
 {
   "name": "aicas_ddt-test3",
-  "components": 5,
-  "wires": 4,
+  "components": 4,
+  "wires": 2,
   "labels": 0,
   "wire_crossings_estimate": 0,
   "bounding_box_area": 120000.0,
-  "density": 41.66666666666667
+  "density": 33.333333333333336
 }

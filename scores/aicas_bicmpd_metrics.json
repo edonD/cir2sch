@@ -1,9 +1,9 @@
 {
   "name": "aicas_bicmpd",
-  "components": 22,
-  "wires": 13,
+  "components": 8,
+  "wires": 0,
   "labels": 0,
   "wire_crossings_estimate": 0,
-  "bounding_box_area": 122000.0,
-  "density": 180.32786885245903
+  "bounding_box_area": 66000.0,
+  "density": 121.2121212121212
 }

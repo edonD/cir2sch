@@ -11,16 +11,9 @@ C {devices/capa.sym} 660 -400 0 0 {name=C2
 value=57.2p}
 C {devices/capa.sym} 880 -400 0 0 {name=C3
 value=33.2p}
-C {devices/vsource.sym} 440 -250 0 0 {name=V1
-value=0}
-C {devices/vsource.sym} 570 -250 0 0 {name=V2
-value=0}
-N 440 -430 440 -280 {lab=in}
-N 880 -430 880 -280 {lab=out}
-N 880 -280 570 -280 {lab=out}
+C {devices/lab_pin.sym} 440 -430 0 0 {name=l_in sig_type=std_logic lab=in}
 C {devices/gnd.sym} 440 -370 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 660 -370 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 880 -370 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 440 -220 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 570 -220 0 0 {name=l_0 lab=GND}
 C {devices/lab_pin.sym} 660 -430 0 0 {name=l_2 sig_type=std_logic lab=2}
+C {devices/lab_pin.sym} 880 -430 0 0 {name=l_out sig_type=std_logic lab=out}

@@ -1,9 +1,9 @@
 {
   "name": "aicas_MOS1_out",
-  "components": 38,
-  "wires": 1,
+  "components": 6,
+  "wires": 9,
   "labels": 0,
-  "wire_crossings_estimate": 0,
-  "bounding_box_area": 132000.0,
-  "density": 287.8787878787879
+  "wire_crossings_estimate": 1,
+  "bounding_box_area": 76000.0,
+  "density": 78.94736842105263
 }

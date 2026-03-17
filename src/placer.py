@@ -449,6 +449,22 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
         if name in block_comps:
             continue
         if comp.type in ("voltage_source", "current_source"):
+            # Skip testbench voltage sources (those driving signal nets, not supply rails).
+            # In a testbench netlist, sources like Vblw, Vwl etc. drive circuit interface
+            # nets; we omit them from the schematic and let the router add net labels.
+            if comp.type == "voltage_source":
+                pos_net = comp.pins.get("positive", "")
+                neg_net = comp.pins.get("negative", "")
+                pos_cls = _classify_net(circuit, pos_net)
+                neg_cls = _classify_net(circuit, neg_net)
+                # Skip testbench sources:
+                # 1. Signal-net drivers (Vblw, Vwl etc.) — circuit interface
+                # 2. Supply-rail sources (Vdd=vdd→0, Vss=vss→0) — define rails
+                #    for simulation; VDD/VSS symbols handle these in the schematic
+                if pos_cls == "signal":
+                    continue  # Testbench signal source
+                if pos_cls in ("supply", "ground") and neg_cls in ("supply", "ground"):
+                    continue  # Supply-to-ground definition source
             sources.append(name)
         elif comp.type == "mosfet_p":
             pmos_free.append(name)
@@ -729,9 +745,40 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
                 c1, c2 = block.components[0], block.components[1]
                 x1, x2 = per_comp_x[c1], per_comp_x[c2]
                 flip_second = _is_symmetric_block(block)
-                result.placements[c1] = Placement(x=_snap(x1), y=_snap(top_y))
-                result.placements[c2] = Placement(x=_snap(x2), y=_snap(top_y), flip=int(flip_second))
-                block.center_x = (x1 + x2) / 2
+                # For matched_pair blocks (e.g. SRAM access transistors): if the
+                # target positions overlap with already-placed latch components
+                # (same x, nearby y), place them BESIDE the latch at the latch
+                # NMOS y level instead of above it at MID_Y.
+                if (block.type.startswith("matched_pair") and
+                        (_is_occupied(result, x1, top_y, 100) or
+                         _is_occupied(result, x2, top_y, 100))):
+                    # Find the latch NMOS y level (highest y = bottom-most)
+                    latch_ys = [
+                        result.placements[n].y
+                        for n in already_placed_blocks
+                        if n in result.placements
+                    ]
+                    side_y = max(latch_ys) if latch_ys else top_y
+                    x_min, x_max = min(x1, x2), max(x1, x2)
+                    c_left = c1 if x1 <= x2 else c2
+                    c_right = c2 if x1 <= x2 else c1
+                    # Place outward: left access transistor left of left inverter,
+                    # right access transistor right of right inverter.
+                    out_dx = max(160, (x_max - x_min) // 2)
+                    ax_left = _snap(x_min - out_dx)
+                    ax_right = _snap(x_max + out_dx)
+                    # Ensure positive x (avoid off-canvas left placement)
+                    if ax_left < 50:
+                        shift = 50 - ax_left
+                        ax_left += shift
+                        ax_right += shift
+                    result.placements[c_left] = Placement(x=ax_left, y=_snap(side_y))
+                    result.placements[c_right] = Placement(x=ax_right, y=_snap(side_y), flip=int(flip_second))
+                    block.center_x = (ax_left + ax_right) / 2
+                else:
+                    result.placements[c1] = Placement(x=_snap(x1), y=_snap(top_y))
+                    result.placements[c2] = Placement(x=_snap(x2), y=_snap(top_y), flip=int(flip_second))
+                    block.center_x = (x1 + x2) / 2
             else:
                 # Fall back to centered alignment using first match
                 block_sources = {circuit.components[cn].pins.get("source", "") for cn in block.components}

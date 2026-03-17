@@ -1,9 +1,9 @@
 {
   "name": "aicas_astable",
-  "components": 15,
-  "wires": 9,
+  "components": 7,
+  "wires": 10,
   "labels": 0,
-  "wire_crossings_estimate": 0,
-  "bounding_box_area": 96000.0,
-  "density": 156.25
+  "wire_crossings_estimate": 1,
+  "bounding_box_area": 58000.0,
+  "density": 120.6896551724138
 }

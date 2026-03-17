@@ -1,9 +1,9 @@
 {
   "name": "aicas_FFT_Leakage",
-  "components": 6,
+  "components": 0,
   "wires": 0,
   "labels": 0,
   "wire_crossings_estimate": 0,
-  "bounding_box_area": 70000.0,
-  "density": 85.71428571428571
+  "bounding_box_area": 0,
+  "density": 0
 }

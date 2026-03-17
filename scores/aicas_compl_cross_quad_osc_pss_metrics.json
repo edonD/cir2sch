@@ -1,9 +1,9 @@
 {
   "name": "aicas_compl_cross_quad_osc_pss",
-  "components": 24,
+  "components": 21,
   "wires": 47,
   "labels": 0,
   "wire_crossings_estimate": 3,
-  "bounding_box_area": 190000.0,
-  "density": 126.3157894736842
+  "bounding_box_area": 160000.0,
+  "density": 131.25
 }

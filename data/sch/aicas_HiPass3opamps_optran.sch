@@ -4,11 +4,7 @@ K {}
 V {}
 S {}
 E {}
-C {devices/vsource.sym} 440 -10 0 0 {name=V1
-value=0}
-C {devices/vsource.sym} 570 -10 0 0 {name=V2
-value=15}
-C {devices/vsource.sym} 700 -10 0 0 {name=V3
+C {devices/vsource.sym} 440 -10 0 0 {name=V3
 value=15}
 C {devices/capa.sym} 3600 -280 0 0 {name=C2
 value=330n}
@@ -129,13 +125,10 @@ N 5230 -250 5230 -200 {lab=Net-_C11-Pad2_}
 N 5230 -200 4920 -200 {lab=Net-_C11-Pad2_}
 N 4680 -220 4540 -220 {lab=Net-_R23-Pad1_}
 N 4540 -220 4540 -230 {lab=Net-_R23-Pad1_}
-C {devices/lab_pin.sym} 440 -40 0 0 {name=l_Net-_C1-Pad2_ sig_type=std_logic lab=Net-_C1-Pad2_}
 C {devices/lab_pin.sym} 3700 -250 0 0 {name=l_Net-_C1-Pad2_ sig_type=std_logic lab=Net-_C1-Pad2_}
 C {devices/lab_pin.sym} 4420 -160 0 0 {name=l_Net-_C1-Pad2_ sig_type=std_logic lab=Net-_C1-Pad2_}
 C {devices/lab_pin.sym} 4780 -130 0 0 {name=l_Net-_C1-Pad2_ sig_type=std_logic lab=Net-_C1-Pad2_}
-C {devices/gnd.sym} 440 20 0 0 {name=l_GND lab=GND}
-C {devices/gnd.sym} 570 20 0 0 {name=l_GND lab=GND}
-C {devices/gnd.sym} 700 -40 0 0 {name=l_GND lab=GND}
+C {devices/gnd.sym} 440 -40 0 0 {name=l_GND lab=GND}
 C {devices/gnd.sym} 440 -370 0 0 {name=l_GND lab=GND}
 C {devices/gnd.sym} 660 -370 0 0 {name=l_GND lab=GND}
 C {devices/gnd.sym} 880 -430 0 0 {name=l_GND lab=GND}
@@ -151,8 +144,7 @@ C {devices/gnd.sym} 2860 -370 0 0 {name=l_GND lab=GND}
 C {devices/gnd.sym} 3080 -430 0 0 {name=l_GND lab=GND}
 C {devices/gnd.sym} 3300 -430 0 0 {name=l_GND lab=GND}
 C {devices/gnd.sym} 3520 -370 0 0 {name=l_GND lab=GND}
-C {devices/lab_pin.sym} 570 -40 0 0 {name=l_15+ sig_type=std_logic lab=15+}
-C {devices/lab_pin.sym} 700 20 0 0 {name=l_15- sig_type=std_logic lab=15-}
+C {devices/lab_pin.sym} 440 20 0 0 {name=l_15- sig_type=std_logic lab=15-}
 C {devices/lab_pin.sym} 3600 -310 0 0 {name=l_Net-_C2-Pad1_ sig_type=std_logic lab=Net-_C2-Pad1_}
 C {devices/lab_pin.sym} 2310 -280 0 0 {name=l_Net-_C2-Pad1_ sig_type=std_logic lab=Net-_C2-Pad1_}
 C {devices/lab_pin.sym} 5550 -320 0 0 {name=l_Net-_C2-Pad1_ sig_type=std_logic lab=Net-_C2-Pad1_}

@@ -1,9 +1,9 @@
 {
   "name": "aicas_cmosamp",
-  "components": 27,
-  "wires": 36,
+  "components": 16,
+  "wires": 34,
   "labels": 0,
   "wire_crossings_estimate": 1,
-  "bounding_box_area": 212000.0,
-  "density": 127.35849056603774
+  "bounding_box_area": 186000.0,
+  "density": 86.02150537634408
 }

@@ -1,9 +1,9 @@
 {
   "name": "aicas_counter",
-  "components": 27,
-  "wires": 5,
+  "components": 24,
+  "wires": 0,
   "labels": 0,
   "wire_crossings_estimate": 0,
   "bounding_box_area": 120000.0,
-  "density": 225.0
+  "density": 200.0
 }

@@ -1,9 +1,9 @@
 {
   "name": "aicas_bjtnoise",
-  "components": 9,
-  "wires": 6,
+  "components": 7,
+  "wires": 1,
   "labels": 0,
   "wire_crossings_estimate": 0,
   "bounding_box_area": 96000.0,
-  "density": 93.75
+  "density": 72.91666666666667
 }

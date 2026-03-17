@@ -1,1 +1,1 @@
-{"name":"cim_bitcell","clarity":8,"wire_cleanliness":8,"hierarchy":9,"spacing":8,"presentation_ready":8,"average":8.2}
+{"name":"cim_bitcell","clarity":8,"wire_cleanliness":7,"hierarchy":9,"spacing":7,"presentation_ready":8,"average":7.8,"notes":"8T SRAM CIM bitcell: access transistors now correctly placed beside latch (not overlapping PMOS/NMOS); testbench voltage sources filtered out; duplicate VDD/VSS bulk labels removed. Cross-coupled q/qb wiring is somewhat complex but routing is clean."}

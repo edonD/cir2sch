@@ -13,8 +13,6 @@ C {nor.sym} 960 -120 0 0 {name=X6}
 C {nor.sym} 520 60 0 0 {name=X7}
 C {nor.sym} 740 60 0 0 {name=X8}
 C {nor.sym} 960 60 0 0 {name=X9}
-C {devices/vsource.sym} 300 150 0 0 {name=V1
-value=-5.2}
 T {X1} 500 -280 0 0 0.25 0.25 {}
 T {X2} 720 -280 0 0 0.25 0.25 {}
 T {X3} 940 -280 0 0 0.25 0.25 {}
@@ -70,8 +68,6 @@ C {devices/gnd.sym} 770 80 0 0 {name=l_gnd lab=GND}
 C {devices/gnd.sym} 990 80 0 0 {name=l_gnd lab=GND}
 C {devices/lab_pin.sym} 930 -300 0 0 {name=l_a3 sig_type=std_logic lab=a3}
 C {devices/lab_pin.sym} 490 60 0 0 {name=l_a3 sig_type=std_logic lab=a3}
-C {devices/lab_pin.sym} 300 120 0 0 {name=l_VEE sig_type=std_logic lab=VEE}
-C {devices/gnd.sym} 300 180 0 0 {name=l_GND lab=GND}
 C {devices/lab_pin.sym} 990 -300 0 0 {name=l_out3 sig_type=std_logic lab=out3}
 C {devices/lab_pin.sym} 490 -140 0 0 {name=l_out3 sig_type=std_logic lab=out3}
 C {devices/lab_pin.sym} 550 -140 0 0 {name=l_out3 sig_type=std_logic lab=out3}

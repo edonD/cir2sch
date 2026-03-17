@@ -1,9 +1,9 @@
 {
   "name": "aicas_bipolar-noise",
-  "components": 8,
-  "wires": 3,
+  "components": 6,
+  "wires": 0,
   "labels": 0,
   "wire_crossings_estimate": 0,
-  "bounding_box_area": 96000.0,
-  "density": 83.33333333333333
+  "bounding_box_area": 40000.0,
+  "density": 150.0
 }

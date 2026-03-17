@@ -20,10 +20,7 @@ C {devices/res.sym} 1540 -400 0 0 {name=Rg
 value=1Meg}
 C {devices/res.sym} 1760 -400 0 0 {name=Rh
 value=1Meg}
-C {devices/vsource.sym} 440 -130 0 0 {name=VS1
-value=PWL(15.9NS}
 C {devices/lab_pin.sym} 1980 -310 0 0 {name=l_1 sig_type=std_logic lab=1}
-C {devices/lab_pin.sym} 440 -160 0 0 {name=l_1 sig_type=std_logic lab=1}
 C {devices/lab_pin.sym} 1980 -250 0 0 {name=l_2 sig_type=std_logic lab=2}
 C {devices/gnd.sym} 440 -430 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 660 -430 0 0 {name=l_0 lab=GND}
@@ -32,7 +29,6 @@ C {devices/gnd.sym} 1100 -370 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 1320 -370 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 1540 -370 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 1760 -370 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 440 -100 0 0 {name=l_0 lab=GND}
 C {devices/lab_pin.sym} 440 -370 0 0 {name=l_3 sig_type=std_logic lab=3}
 C {devices/lab_pin.sym} 660 -370 0 0 {name=l_4 sig_type=std_logic lab=4}
 C {devices/lab_pin.sym} 880 -370 0 0 {name=l_5 sig_type=std_logic lab=5}

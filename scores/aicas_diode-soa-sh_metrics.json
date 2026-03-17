@@ -1,9 +1,9 @@
 {
   "name": "aicas_diode-soa-sh",
-  "components": 8,
-  "wires": 4,
+  "components": 6,
+  "wires": 0,
   "labels": 0,
   "wire_crossings_estimate": 0,
   "bounding_box_area": 120000.0,
-  "density": 66.66666666666667
+  "density": 50.0
 }

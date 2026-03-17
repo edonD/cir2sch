@@ -1,9 +1,9 @@
 {
   "name": "aicas_CurrentBias_IDC",
-  "components": 19,
-  "wires": 5,
+  "components": 7,
+  "wires": 4,
   "labels": 0,
   "wire_crossings_estimate": 0,
-  "bounding_box_area": 126000.0,
-  "density": 150.79365079365078
+  "bounding_box_area": 100000.0,
+  "density": 70.0
 }

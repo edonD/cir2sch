@@ -1,9 +1,9 @@
 {
   "name": "aicas_Optimos_out",
-  "components": 16,
-  "wires": 7,
+  "components": 7,
+  "wires": 2,
   "labels": 0,
   "wire_crossings_estimate": 0,
-  "bounding_box_area": 100000.0,
-  "density": 160.0
+  "bounding_box_area": 44000.0,
+  "density": 159.0909090909091
 }

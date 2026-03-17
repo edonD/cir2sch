@@ -19,16 +19,10 @@ C {devices/res.sym} 660 -400 0 0 {name=R31
 value=22k}
 C {devices/res.sym} 880 -400 0 0 {name=R30
 value=22k}
-C {devices/vsource.sym} 440 200 0 0 {name=Vbat
-value=9V}
-C {devices/vsource.sym} 570 200 0 0 {name=V3
-value=6V}
 C {devices/res.sym} 870 -550 0 0 {name=R?
 value=2.2k}
 C {devices/res.sym} 1120 -310 0 0 {name=R19
 value=22k}
-C {devices/vsource.sym} 700 200 0 0 {name=V1
-value=26V}
 C {devices/res.sym} 1100 -400 0 0 {name=R18
 value=2.2k}
 C {devices/res.sym} 1320 -400 0 0 {name=R17
@@ -76,8 +70,6 @@ value=2.2k}
 C {TL431-R.sym} 3750 60 0 0 {name=X3}
 C {devices/res.sym} 2640 -400 0 0 {name=R4
 value=22k}
-C {devices/vsource.sym} 830 200 0 0 {name=Vvcc
-value=0V}
 C {devices/res.sym} 3180 -280 0 0 {name=R24
 value=10k}
 C {LM293.sym} 3970 60 0 0 {name=X2}
@@ -163,7 +155,6 @@ C {devices/vdd.sym} 3500 -300 0 0 {name=l_Vcc lab=Vcc}
 C {devices/vdd.sym} 660 -370 0 0 {name=l_Vcc lab=Vcc}
 C {devices/vdd.sym} 880 -370 0 0 {name=l_Vcc lab=Vcc}
 C {devices/vdd.sym} 870 -520 0 0 {name=l_Vcc lab=Vcc}
-C {devices/vdd.sym} 700 170 0 0 {name=l_Vcc lab=Vcc}
 C {devices/vdd.sym} 1100 -370 0 0 {name=l_Vcc lab=Vcc}
 C {devices/vdd.sym} 3720 -300 0 0 {name=l_Vcc lab=Vcc}
 C {devices/vdd.sym} 1540 -430 0 0 {name=l_Vcc lab=Vcc}
@@ -176,9 +167,7 @@ C {devices/vdd.sym} 3940 240 0 0 {name=l_Vcc lab=Vcc}
 C {devices/vdd.sym} 3500 420 0 0 {name=l_Vcc lab=Vcc}
 C {devices/gnd.sym} 3560 -300 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 440 -370 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 570 230 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 870 -580 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 700 230 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 1320 -370 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 3780 -300 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 1760 -430 0 0 {name=l_0 lab=GND}
@@ -189,7 +178,6 @@ C {devices/gnd.sym} 2420 -430 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 3560 40 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 3780 40 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 2640 -430 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 830 230 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 4000 60 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 3780 240 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 4000 240 0 0 {name=l_0 lab=GND}
@@ -198,7 +186,6 @@ C {devices/gnd.sym} 2740 20 0 0 {name=l_0 lab=GND}
 C {devices/lab_pin.sym} 3500 -280 0 0 {name=l_ledverte sig_type=std_logic lab=ledverte}
 C {devices/lab_pin.sym} 660 -430 0 0 {name=l_ledverte sig_type=std_logic lab=ledverte}
 C {devices/lab_pin.sym} 2960 -310 0 0 {name=l_vmbatm sig_type=std_logic lab=vmbatm}
-C {devices/lab_pin.sym} 440 230 0 0 {name=l_vmbatm sig_type=std_logic lab=vmbatm}
 C {devices/lab_pin.sym} 3940 -120 0 0 {name=l_vmbatm sig_type=std_logic lab=vmbatm}
 C {devices/lab_pin.sym} 2960 -250 0 0 {name=l_1 sig_type=std_logic lab=1}
 C {devices/lab_pin.sym} 660 -340 0 0 {name=l_Imbat sig_type=std_logic lab=Imbat}
@@ -208,9 +195,7 @@ C {devices/lab_pin.sym} 3720 -320 0 0 {name=l_V9p sig_type=std_logic lab=V9p}
 C {devices/lab_pin.sym} 880 -430 0 0 {name=l_ledrouge sig_type=std_logic lab=ledrouge}
 C {devices/lab_pin.sym} 1620 -280 0 0 {name=l_ledrouge sig_type=std_logic lab=ledrouge}
 C {devices/lab_pin.sym} 3500 230 0 0 {name=l_ledrouge sig_type=std_logic lab=ledrouge}
-C {devices/lab_pin.sym} 440 170 0 0 {name=l_2 sig_type=std_logic lab=2}
 C {devices/lab_pin.sym} 1740 -210 0 0 {name=l_2 sig_type=std_logic lab=2}
-C {devices/lab_pin.sym} 570 170 0 0 {name=l_3 sig_type=std_logic lab=3}
 C {devices/lab_pin.sym} 2770 -340 0 0 {name=l_3 sig_type=std_logic lab=3}
 C {devices/lab_pin.sym} 1120 -340 0 0 {name=l_vmbat sig_type=std_logic lab=vmbat}
 C {devices/lab_pin.sym} 2200 -150 0 0 {name=l_vmbat sig_type=std_logic lab=vmbat}
@@ -241,7 +226,6 @@ C {devices/lab_pin.sym} 2640 -370 0 0 {name=l_v1p sig_type=std_logic lab=v1p}
 C {devices/lab_pin.sym} 3720 220 0 0 {name=l_v1p sig_type=std_logic lab=v1p}
 C {devices/lab_pin.sym} 2200 -90 0 0 {name=l_v1p sig_type=std_logic lab=v1p}
 C {devices/lab_pin.sym} 2740 80 0 0 {name=l_v1p sig_type=std_logic lab=v1p}
-C {devices/lab_pin.sym} 830 170 0 0 {name=l_cmd_buck sig_type=std_logic lab=cmd_buck}
 C {devices/lab_pin.sym} 3780 220 0 0 {name=l_V1m sig_type=std_logic lab=V1m}
 C {devices/lab_pin.sym} 3310 -310 0 0 {name=l_Vmbat sig_type=std_logic lab=Vmbat}
 C {devices/lab_pin.sym} 2240 -250 0 0 {name=l_Vmbatm sig_type=std_logic lab=Vmbatm}

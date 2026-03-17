@@ -1,9 +1,9 @@
 {
   "name": "aicas_diffpair",
-  "components": 18,
-  "wires": 9,
+  "components": 12,
+  "wires": 2,
   "labels": 0,
   "wire_crossings_estimate": 0,
-  "bounding_box_area": 96000.0,
-  "density": 187.5
+  "bounding_box_area": 40000.0,
+  "density": 300.0
 }

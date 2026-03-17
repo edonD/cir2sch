@@ -1,9 +1,9 @@
 {
   "name": "aicas_diffamp",
-  "components": 27,
-  "wires": 0,
+  "components": 16,
+  "wires": 2,
   "labels": 0,
   "wire_crossings_estimate": 0,
   "bounding_box_area": 160000.0,
-  "density": 168.75
+  "density": 100.0
 }

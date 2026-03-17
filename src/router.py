@@ -245,7 +245,23 @@ def route_nets(placed: PlacedCircuit) -> tuple[list[Wire], list[Label]]:
                         seen_rows.add(row_key)
                     labels.append(Label(x=x, y=y, net=net_name))
             else:
+                # For MOSFETs, skip bulk-pin labels when the same transistor's
+                # source already connects to this supply — avoids duplicate VDD/VSS
+                # symbols stacked on each transistor.
+                comp_source_pins = {}  # comp_name -> set of supply-connected pin types
                 for cn, pn in conns:
+                    comp = placed.circuit.components.get(cn)
+                    if comp and comp.type in ("mosfet_n", "mosfet_p"):
+                        comp_source_pins.setdefault(cn, set()).add(pn)
+
+                for cn, pn in conns:
+                    comp = placed.circuit.components.get(cn)
+                    # If this is the bulk pin of a MOSFET and its source is also on
+                    # this supply net, skip the bulk label (source label suffices).
+                    if (comp and comp.type in ("mosfet_n", "mosfet_p")
+                            and pn == "bulk"
+                            and "source" in comp_source_pins.get(cn, set())):
+                        continue
                     x, y = _get_pin_position(placed, cn, pn)
                     labels.append(Label(x=x, y=y, net=net_name))
             continue

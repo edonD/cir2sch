@@ -1,9 +1,9 @@
 {
   "name": "aicas_ac-resistance",
-  "components": 10,
-  "wires": 6,
+  "components": 9,
+  "wires": 4,
   "labels": 0,
   "wire_crossings_estimate": 0,
-  "bounding_box_area": 160000.0,
-  "density": 62.5
+  "bounding_box_area": 130000.0,
+  "density": 69.23076923076923
 }

@@ -1,9 +1,9 @@
 {
   "name": "aicas_clkfeed",
-  "components": 37,
-  "wires": 30,
+  "components": 20,
+  "wires": 23,
   "labels": 0,
   "wire_crossings_estimate": 1,
-  "bounding_box_area": 242000.0,
-  "density": 152.89256198347107
+  "bounding_box_area": 190000.0,
+  "density": 105.26315789473684
 }

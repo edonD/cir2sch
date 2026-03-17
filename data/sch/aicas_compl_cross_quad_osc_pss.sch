@@ -6,8 +6,6 @@ S {}
 E {}
 C {devices/capa.sym} 830 -280 0 0 {name=Complimentary
 value=CMOS}
-C {devices/vsource.sym} 110 200 0 0 {name=vdd
-value=1.2}
 C {devices/res.sym} 570 -550 0 0 {name=rdd
 value=70m}
 C {devices/res.sym} 350 50 0 0 {name=rgnd
@@ -95,8 +93,6 @@ N 620 -20 620 -30 {lab=id}
 N 620 -30 480 -30 {lab=id}
 C {devices/lab_pin.sym} 830 -310 0 0 {name=l_Cross sig_type=std_logic lab=Cross}
 C {devices/lab_pin.sym} 830 -250 0 0 {name=l_Quad sig_type=std_logic lab=Quad}
-C {devices/vdd.sym} 110 170 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 570 -580 0 0 {name=l_vdd lab=VDD}
-C {devices/gnd.sym} 110 230 0 0 {name=l_gnd lab=GND}
 C {devices/gnd.sym} 350 20 0 0 {name=l_gnd lab=GND}
 C {devices/lab_pin.sym} 360 -90 0 0 {name=l_i1 sig_type=std_logic lab=i1}

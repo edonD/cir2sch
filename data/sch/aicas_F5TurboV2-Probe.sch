@@ -80,12 +80,6 @@ l=0.18u
 model=NMOS}
 C {devices/res.sym} 460 50 0 0 {name=Rl1
 value=4}
-C {devices/vsource.sym} 110 200 0 0 {name=V1
-value=32}
-C {devices/vsource.sym} 240 200 0 0 {name=V2
-value=-32}
-C {devices/vsource.sym} 370 200 0 0 {name=V3
-value=sin(0}
 T {XP2} 1880 -280 0 0 0.25 0.25 {}
 T {XP3} 2000 -100 0 0 0.25 0.25 {}
 T {XP1} 1880 80 0 0 0.25 0.25 {}
@@ -164,19 +158,13 @@ C {devices/gnd.sym} 2050 -140 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 960 80 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 1150 -370 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 460 80 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 110 230 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 240 230 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 370 230 0 0 {name=l_0 lab=GND}
 C {devices/lab_pin.sym} 830 -370 0 0 {name=l_Net-_P3-Pad1_ sig_type=std_logic lab=Net-_P3-Pad1_}
 C {devices/lab_pin.sym} 870 -190 0 0 {name=l_Net-_P2-Pad1_ sig_type=std_logic lab=Net-_P2-Pad1_}
 C {devices/lab_pin.sym} 1870 -320 0 0 {name=l_Net-_P2-Pad1_ sig_type=std_logic lab=Net-_P2-Pad1_}
-C {devices/lab_pin.sym} 240 170 0 0 {name=l_-32 sig_type=std_logic lab=-32}
 C {devices/lab_pin.sym} 90 -150 0 0 {name=l_Net-_Q5-Pad2_ sig_type=std_logic lab=Net-_Q5-Pad2_}
 C {devices/lab_pin.sym} 870 -250 0 0 {name=l_Net-_Q5-Pad2_ sig_type=std_logic lab=Net-_Q5-Pad2_}
 C {devices/lab_pin.sym} 130 -120 0 0 {name=l_Net-_D1a1-Pad2_ sig_type=std_logic lab=Net-_D1a1-Pad2_}
 C {devices/lab_pin.sym} 1280 -430 0 0 {name=l_Net-_Q1-Pad2_ sig_type=std_logic lab=Net-_Q1-Pad2_}
-C {devices/lab_pin.sym} 370 170 0 0 {name=l_in sig_type=std_logic lab=in}
-C {devices/lab_pin.sym} 110 170 0 0 {name=l_+32 sig_type=std_logic lab=+32}
 C {devices/lab_pin.sym} 590 -120 0 0 {name=l_Net-_D4a1-Pad1_ sig_type=std_logic lab=Net-_D4a1-Pad1_}
 C {devices/lab_pin.sym} 1520 -150 0 0 {name=l_Net-_Q4-Pad2_ sig_type=std_logic lab=Net-_Q4-Pad2_}
 C {devices/lab_pin.sym} 630 -150 0 0 {name=l_Net-_Q4-Pad2_ sig_type=std_logic lab=Net-_Q4-Pad2_}

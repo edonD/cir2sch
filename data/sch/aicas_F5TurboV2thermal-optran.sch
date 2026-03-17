@@ -60,8 +60,6 @@ C {RPOT.sym} 3250 -300 0 0 {name=XP1
 value=5k}
 C {RPOT.sym} 3030 -120 0 0 {name=XP2
 value=5k}
-C {devices/vsource.sym} 110 200 0 0 {name=V3
-value=0}
 C {devices/nmos4.sym} 110 -150 0 0 {name=MQ5
 w=5u
 l=0.18u
@@ -98,26 +96,18 @@ C {devices/res.sym} 2180 -220 0 0 {name=Rc5
 value=1}
 C {devices/res.sym} 2320 -220 0 0 {name=Rc7
 value=1}
-C {devices/vsource.sym} 240 200 0 0 {name=Vt1
-value=40}
 C {devices/capa.sym} 1710 -400 0 0 {name=Cc1
 value=1}
 C {devices/capa.sym} 1930 -400 0 0 {name=Cc3
 value=1}
 C {devices/capa.sym} 2150 -400 0 0 {name=Cc4
 value=1}
-C {devices/vsource.sym} 370 200 0 0 {name=V1
-value=32}
-C {devices/vsource.sym} 500 200 0 0 {name=V2
-value=-32}
 C {th.sym} 3250 -120 0 0 {name=XTH2}
 C {th.sym} 3030 60 0 0 {name=XTH1}
 C {devices/nmos4.sym} 390 -150 0 0 {name=MQ3
 w=5u
 l=0.18u
 model=Q3tc}
-C {devices/vsource.sym} 110 330 0 0 {name=Vs1
-value=0}
 C {genrelay.sym} 3250 60 0 0 {name=XS1}
 C {devices/capa.sym} 2370 -400 0 0 {name=Cc2
 value=1}
@@ -129,6 +119,8 @@ T {XP2} 3010 -100 0 0 0.25 0.25 {}
 T {XTH2} 3230 -100 0 0 0.25 0.25 {}
 T {XTH1} 3010 80 0 0 0.25 0.25 {}
 T {XS1} 3230 80 0 0 0.25 0.25 {}
+N 830 -430 830 -280 {lab=in}
+N 830 -280 1050 -280 {lab=in}
 N 1700 -250 1700 -130 {lab=+32}
 N 1700 -130 1740 -130 {lab=+32}
 N 1740 -130 1740 -160 {lab=+32}
@@ -194,32 +186,23 @@ N 2560 -290 2560 -210 {lab=Q4hs}
 N 2560 -210 2800 -210 {lab=Q4hs}
 N 2560 -290 2560 -430 {lab=Q4hs}
 N 2560 -430 2370 -430 {lab=Q4hs}
-C {devices/lab_pin.sym} 830 -430 0 0 {name=l_in sig_type=std_logic lab=in}
-C {devices/lab_pin.sym} 1050 -280 0 0 {name=l_in sig_type=std_logic lab=in}
-C {devices/lab_pin.sym} 110 170 0 0 {name=l_in sig_type=std_logic lab=in}
 C {devices/gnd.sym} 830 -370 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 1050 -370 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 1270 -430 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 1490 -370 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 3070 -320 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 110 230 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 450 80 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 710 80 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 210 80 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 590 80 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 240 230 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 1710 -370 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 1930 -370 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 2150 -370 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 370 230 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 500 230 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 110 360 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 3280 40 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 3280 60 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 2370 -370 0 0 {name=l_0 lab=GND}
 C {devices/lab_pin.sym} 1050 -340 0 0 {name=l_Net-_Q1-Pad2_ sig_type=std_logic lab=Net-_Q1-Pad2_}
 C {devices/lab_pin.sym} 2680 -310 0 0 {name=l_+32 sig_type=std_logic lab=+32}
-C {devices/lab_pin.sym} 370 170 0 0 {name=l_+32 sig_type=std_logic lab=+32}
 C {devices/lab_pin.sym} 2680 -250 0 0 {name=l_Net-_P1-Pad1_ sig_type=std_logic lab=Net-_P1-Pad1_}
 C {devices/lab_pin.sym} 2920 -160 0 0 {name=l_Net-_P1-Pad1_ sig_type=std_logic lab=Net-_P1-Pad1_}
 C {devices/lab_pin.sym} 1960 -180 0 0 {name=l_Net-_P1-Pad1_ sig_type=std_logic lab=Net-_P1-Pad1_}
@@ -230,7 +213,6 @@ C {devices/lab_pin.sym} 3010 -320 0 0 {name=l_Net-_P3-Pad1_ sig_type=std_logic l
 C {devices/lab_pin.sym} 1270 -370 0 0 {name=l_Net-_P3-Pad3_ sig_type=std_logic lab=Net-_P3-Pad3_}
 C {devices/lab_pin.sym} 3010 -300 0 0 {name=l_Net-_P3-Pad3_ sig_type=std_logic lab=Net-_P3-Pad3_}
 C {devices/lab_pin.sym} 1580 -190 0 0 {name=l_Net-_P2-Pad1_ sig_type=std_logic lab=Net-_P2-Pad1_}
-C {devices/lab_pin.sym} 500 170 0 0 {name=l_-32 sig_type=std_logic lab=-32}
 C {devices/lab_pin.sym} 1960 -240 0 0 {name=l_Net-_Q3-Pad2_ sig_type=std_logic lab=Net-_Q3-Pad2_}
 C {devices/lab_pin.sym} 370 -150 0 0 {name=l_Net-_Q3-Pad2_ sig_type=std_logic lab=Net-_Q3-Pad2_}
 C {devices/lab_pin.sym} 1580 -250 0 0 {name=l_Net-_Q5-Pad2_ sig_type=std_logic lab=Net-_Q5-Pad2_}
@@ -256,7 +238,6 @@ C {devices/lab_pin.sym} 3220 40 0 0 {name=l_Net-_Ra1-Pad2_ sig_type=std_logic la
 C {devices/lab_pin.sym} 960 -30 0 0 {name=l_Net-_Ra1-Pad2_ sig_type=std_logic lab=Net-_Ra1-Pad2_}
 C {devices/lab_pin.sym} 3060 40 0 0 {name=l_Q3hs sig_type=std_logic lab=Q3hs}
 C {devices/lab_pin.sym} 1700 -280 0 0 {name=l_Net-_Rc2-Pad2_ sig_type=std_logic lab=Net-_Rc2-Pad2_}
-C {devices/lab_pin.sym} 240 170 0 0 {name=l_Net-_Rc2-Pad2_ sig_type=std_logic lab=Net-_Rc2-Pad2_}
 C {devices/lab_pin.sym} 2440 -260 0 0 {name=l_Q5hs sig_type=std_logic lab=Q5hs}
 C {devices/lab_pin.sym} 2180 -190 0 0 {name=l_Q5hs sig_type=std_logic lab=Q5hs}
 C {devices/lab_pin.sym} 1930 -430 0 0 {name=l_Q5hs sig_type=std_logic lab=Q5hs}
@@ -268,5 +249,4 @@ C {devices/lab_pin.sym} 1820 -290 0 0 {name=l_Q3tc sig_type=std_logic lab=Q3tc}
 C {devices/lab_pin.sym} 2800 -270 0 0 {name=l_Q4tc sig_type=std_logic lab=Q4tc}
 C {devices/lab_pin.sym} 2180 -250 0 0 {name=l_Q5tc sig_type=std_logic lab=Q5tc}
 C {devices/lab_pin.sym} 2320 -250 0 0 {name=l_Q6tc sig_type=std_logic lab=Q6tc}
-C {devices/lab_pin.sym} 110 300 0 0 {name=l_Net-_S1-Pad3_ sig_type=std_logic lab=Net-_S1-Pad3_}
 C {devices/lab_pin.sym} 3220 60 0 0 {name=l_Net-_S1-Pad3_ sig_type=std_logic lab=Net-_S1-Pad3_}

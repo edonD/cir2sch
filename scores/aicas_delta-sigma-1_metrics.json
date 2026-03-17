@@ -1,9 +1,9 @@
 {
   "name": "aicas_delta-sigma-1",
-  "components": 39,
+  "components": 27,
   "wires": 20,
   "labels": 0,
   "wire_crossings_estimate": 1,
-  "bounding_box_area": 130000.0,
-  "density": 300.0
+  "bounding_box_area": 76000.0,
+  "density": 355.2631578947369
 }

@@ -1,9 +1,9 @@
 {
   "name": "aicas_F5TurboV2thermal-optran",
-  "components": 133,
-  "wires": 65,
+  "components": 116,
+  "wires": 67,
   "labels": 0,
   "wire_crossings_estimate": 1,
-  "bounding_box_area": 186000.0,
-  "density": 715.0537634408602
+  "bounding_box_area": 132000.0,
+  "density": 878.7878787878788
 }

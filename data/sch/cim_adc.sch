@@ -90,7 +90,6 @@ N 240 -250 240 -220 {lab=outp}
 N 240 -220 380 -220 {lab=outp}
 C {devices/lab_pin.sym} 600 30 0 0 {name=l_clk sig_type=std_logic lab=clk}
 C {devices/gnd.sym} 640 60 0 0 {name=l_vss lab=VSS}
-C {devices/gnd.sym} 640 30 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 220 -150 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 400 -150 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 240 -220 0 0 {name=l_vss lab=VSS}
@@ -98,17 +97,11 @@ C {devices/gnd.sym} 420 -220 0 0 {name=l_vss lab=VSS}
 C {devices/lab_pin.sym} 180 -150 0 0 {name=l_inp sig_type=std_logic lab=inp}
 C {devices/lab_pin.sym} 440 -150 0 0 {name=l_inm sig_type=std_logic lab=inm}
 C {devices/vdd.sym} 530 -370 0 0 {name=l_vdd lab=VDD}
-C {devices/vdd.sym} 530 -400 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 710 -370 0 0 {name=l_vdd lab=VDD}
-C {devices/vdd.sym} 710 -400 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 810 -370 0 0 {name=l_vdd lab=VDD}
-C {devices/vdd.sym} 810 -400 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 990 -370 0 0 {name=l_vdd lab=VDD}
-C {devices/vdd.sym} 990 -400 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 240 -370 0 0 {name=l_vdd lab=VDD}
-C {devices/vdd.sym} 240 -400 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 420 -370 0 0 {name=l_vdd lab=VDD}
-C {devices/vdd.sym} 420 -400 0 0 {name=l_vdd lab=VDD}
 C {devices/lab_pin.sym} 810 -430 0 0 {name=l_outn sig_type=std_logic lab=outn}
 C {devices/lab_pin.sym} 990 -430 0 0 {name=l_outp sig_type=std_logic lab=outp}
 C {devices/ipin.sym} 80 -150 0 0 {name=p_inp lab=inp}

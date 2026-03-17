@@ -1,9 +1,9 @@
 {
   "name": "aicas_AMP_PSRR",
-  "components": 14,
-  "wires": 4,
+  "components": 7,
+  "wires": 2,
   "labels": 0,
   "wire_crossings_estimate": 0,
   "bounding_box_area": 120000.0,
-  "density": 116.66666666666667
+  "density": 58.333333333333336
 }

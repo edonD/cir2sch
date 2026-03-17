@@ -4,8 +4,6 @@ K {}
 V {}
 S {}
 E {}
-C {devices/vsource.sym} 440 200 0 0 {name=V1
-value=1}
 C {devices/res.sym} 440 -400 0 0 {name=R1
 value=4K7}
 C {devices/res.sym} 320 50 0 0 {name=R2
@@ -28,8 +26,7 @@ C {devices/res.sym} 560 50 0 0 {name=R10
 value=470L}
 C {devices/res.sym} 1180 50 0 0 {name=R11
 value=4M7}
-N 440 170 440 20 {lab=1}
-N 440 20 320 20 {lab=1}
+N 320 20 440 20 {lab=1}
 N 440 20 560 20 {lab=1}
 N 560 20 680 20 {lab=1}
 N 680 20 800 20 {lab=1}
@@ -39,7 +36,6 @@ N 1060 20 1180 20 {lab=1}
 N 1180 20 1300 20 {lab=1}
 N 1300 20 1420 20 {lab=1}
 C {devices/lab_pin.sym} 440 -430 0 0 {name=l_1 sig_type=std_logic lab=1}
-C {devices/gnd.sym} 440 230 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 440 -370 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 320 80 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 440 80 0 0 {name=l_0 lab=GND}

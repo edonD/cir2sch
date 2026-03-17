@@ -6,16 +6,8 @@ S {}
 E {}
 C {devices/capa.sym} 830 -280 0 0 {name=CMOS
 value=AMPLIFIER}
-C {devices/vsource.sym} 110 180 0 0 {name=VDD
-value=2.5V}
-C {devices/vsource.sym} 240 180 0 0 {name=VSS
-value=-2.5V}
-C {devices/isource.sym} 370 180 0 0 {name=IBIAS
+C {devices/isource.sym} 110 180 0 0 {name=IBIAS
 value=100UA}
-C {devices/vsource.sym} 500 180 0 0 {name=VPL
-value=0.0V}
-C {devices/vsource.sym} 110 310 0 0 {name=VMI
-value=0.0V}
 C {devices/pmos4.sym} 110 -400 0 0 {name=M1
 w=15U
 l=1U
@@ -54,8 +46,6 @@ N 520 -400 590 -400 {lab=1}
 N 590 -400 590 -370 {lab=1}
 N 590 -370 410 -370 {lab=1}
 N 410 -370 410 -400 {lab=1}
-N 240 150 240 60 {lab=2}
-N 240 60 200 60 {lab=2}
 N 200 60 200 30 {lab=2}
 N 200 30 200 -120 {lab=2}
 N 200 -120 130 -120 {lab=2}
@@ -86,14 +76,7 @@ N 310 -180 590 -180 {lab=8}
 N 590 -180 590 -430 {lab=8}
 C {devices/lab_pin.sym} 830 -310 0 0 {name=l_2-STAGE sig_type=std_logic lab=2-STAGE}
 C {devices/lab_pin.sym} 830 -250 0 0 {name=l_OPERATIONAL sig_type=std_logic lab=OPERATIONAL}
-C {devices/lab_pin.sym} 110 150 0 0 {name=l_1 sig_type=std_logic lab=1}
 C {devices/gnd.sym} 110 210 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 240 210 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 370 210 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 500 210 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 110 340 0 0 {name=l_0 lab=GND}
-C {devices/lab_pin.sym} 370 150 0 0 {name=l_9 sig_type=std_logic lab=9}
-C {devices/lab_pin.sym} 500 150 0 0 {name=l_3 sig_type=std_logic lab=3}
+C {devices/lab_pin.sym} 110 150 0 0 {name=l_9 sig_type=std_logic lab=9}
 C {devices/lab_pin.sym} 90 -400 0 0 {name=l_3 sig_type=std_logic lab=3}
-C {devices/lab_pin.sym} 110 280 0 0 {name=l_4 sig_type=std_logic lab=4}
 C {devices/lab_pin.sym} 350 -400 0 0 {name=l_4 sig_type=std_logic lab=4}
