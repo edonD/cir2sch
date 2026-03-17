@@ -170,9 +170,9 @@ def route_nets(placed: PlacedCircuit) -> tuple[list[Wire], list[Label]]:
         span = (max(xs) - min(xs)) + (max(ys) - min(ys))
 
         # For nets with too many connections or large span, use labels
+        # But still wire-connect pins that are close together
         if len(conns) > max_wire_fanout or span > LABEL_DISTANCE:
-            for (x, y) in positions:
-                labels.append(Label(x=x, y=y, net=net_name))
+            _label_with_local_wires(wires, labels, positions, net_name)
             continue
 
         # For 2-connection nets: direct L-route with crossing-aware direction
@@ -231,6 +231,48 @@ def _eliminate_crossings(wires: list[Wire], labels: list[Label]) -> tuple[list[W
             new_wires.append(w)
 
     return new_wires, labels
+
+
+def _label_with_local_wires(wires: list[Wire], labels: list[Label],
+                            positions: list[tuple], net: str):
+    """For nets using labels, still wire-connect pins that are close together.
+
+    Groups pins within LOCAL_DIST of each other, wires each group,
+    and adds a single label per group.
+    """
+    LOCAL_DIST = 300  # Max Manhattan distance to wire-connect
+    n = len(positions)
+    used = [False] * n
+
+    for i in range(n):
+        if used[i]:
+            continue
+        group = [i]
+        used[i] = True
+        # Find all pins close to this one (transitive closure)
+        changed = True
+        while changed:
+            changed = False
+            for j in range(n):
+                if used[j]:
+                    continue
+                for gi in group:
+                    dist = abs(positions[j][0] - positions[gi][0]) + abs(positions[j][1] - positions[gi][1])
+                    if dist <= LOCAL_DIST:
+                        group.append(j)
+                        used[j] = True
+                        changed = True
+                        break
+
+        group_pos = [positions[idx] for idx in group]
+
+        if len(group_pos) == 1:
+            labels.append(Label(x=group_pos[0][0], y=group_pos[0][1], net=net))
+        else:
+            # Wire-connect the group using chain routing
+            _add_chain_route(wires, group_pos, net)
+            # Add a single label at one end
+            labels.append(Label(x=group_pos[0][0], y=group_pos[0][1], net=net))
 
 
 def _add_smart_l_route(wires: list[Wire], x1: int, y1: int, x2: int, y2: int, net: str):

@@ -365,7 +365,7 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
 
     # === Stage 1: Group connected blocks and place as vertical stacks ===
     groups = _group_connected_blocks(circuit, blocks)
-    cur_x = 300
+    cur_x = 200
 
     for group in groups:
         # Separate by type
@@ -379,7 +379,7 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
             chain = _order_inverter_chain(circuit, inv_blocks)
             if chain:
                 # Place inverter chain with tight spacing
-                INV_SPACING = 240
+                INV_SPACING = 280
                 ix = cur_x
                 for block in chain:
                     _place_block(result, block, ix, PMOS_Y)

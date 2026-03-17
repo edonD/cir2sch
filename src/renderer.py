@@ -79,7 +79,9 @@ def _format_attributes(comp: Component) -> str:
         nf = comp.params.get("nf", "1")
         attrs.append(f"w={w}")
         attrs.append(f"l={l}")
-        attrs.append(f"m={m}")
+        # Only show m if not default (saves text space)
+        if m not in ("1", 1):
+            attrs.append(f"m={m}")
         if nf != "1":
             attrs.append(f"nf={nf}")
         attrs.append(f"model={comp.model}")
