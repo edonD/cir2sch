@@ -907,15 +907,15 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
 
     # === Stage 4: Place sources compactly BELOW the circuit ===
     if sources:
-        # Find the bottom and left of the circuit so far
-        all_y = [p.y for p in result.placements.values()] if result.placements else [0]
-        all_x = [p.x for p in result.placements.values()] if result.placements else [300]
-        src_y_start = max(all_y) + 150
-        src_x_start = min(all_x)
-        # Use enough columns to fit in 2 rows max
-        src_cols = len(sources)  # All in one row
-        for i, name in enumerate(sources):
-            if name not in result.placements:
+        unplaced_sources = [s for s in sources if s not in result.placements]
+        if unplaced_sources:
+            all_y = [p.y for p in result.placements.values()] if result.placements else [0]
+            all_x = [p.x for p in result.placements.values()] if result.placements else [300]
+            src_y_start = max(all_y) + 150
+            src_x_start = min(all_x)
+            # Use a grid: max 4 columns to keep width reasonable
+            src_cols = min(len(unplaced_sources), 4)
+            for i, name in enumerate(unplaced_sources):
                 row = i // src_cols
                 col = i % src_cols
                 result.placements[name] = Placement(

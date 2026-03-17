@@ -14,13 +14,13 @@ C {devices/vsource.sym} 480 -70 0 0 {name=Vclk
 value=PULSE(0}
 C {devices/vsource.sym} 610 -70 0 0 {name=Vin0
 value=0}
-C {devices/vsource.sym} 740 -70 0 0 {name=Vin1
+C {devices/vsource.sym} 220 60 0 0 {name=Vin1
 value=0}
-C {devices/vsource.sym} 870 -70 0 0 {name=Vin2
+C {devices/vsource.sym} 350 60 0 0 {name=Vin2
 value=0}
-C {devices/vsource.sym} 1000 -70 0 0 {name=Vin3
+C {devices/vsource.sym} 480 60 0 0 {name=Vin3
 value=0}
-C {devices/vsource.sym} 1130 -70 0 0 {name=Vpwm
+C {devices/vsource.sym} 610 60 0 0 {name=Vpwm
 value=1.8}
 C {devices/nmos4.sym} 220 -220 0 0 {name=XMn1
 w=1u
@@ -77,10 +77,10 @@ C {devices/gnd.sym} 220 -40 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 350 -40 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 480 -40 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 610 -40 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 740 -40 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 870 -40 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 1000 -40 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 1130 -40 0 0 {name=l_0 lab=GND}
+C {devices/gnd.sym} 220 90 0 0 {name=l_0 lab=GND}
+C {devices/gnd.sym} 350 90 0 0 {name=l_0 lab=GND}
+C {devices/gnd.sym} 480 90 0 0 {name=l_0 lab=GND}
+C {devices/gnd.sym} 610 90 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 880 -220 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 350 -100 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 240 -190 0 0 {name=l_vss lab=VSS}
@@ -91,7 +91,7 @@ C {devices/gnd.sym} 760 -190 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 760 -220 0 0 {name=l_vss lab=VSS}
 C {devices/lab_pin.sym} 480 -100 0 0 {name=l_clk sig_type=std_logic lab=clk}
 C {devices/lab_pin.sym} 610 -100 0 0 {name=l_in0 sig_type=std_logic lab=in0}
-C {devices/lab_pin.sym} 740 -100 0 0 {name=l_in1 sig_type=std_logic lab=in1}
-C {devices/lab_pin.sym} 870 -100 0 0 {name=l_in2 sig_type=std_logic lab=in2}
-C {devices/lab_pin.sym} 1000 -100 0 0 {name=l_in3 sig_type=std_logic lab=in3}
-C {devices/lab_pin.sym} 1130 -100 0 0 {name=l_pwm_in sig_type=std_logic lab=pwm_in}
+C {devices/lab_pin.sym} 220 30 0 0 {name=l_in1 sig_type=std_logic lab=in1}
+C {devices/lab_pin.sym} 350 30 0 0 {name=l_in2 sig_type=std_logic lab=in2}
+C {devices/lab_pin.sym} 480 30 0 0 {name=l_in3 sig_type=std_logic lab=in3}
+C {devices/lab_pin.sym} 610 30 0 0 {name=l_pwm_in sig_type=std_logic lab=pwm_in}
