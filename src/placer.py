@@ -601,14 +601,7 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
             else:
                 px += H_SPACING + BLOCK_GAP
 
-        # Place top NMOS blocks above bottom ones (between PMOS and NMOS bands)
-        top_y = MID_Y  # Between PMOS and NMOS
-        tx = cur_x
-        for block in top_n:
-            _place_block(result, block, tx, top_y)
-            tx += H_SPACING + BLOCK_GAP
-
-        # Place bottom NMOS blocks at NMOS_Y
+        # Place bottom NMOS blocks FIRST (so top blocks can align above them)
         nx = cur_x
         for block in bottom_n:
             _place_block(result, block, nx, NMOS_Y)
@@ -630,6 +623,29 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
                         context_placed.add(load_name)
 
             nx += H_SPACING + BLOCK_GAP
+
+        # Place top NMOS blocks aligned above their bottom stacking partners
+        top_y = MID_Y
+        tx = cur_x
+        for block in top_n:
+            block_sources = set()
+            for cn in block.components:
+                block_sources.add(circuit.components[cn].pins["source"])
+            aligned_x = None
+            for bot_block in bottom_n:
+                for cn in bot_block.components:
+                    drain_net = circuit.components[cn].pins["drain"]
+                    if drain_net in block_sources and cn in result.placements:
+                        aligned_x = result.placements[cn].x
+                        break
+                if aligned_x is not None:
+                    break
+
+            if aligned_x is not None:
+                _place_block(result, block, aligned_x, top_y)
+            else:
+                _place_block(result, block, tx, top_y)
+            tx = max(tx, max(result.placements[c].x for c in block.components)) + BLOCK_GAP + H_SPACING // 2
 
         cur_x = max(px, tx, nx)
 
