@@ -79,11 +79,6 @@ N 310 -150 580 -150 {lab=net5}
 N 580 -150 580 -180 {lab=net5}
 N 580 -180 620 -180 {lab=net5}
 N 310 -370 310 -400 {lab=VDD2}
-N 500 -430 460 -430 {lab=net3}
-N 460 -430 460 -400 {lab=net3}
-N 460 -400 350 -400 {lab=net3}
-N 350 -400 350 -310 {lab=net3}
-N 350 -400 90 -400 {lab=net3}
 C {devices/gnd.sym} 350 -150 0 0 {name=l_VSS lab=VSS}
 C {devices/gnd.sym} 130 -120 0 0 {name=l_VSS lab=VSS}
 C {devices/gnd.sym} 130 -150 0 0 {name=l_VSS lab=VSS}
@@ -98,5 +93,11 @@ C {devices/vdd.sym} 500 -400 0 0 {name=l_VDD lab=VDD}
 C {devices/vdd.sym} 130 -370 0 0 {name=l_VDD lab=VDD}
 C {devices/vdd.sym} 130 -400 0 0 {name=l_VDD lab=VDD}
 C {devices/lab_pin.sym} 620 -120 0 0 {name=l_Ibias sig_type=std_logic lab=Ibias}
+C {devices/lab_pin.sym} 500 -430 0 0 {name=l_net3 sig_type=std_logic lab=net3}
+C {devices/lab_pin.sym} 460 -400 0 0 {name=l_net3 sig_type=std_logic lab=net3}
+C {devices/lab_pin.sym} 350 -400 0 0 {name=l_net3 sig_type=std_logic lab=net3}
+C {devices/lab_pin.sym} 350 -310 0 0 {name=l_net3 sig_type=std_logic lab=net3}
+C {devices/lab_pin.sym} 90 -400 0 0 {name=l_net3 sig_type=std_logic lab=net3}
+C {devices/lab_pin.sym} 460 -430 0 0 {name=l_net3 sig_type=std_logic lab=net3}
 C {devices/ipin.sym} -10 -150 0 0 {name=p_Ibias lab=Ibias}
 C {devices/iopin.sym} -10 -400 0 0 {name=p_VDD2 lab=VDD2}

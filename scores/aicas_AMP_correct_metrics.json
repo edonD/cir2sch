@@ -1,7 +1,7 @@
 {
   "name": "aicas_AMP_correct",
   "components": 33,
-  "wires": 23,
+  "wires": 24,
   "labels": 0,
   "wire_crossings_estimate": 1,
   "bounding_box_area": 126000.0,

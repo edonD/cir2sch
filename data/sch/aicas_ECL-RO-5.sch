@@ -28,6 +28,14 @@ N 490 -320 550 -320 {lab=out9}
 N 550 -300 550 -320 {lab=out1}
 N 550 -320 710 -320 {lab=out1}
 N 710 -320 770 -320 {lab=out1}
+N 490 -280 490 -100 {lab=vee}
+N 490 -100 490 80 {lab=vee}
+N 490 -280 710 -280 {lab=vee}
+N 710 -280 710 -100 {lab=vee}
+N 710 -100 710 80 {lab=vee}
+N 710 -280 930 -280 {lab=vee}
+N 930 -280 930 -100 {lab=vee}
+N 930 -100 930 80 {lab=vee}
 N 710 -300 710 -120 {lab=a2}
 N 710 -120 930 -120 {lab=a2}
 N 770 -300 770 -320 {lab=out2}
@@ -49,18 +57,6 @@ N 710 40 770 40 {lab=out7}
 N 770 60 770 40 {lab=out8}
 N 770 40 930 40 {lab=out8}
 N 930 40 990 40 {lab=out8}
-N 710 -280 710 -100 {lab=vee}
-N 710 -100 710 80 {lab=vee}
-N 710 -280 930 -280 {lab=vee}
-N 930 -280 930 -100 {lab=vee}
-N 930 -100 930 80 {lab=vee}
-N 710 -280 490 -280 {lab=vee}
-N 490 -280 490 -100 {lab=vee}
-N 490 -100 490 80 {lab=vee}
-N 990 -300 990 -140 {lab=out3}
-N 490 -140 550 -140 {lab=out3}
-N 990 -120 990 40 {lab=out6}
-N 490 40 550 40 {lab=out6}
 C {devices/lab_pin.sym} 990 60 0 0 {name=l_out9 sig_type=std_logic lab=out9}
 C {devices/lab_pin.sym} 490 -300 0 0 {name=l_a1 sig_type=std_logic lab=a1}
 C {devices/gnd.sym} 550 -280 0 0 {name=l_gnd lab=GND}
@@ -76,3 +72,11 @@ C {devices/lab_pin.sym} 930 -300 0 0 {name=l_a3 sig_type=std_logic lab=a3}
 C {devices/lab_pin.sym} 490 60 0 0 {name=l_a3 sig_type=std_logic lab=a3}
 C {devices/lab_pin.sym} 300 120 0 0 {name=l_VEE sig_type=std_logic lab=VEE}
 C {devices/gnd.sym} 300 180 0 0 {name=l_GND lab=GND}
+C {devices/lab_pin.sym} 990 -300 0 0 {name=l_out3 sig_type=std_logic lab=out3}
+C {devices/lab_pin.sym} 490 -140 0 0 {name=l_out3 sig_type=std_logic lab=out3}
+C {devices/lab_pin.sym} 550 -140 0 0 {name=l_out3 sig_type=std_logic lab=out3}
+C {devices/lab_pin.sym} 990 -140 0 0 {name=l_out3 sig_type=std_logic lab=out3}
+C {devices/lab_pin.sym} 990 -120 0 0 {name=l_out6 sig_type=std_logic lab=out6}
+C {devices/lab_pin.sym} 490 40 0 0 {name=l_out6 sig_type=std_logic lab=out6}
+C {devices/lab_pin.sym} 550 40 0 0 {name=l_out6 sig_type=std_logic lab=out6}
+C {devices/lab_pin.sym} 990 40 0 0 {name=l_out6 sig_type=std_logic lab=out6}

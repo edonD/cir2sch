@@ -46,7 +46,6 @@ N 840 -200 840 -280 {lab=d1}
 N 840 -280 1090 -280 {lab=d1}
 N 980 -180 980 -280 {lab=d0}
 N 980 -280 1150 -280 {lab=d0}
-N 1090 -30 830 -30 {lab=input}
 C {devices/vdd.sym} 440 -30 0 0 {name=l_vcc lab=vcc}
 C {devices/vdd.sym} 1150 -360 0 0 {name=l_vcc lab=vcc}
 C {devices/gnd.sym} 440 30 0 0 {name=l_0 lab=GND}
@@ -57,4 +56,6 @@ C {devices/lab_pin.sym} 700 -30 0 0 {name=l_Start sig_type=std_logic lab=Start}
 C {devices/lab_pin.sym} 1090 -340 0 0 {name=l_start sig_type=std_logic lab=start}
 C {devices/lab_pin.sym} 1150 -340 0 0 {name=l_valid sig_type=std_logic lab=valid}
 C {devices/lab_pin.sym} 1090 -260 0 0 {name=l_clk sig_type=std_logic lab=clk}
+C {devices/lab_pin.sym} 1090 -30 0 0 {name=l_input sig_type=std_logic lab=input}
+C {devices/lab_pin.sym} 830 -30 0 0 {name=l_input sig_type=std_logic lab=input}
 C {devices/lab_pin.sym} 1090 -360 0 0 {name=l_input sig_type=std_logic lab=input}

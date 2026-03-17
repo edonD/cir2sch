@@ -39,13 +39,15 @@ N 240 -120 350 -120 {lab=5}
 N 350 -120 350 100 {lab=5}
 N 440 -250 610 -250 {lab=6}
 N 610 -250 610 100 {lab=6}
-N 610 -30 610 -150 {lab=11}
-N 220 100 480 100 {lab=4}
-N 480 100 480 -30 {lab=4}
-N 480 -30 480 -310 {lab=4}
-N 480 -310 440 -310 {lab=4}
 C {devices/gnd.sym} 220 30 0 0 {name=l_0 lab=GND}
 C {devices/lab_pin.sym} 220 160 0 0 {name=l_10 sig_type=std_logic lab=10}
 C {devices/lab_pin.sym} 350 160 0 0 {name=l_7 sig_type=std_logic lab=7}
 C {devices/lab_pin.sym} 480 100 0 0 {name=l_9 sig_type=std_logic lab=9}
+C {devices/lab_pin.sym} 610 -30 0 0 {name=l_11 sig_type=std_logic lab=11}
 C {devices/lab_pin.sym} 240 -150 0 0 {name=l_11 sig_type=std_logic lab=11}
+C {devices/lab_pin.sym} 610 -150 0 0 {name=l_11 sig_type=std_logic lab=11}
+C {devices/lab_pin.sym} 220 100 0 0 {name=l_4 sig_type=std_logic lab=4}
+C {devices/lab_pin.sym} 480 -30 0 0 {name=l_4 sig_type=std_logic lab=4}
+C {devices/lab_pin.sym} 480 -310 0 0 {name=l_4 sig_type=std_logic lab=4}
+C {devices/lab_pin.sym} 440 -310 0 0 {name=l_4 sig_type=std_logic lab=4}
+C {devices/lab_pin.sym} 480 100 0 0 {name=l_4 sig_type=std_logic lab=4}

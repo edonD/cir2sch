@@ -1,9 +1,9 @@
 {
   "name": "ode_multiplier",
-  "components": 50,
-  "wires": 39,
+  "components": 43,
+  "wires": 45,
   "labels": 0,
-  "wire_crossings_estimate": 0,
+  "wire_crossings_estimate": 2,
   "bounding_box_area": 156000.0,
-  "density": 320.5128205128205
+  "density": 275.64102564102564
 }

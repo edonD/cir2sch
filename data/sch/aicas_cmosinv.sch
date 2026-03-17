@@ -45,10 +45,11 @@ N 220 -30 220 100 {lab=3}
 N 350 -30 350 100 {lab=4}
 N 480 -30 610 -30 {lab=1}
 N 480 100 610 100 {lab=2}
-N 480 30 240 30 {lab=15}
 C {devices/lab_pin.sym} 240 -400 0 0 {name=l_16 sig_type=std_logic lab=16}
 C {devices/lab_pin.sym} 610 30 0 0 {name=l_16 sig_type=std_logic lab=16}
+C {devices/lab_pin.sym} 480 30 0 0 {name=l_15 sig_type=std_logic lab=15}
 C {devices/lab_pin.sym} 240 -370 0 0 {name=l_15 sig_type=std_logic lab=15}
+C {devices/lab_pin.sym} 240 30 0 0 {name=l_15 sig_type=std_logic lab=15}
 C {devices/iopin.sym} 100 0 0 0 {name=p_1 lab=1}
 C {devices/iopin.sym} 100 130 0 0 {name=p_2 lab=2}
 C {devices/iopin.sym} 100 65 0 0 {name=p_3 lab=3}

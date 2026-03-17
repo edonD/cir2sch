@@ -29,9 +29,10 @@ N 720 -250 820 -250 {lab=3}
 N 820 -250 820 -160 {lab=3}
 N 940 -250 960 -250 {lab=4}
 N 960 -250 960 -160 {lab=4}
-N 440 -250 440 -220 {lab=1}
 C {devices/lab_pin.sym} 440 -70 0 0 {name=l_5 sig_type=std_logic lab=5}
 C {devices/lab_pin.sym} 940 -310 0 0 {name=l_5 sig_type=std_logic lab=5}
 C {devices/gnd.sym} 440 -10 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 570 -10 0 0 {name=l_0 lab=GND}
 C {devices/lab_pin.sym} 960 -220 0 0 {name=l_1 sig_type=std_logic lab=1}
+C {devices/lab_pin.sym} 440 -250 0 0 {name=l_1 sig_type=std_logic lab=1}
+C {devices/lab_pin.sym} 440 -220 0 0 {name=l_1 sig_type=std_logic lab=1}

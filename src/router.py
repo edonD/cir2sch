@@ -328,7 +328,7 @@ def _eliminate_crossings(wires: list[Wire], labels: list[Label]) -> tuple[list[W
                 bb_span = (max(all_xs) - min(all_xs)) + (max(all_ys) - min(all_ys))
             else:
                 bb_span = 0
-            if wire_count <= 6 and bb_span > 300:
+            if wire_count <= 5 and bb_span > 300:
                 crossing_nets.add(net)
 
     if not crossing_nets:

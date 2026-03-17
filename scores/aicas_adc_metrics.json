@@ -1,9 +1,9 @@
 {
   "name": "aicas_adc",
-  "components": 22,
-  "wires": 21,
+  "components": 24,
+  "wires": 20,
   "labels": 0,
   "wire_crossings_estimate": 0,
   "bounding_box_area": 100000.0,
-  "density": 220.0
+  "density": 240.0
 }

@@ -73,6 +73,12 @@ N 290 -280 290 -190 {lab=xp_int}
 N 290 -190 150 -190 {lab=xp_int}
 N 150 -190 150 -280 {lab=xp_int}
 N 150 -280 0 -280 {lab=xp_int}
+N 150 -130 150 -40 {lab=vcm}
+N 150 -40 140 -40 {lab=vcm}
+N 140 -40 140 -30 {lab=vcm}
+N 140 -30 520 -30 {lab=vcm}
+N 520 -30 520 -110 {lab=vcm}
+N 520 -110 540 -110 {lab=vcm}
 N 700 -190 700 -170 {lab=xn_int}
 N 700 -170 540 -170 {lab=xn_int}
 N 540 -170 540 -280 {lab=xn_int}
@@ -121,13 +127,6 @@ C {devices/gnd.sym} 330 -280 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 410 -280 0 0 {name=l_vss lab=VSS}
 C {devices/vdd.sym} 320 -580 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 440 -580 0 0 {name=l_vdd lab=VDD}
-C {devices/lab_pin.sym} 140 -30 0 0 {name=l_vcm sig_type=std_logic lab=vcm}
-C {devices/lab_pin.sym} 540 -110 0 0 {name=l_vcm sig_type=std_logic lab=vcm}
-C {devices/lab_pin.sym} 520 -110 0 0 {name=l_vcm sig_type=std_logic lab=vcm}
-C {devices/lab_pin.sym} 520 -30 0 0 {name=l_vcm sig_type=std_logic lab=vcm}
-C {devices/lab_pin.sym} 150 -130 0 0 {name=l_vcm sig_type=std_logic lab=vcm}
-C {devices/lab_pin.sym} 140 -40 0 0 {name=l_vcm sig_type=std_logic lab=vcm}
-C {devices/lab_pin.sym} 150 -40 0 0 {name=l_vcm sig_type=std_logic lab=vcm}
 C {devices/ipin.sym} -100 30 0 0 {name=p_vbias_n lab=vbias_n}
 C {devices/ipin.sym} -100 -590 0 0 {name=p_vbias_p lab=vbias_p}
 C {devices/ipin.sym} -100 -107 0 0 {name=p_vcm lab=vcm}

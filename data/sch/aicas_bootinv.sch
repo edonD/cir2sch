@@ -26,6 +26,12 @@ C {devices/capa.sym} 760 -60 0 0 {name=CL
 value=0.1pf}
 C {devices/capa.sym} 890 -80 0 0 {name=CB
 value=0.1pf}
+N 660 150 660 30 {lab=1}
+N 660 30 860 30 {lab=1}
+N 860 30 860 0 {lab=1}
+N 860 0 900 0 {lab=1}
+N 660 150 660 -180 {lab=1}
+N 660 -180 680 -180 {lab=1}
 N 790 150 790 30 {lab=2}
 N 790 30 900 30 {lab=2}
 N 900 30 900 -30 {lab=2}
@@ -44,12 +50,6 @@ N 680 -120 680 -90 {lab=4}
 N 680 -90 760 -90 {lab=4}
 N 760 -90 760 -50 {lab=4}
 N 760 -50 890 -50 {lab=4}
-N 660 -180 680 -180 {lab=1}
-N 660 -180 660 30 {lab=1}
-N 660 30 660 150 {lab=1}
-N 660 30 860 30 {lab=1}
-N 860 30 860 0 {lab=1}
-N 860 0 900 0 {lab=1}
 C {devices/gnd.sym} 660 210 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 790 210 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 920 210 0 0 {name=l_0 lab=GND}

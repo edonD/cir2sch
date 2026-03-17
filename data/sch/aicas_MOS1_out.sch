@@ -29,27 +29,32 @@ w=5u
 l=0.18u
 model=NMOS3}
 N 240 280 240 60 {lab=Nvs3}
-N 310 -150 240 -150 {lab=Nvf}
-N 240 -150 130 -150 {lab=Nvf}
-N 240 -150 240 30 {lab=Nvf}
-N 240 30 110 30 {lab=Nvf}
-N 110 30 110 150 {lab=Nvf}
-N 130 -180 240 -180 {lab=Nvd}
-N 240 -180 310 -180 {lab=Nvd}
-N 240 -180 240 0 {lab=Nvd}
-N 240 0 240 150 {lab=Nvd}
-N 90 -150 200 -150 {lab=Nvg}
-N 200 -150 350 -150 {lab=Nvg}
-N 200 -150 200 30 {lab=Nvg}
-N 200 30 370 30 {lab=Nvg}
-N 370 30 370 150 {lab=Nvg}
-N 130 -120 130 150 {lab=Nvs1}
-N 110 280 310 280 {lab=Nvs2}
 C {devices/gnd.sym} 110 210 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 240 210 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 370 210 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 500 210 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 110 340 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 240 340 0 0 {name=l_0 lab=GND}
+C {devices/lab_pin.sym} 310 -150 0 0 {name=l_Nvf sig_type=std_logic lab=Nvf}
+C {devices/lab_pin.sym} 240 30 0 0 {name=l_Nvf sig_type=std_logic lab=Nvf}
+C {devices/lab_pin.sym} 240 -150 0 0 {name=l_Nvf sig_type=std_logic lab=Nvf}
+C {devices/lab_pin.sym} 110 30 0 0 {name=l_Nvf sig_type=std_logic lab=Nvf}
+C {devices/lab_pin.sym} 130 -150 0 0 {name=l_Nvf sig_type=std_logic lab=Nvf}
+C {devices/lab_pin.sym} 110 150 0 0 {name=l_Nvf sig_type=std_logic lab=Nvf}
+C {devices/lab_pin.sym} 130 -180 0 0 {name=l_Nvd sig_type=std_logic lab=Nvd}
+C {devices/lab_pin.sym} 310 -180 0 0 {name=l_Nvd sig_type=std_logic lab=Nvd}
+C {devices/lab_pin.sym} 240 -180 0 0 {name=l_Nvd sig_type=std_logic lab=Nvd}
+C {devices/lab_pin.sym} 240 0 0 0 {name=l_Nvd sig_type=std_logic lab=Nvd}
+C {devices/lab_pin.sym} 240 150 0 0 {name=l_Nvd sig_type=std_logic lab=Nvd}
+C {devices/lab_pin.sym} 90 -150 0 0 {name=l_Nvg sig_type=std_logic lab=Nvg}
+C {devices/lab_pin.sym} 370 30 0 0 {name=l_Nvg sig_type=std_logic lab=Nvg}
+C {devices/lab_pin.sym} 200 30 0 0 {name=l_Nvg sig_type=std_logic lab=Nvg}
+C {devices/lab_pin.sym} 200 -150 0 0 {name=l_Nvg sig_type=std_logic lab=Nvg}
+C {devices/lab_pin.sym} 370 150 0 0 {name=l_Nvg sig_type=std_logic lab=Nvg}
+C {devices/lab_pin.sym} 350 -150 0 0 {name=l_Nvg sig_type=std_logic lab=Nvg}
+C {devices/lab_pin.sym} 130 -120 0 0 {name=l_Nvs1 sig_type=std_logic lab=Nvs1}
+C {devices/lab_pin.sym} 130 150 0 0 {name=l_Nvs1 sig_type=std_logic lab=Nvs1}
 C {devices/lab_pin.sym} 500 150 0 0 {name=l_Nvs1 sig_type=std_logic lab=Nvs1}
+C {devices/lab_pin.sym} 110 280 0 0 {name=l_Nvs2 sig_type=std_logic lab=Nvs2}
 C {devices/lab_pin.sym} 310 -120 0 0 {name=l_Nvs2 sig_type=std_logic lab=Nvs2}
+C {devices/lab_pin.sym} 310 280 0 0 {name=l_Nvs2 sig_type=std_logic lab=Nvs2}

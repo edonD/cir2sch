@@ -1,9 +1,9 @@
 {
   "name": "aicas_cmosinv",
-  "components": 17,
-  "wires": 17,
+  "components": 19,
+  "wires": 16,
   "labels": 0,
-  "wire_crossings_estimate": 3,
+  "wire_crossings_estimate": 0,
   "bounding_box_area": 146000.0,
-  "density": 116.43835616438356
+  "density": 130.13698630136986
 }

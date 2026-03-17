@@ -41,12 +41,6 @@ N 1160 -260 1160 -100 {lab=dlout9}
 N 1160 -100 880 -100 {lab=dlout9}
 N 1100 -240 1100 -100 {lab=dlout10}
 N 1100 -100 940 -100 {lab=dlout10}
-N 1160 -180 1160 -340 {lab=dlout1}
-N 1160 -180 880 -180 {lab=dlout1}
-N 1160 -320 1160 -160 {lab=dlout3}
-N 1160 -160 880 -160 {lab=dlout3}
-N 880 -140 1160 -140 {lab=dlout5}
-N 1160 -140 1160 -300 {lab=dlout5}
 C {devices/lab_pin.sym} 300 120 0 0 {name=l_inp sig_type=std_logic lab=inp}
 C {devices/lab_pin.sym} 880 -320 0 0 {name=l_inp sig_type=std_logic lab=inp}
 C {devices/lab_pin.sym} 300 180 0 0 {name=l_inm sig_type=std_logic lab=inm}
@@ -69,3 +63,12 @@ C {devices/lab_pin.sym} 1160 -120 0 0 {name=l_xsinc.dout8 sig_type=std_logic lab
 C {devices/lab_pin.sym} 1100 -100 0 0 {name=l_xsinc.dout9 sig_type=std_logic lab=xsinc.dout9}
 C {devices/lab_pin.sym} 1160 -100 0 0 {name=l_xsinc.dout10 sig_type=std_logic lab=xsinc.dout10}
 C {devices/lab_pin.sym} 1100 -80 0 0 {name=l_adaccout sig_type=std_logic lab=adaccout}
+C {devices/lab_pin.sym} 1160 -180 0 0 {name=l_dlout1 sig_type=std_logic lab=dlout1}
+C {devices/lab_pin.sym} 1160 -340 0 0 {name=l_dlout1 sig_type=std_logic lab=dlout1}
+C {devices/lab_pin.sym} 880 -180 0 0 {name=l_dlout1 sig_type=std_logic lab=dlout1}
+C {devices/lab_pin.sym} 1160 -320 0 0 {name=l_dlout3 sig_type=std_logic lab=dlout3}
+C {devices/lab_pin.sym} 880 -160 0 0 {name=l_dlout3 sig_type=std_logic lab=dlout3}
+C {devices/lab_pin.sym} 1160 -160 0 0 {name=l_dlout3 sig_type=std_logic lab=dlout3}
+C {devices/lab_pin.sym} 880 -140 0 0 {name=l_dlout5 sig_type=std_logic lab=dlout5}
+C {devices/lab_pin.sym} 1160 -140 0 0 {name=l_dlout5 sig_type=std_logic lab=dlout5}
+C {devices/lab_pin.sym} 1160 -300 0 0 {name=l_dlout5 sig_type=std_logic lab=dlout5}
