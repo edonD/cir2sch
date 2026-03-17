@@ -4,40 +4,40 @@ K {}
 V {}
 S {}
 E {}
-T {SKY130 CIM 8T SRAM Bitcell} -170 -500 0 0 0.5 0.5 {}
-T {6T storage core + 2T decoupled read port for compute-in-memory} -170 -470 0 0 0.35 0.35 {}
-T {- bl:  Bitline (read port drain — current flows BL -> RD1 -> mid -> RD2 -> VSS)} -170 -445 0 0 0.35 0.35 {}
-T {- blb: Bitline bar (not used by read port, available for differential write)} -170 -420 0 0 0.35 0.35 {}
-C {devices/vsource.sym} -20 -400 0 0 {name=Vdd
+T {SKY130 CIM 8T SRAM Bitcell} 120 -500 0 0 0.5 0.5 {}
+T {6T storage core + 2T decoupled read port for compute-in-memory} 120 -470 0 0 0.35 0.35 {}
+T {- bl:  Bitline (read port drain — current flows BL -> RD1 -> mid -> RD2 -> VSS)} 120 -445 0 0 0.35 0.35 {}
+T {- blb: Bitline bar (not used by read port, available for differential write)} 120 -420 0 0 0.35 0.35 {}
+C {devices/vsource.sym} 170 200 0 0 {name=Vdd
 value={Vsupply}}
-C {devices/vsource.sym} 240 -400 0 0 {name=Vss
+C {devices/vsource.sym} 310 200 0 0 {name=Vss
 value=0}
-C {sky130_fd_pr/pfet_01v8.sym} 110 -400 0 0 {name=XMPL
+C {sky130_fd_pr/pfet_01v8.sym} 170 -400 0 0 {name=XMPL
 W={Wp}u
 L={Lp}u
 nf=1
 spiceprefix=X}
-C {sky130_fd_pr/nfet_01v8.sym} 10 -150 0 0 {name=XMNL
+C {sky130_fd_pr/nfet_01v8.sym} 170 -150 0 0 {name=XMNL
 W={Wn}u
 L={Ln}u
 nf=1
 spiceprefix=X}
-C {sky130_fd_pr/pfet_01v8.sym} 520 -400 0 1 {name=XMPR
+C {sky130_fd_pr/pfet_01v8.sym} 430 -400 0 1 {name=XMPR
 W={Wp}u
 L={Lp}u
 nf=1
 spiceprefix=X}
-C {sky130_fd_pr/nfet_01v8.sym} 580 -150 0 1 {name=XMNR
+C {sky130_fd_pr/nfet_01v8.sym} 430 -150 0 1 {name=XMNR
 W={Wn}u
 L={Ln}u
 nf=1
 spiceprefix=X}
-C {sky130_fd_pr/nfet_01v8.sym} 440 -150 0 0 {name=XMAXL
+C {sky130_fd_pr/nfet_01v8.sym} 300 -150 0 0 {name=XMAXL
 W={Wax}u
 L=0.15u
 nf=1
 spiceprefix=X}
-C {sky130_fd_pr/nfet_01v8.sym} 720 -150 0 0 {name=XMAXR
+C {sky130_fd_pr/nfet_01v8.sym} 560 -150 0 0 {name=XMAXR
 W={Wax}u
 L=0.15u
 nf=1
@@ -47,64 +47,64 @@ W={Wrd}u
 L={Lrd}u
 nf=1
 spiceprefix=X}
-C {sky130_fd_pr/nfet_01v8.sym} 860 -150 0 0 {name=XMRD2
+C {sky130_fd_pr/nfet_01v8.sym} 820 -150 0 0 {name=XMRD2
 W={Wrd}u
 L={Lrd}u
 nf=1
 spiceprefix=X}
-C {devices/vsource.sym} 380 -400 0 0 {name=Vblw
+C {devices/vsource.sym} 450 200 0 0 {name=Vblw
 value=PWL(0}
-C {devices/vsource.sym} -120 -200 0 0 {name=Vblbw
+C {devices/vsource.sym} 590 200 0 0 {name=Vblbw
 value=PWL(0}
-C {devices/vsource.sym} 140 -200 0 0 {name=Vwwl
+C {devices/vsource.sym} 170 340 0 0 {name=Vwwl
 value=PWL(0}
-C {devices/vsource.sym} 280 -200 0 0 {name=Vwl
+C {devices/vsource.sym} 310 340 0 0 {name=Vwl
 value=PWL(0}
-C {devices/vsource.sym} 50 0 0 0 {name=Vbl
+C {devices/vsource.sym} 450 340 0 0 {name=Vbl
 value={Vsupply}}
-N 460 -180 460 -430 {lab=blw}
-N 460 -430 380 -430 {lab=blw}
-N 420 -150 700 -150 {lab=wwl}
-N 420 -150 420 -230 {lab=wwl}
-N 420 -230 140 -230 {lab=wwl}
-N 740 -180 740 -230 {lab=blbw}
-N 740 -230 -120 -230 {lab=blbw}
-N 580 -80 580 -30 {lab=bl}
-N 580 -30 50 -30 {lab=bl}
-N 580 -20 880 -20 {lab=mid_rd}
-N 880 -20 880 -180 {lab=mid_rd}
-N 840 -150 280 -150 {lab=wl}
-N 280 -150 280 -230 {lab=wl}
-C {devices/vdd.sym} -20 -430 0 0 {name=l_vdd lab=VDD}
-C {devices/vdd.sym} 130 -370 0 0 {name=l_vdd lab=VDD}
-C {devices/vdd.sym} 130 -400 0 0 {name=l_vdd lab=VDD}
-C {devices/vdd.sym} 500 -370 0 0 {name=l_vdd lab=VDD}
-C {devices/vdd.sym} 500 -400 0 0 {name=l_vdd lab=VDD}
-C {devices/gnd.sym} -20 -370 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 240 -370 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 380 -370 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} -120 -170 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 140 -170 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 280 -170 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 50 30 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 240 -430 0 0 {name=l_vss lab=VSS}
-C {devices/gnd.sym} 30 -120 0 0 {name=l_vss lab=VSS}
-C {devices/gnd.sym} 30 -150 0 0 {name=l_vss lab=VSS}
-C {devices/gnd.sym} 560 -120 0 0 {name=l_vss lab=VSS}
-C {devices/gnd.sym} 560 -150 0 0 {name=l_vss lab=VSS}
-C {devices/gnd.sym} 460 -150 0 0 {name=l_vss lab=VSS}
-C {devices/gnd.sym} 740 -150 0 0 {name=l_vss lab=VSS}
+N 320 -180 320 170 {lab=blw}
+N 320 170 450 170 {lab=blw}
+N 280 -150 540 -150 {lab=wwl}
+N 280 -150 280 310 {lab=wwl}
+N 280 310 170 310 {lab=wwl}
+N 580 -180 580 170 {lab=blbw}
+N 580 170 590 170 {lab=blbw}
+N 580 -80 580 310 {lab=bl}
+N 580 310 450 310 {lab=bl}
+N 580 -20 580 -180 {lab=mid_rd}
+N 580 -180 840 -180 {lab=mid_rd}
+N 800 -150 800 310 {lab=wl}
+N 800 310 310 310 {lab=wl}
+C {devices/vdd.sym} 170 170 0 0 {name=l_vdd lab=VDD}
+C {devices/vdd.sym} 190 -370 0 0 {name=l_vdd lab=VDD}
+C {devices/vdd.sym} 190 -400 0 0 {name=l_vdd lab=VDD}
+C {devices/vdd.sym} 410 -370 0 0 {name=l_vdd lab=VDD}
+C {devices/vdd.sym} 410 -400 0 0 {name=l_vdd lab=VDD}
+C {devices/gnd.sym} 170 230 0 0 {name=l_0 lab=GND}
+C {devices/gnd.sym} 310 230 0 0 {name=l_0 lab=GND}
+C {devices/gnd.sym} 450 230 0 0 {name=l_0 lab=GND}
+C {devices/gnd.sym} 590 230 0 0 {name=l_0 lab=GND}
+C {devices/gnd.sym} 170 370 0 0 {name=l_0 lab=GND}
+C {devices/gnd.sym} 310 370 0 0 {name=l_0 lab=GND}
+C {devices/gnd.sym} 450 370 0 0 {name=l_0 lab=GND}
+C {devices/gnd.sym} 310 170 0 0 {name=l_vss lab=VSS}
+C {devices/gnd.sym} 190 -120 0 0 {name=l_vss lab=VSS}
+C {devices/gnd.sym} 190 -150 0 0 {name=l_vss lab=VSS}
+C {devices/gnd.sym} 410 -120 0 0 {name=l_vss lab=VSS}
+C {devices/gnd.sym} 410 -150 0 0 {name=l_vss lab=VSS}
+C {devices/gnd.sym} 320 -150 0 0 {name=l_vss lab=VSS}
+C {devices/gnd.sym} 580 -150 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 580 -50 0 0 {name=l_vss lab=VSS}
-C {devices/gnd.sym} 880 -120 0 0 {name=l_vss lab=VSS}
-C {devices/gnd.sym} 880 -150 0 0 {name=l_vss lab=VSS}
-C {devices/lab_pin.sym} 130 -430 0 0 {name=l_q sig_type=std_logic lab=q}
-C {devices/lab_pin.sym} 30 -180 0 0 {name=l_q sig_type=std_logic lab=q}
-C {devices/lab_pin.sym} 540 -400 0 0 {name=l_q sig_type=std_logic lab=q}
-C {devices/lab_pin.sym} 600 -150 0 0 {name=l_q sig_type=std_logic lab=q}
-C {devices/lab_pin.sym} 460 -120 0 0 {name=l_q sig_type=std_logic lab=q}
+C {devices/gnd.sym} 840 -120 0 0 {name=l_vss lab=VSS}
+C {devices/gnd.sym} 840 -150 0 0 {name=l_vss lab=VSS}
+C {devices/lab_pin.sym} 190 -430 0 0 {name=l_q sig_type=std_logic lab=q}
+C {devices/lab_pin.sym} 190 -180 0 0 {name=l_q sig_type=std_logic lab=q}
+C {devices/lab_pin.sym} 450 -400 0 0 {name=l_q sig_type=std_logic lab=q}
+C {devices/lab_pin.sym} 450 -150 0 0 {name=l_q sig_type=std_logic lab=q}
+C {devices/lab_pin.sym} 320 -120 0 0 {name=l_q sig_type=std_logic lab=q}
 C {devices/lab_pin.sym} 540 -50 0 0 {name=l_q sig_type=std_logic lab=q}
-C {devices/lab_pin.sym} 90 -400 0 0 {name=l_qb sig_type=std_logic lab=qb}
-C {devices/lab_pin.sym} -10 -150 0 0 {name=l_qb sig_type=std_logic lab=qb}
-C {devices/lab_pin.sym} 500 -430 0 0 {name=l_qb sig_type=std_logic lab=qb}
-C {devices/lab_pin.sym} 560 -180 0 0 {name=l_qb sig_type=std_logic lab=qb}
-C {devices/lab_pin.sym} 740 -120 0 0 {name=l_qb sig_type=std_logic lab=qb}
+C {devices/lab_pin.sym} 150 -400 0 0 {name=l_qb sig_type=std_logic lab=qb}
+C {devices/lab_pin.sym} 150 -150 0 0 {name=l_qb sig_type=std_logic lab=qb}
+C {devices/lab_pin.sym} 410 -430 0 0 {name=l_qb sig_type=std_logic lab=qb}
+C {devices/lab_pin.sym} 410 -180 0 0 {name=l_qb sig_type=std_logic lab=qb}
+C {devices/lab_pin.sym} 580 -120 0 0 {name=l_qb sig_type=std_logic lab=qb}

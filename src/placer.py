@@ -516,19 +516,21 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
             max_x = max((p.x for p in result.placements.values()), default=cur_x)
             result.placements[name] = Placement(x=_snap(max_x + H_SPACING), y=_snap(MID_Y))
 
-    # === Stage 4: Place sources compactly ===
-    # Use a grid layout for sources instead of a column
+    # === Stage 4: Place sources compactly BELOW the circuit ===
     if sources:
-        src_cols = min(3, len(sources))
-        src_x_start = 50
-        src_y_start = PMOS_Y
+        # Find the bottom and left of the circuit so far
+        all_y = [p.y for p in result.placements.values()] if result.placements else [0]
+        all_x = [p.x for p in result.placements.values()] if result.placements else [300]
+        src_y_start = max(all_y) + V_SPACING + 50
+        src_x_start = min(all_x)
+        src_cols = min(4, len(sources))
         for i, name in enumerate(sources):
             if name not in result.placements:
                 row = i // src_cols
                 col = i % src_cols
                 result.placements[name] = Placement(
-                    x=_snap(src_x_start + col * 160),
-                    y=_snap(src_y_start + row * V_SPACING)
+                    x=_snap(src_x_start + col * 140),
+                    y=_snap(src_y_start + row * 140)
                 )
 
     # === Stage 5: Place subcircuit instances ===
