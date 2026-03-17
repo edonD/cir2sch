@@ -558,10 +558,12 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
                             x=_snap(latch_x_center), y=_snap(dp_y + V_SPACING))
                         context_placed.add(tail)
 
-    # Remove latch blocks from the blocks list to avoid double-placement
+    # Keep latch blocks in the list for grouping/stacking detection,
+    # but track them to skip re-placement
+    already_placed_blocks = set()
     if latch_placed:
-        blocks = [b for b in blocks if not any(c in latch_placed for c in b.components)]
-        # Also remove diff pairs we already placed
+        already_placed_blocks.update(latch_placed)
+        # Also skip diff pairs we already placed
         blocks = [b for b in blocks if not any(c in context_placed for c in b.components)]
         block_comps -= latch_placed
 
@@ -606,9 +608,11 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
             top_n = []
             bottom_n = n_blocks
 
-        # Place PMOS blocks at PMOS_Y
+        # Place PMOS blocks at PMOS_Y (skip already-placed latch blocks)
         px = cur_x
         for block in p_blocks:
+            if any(c in already_placed_blocks for c in block.components):
+                continue  # Already placed by Stage 0.5
             _place_block(result, block, px, PMOS_Y)
             # Single-column blocks need less space than diff pairs
             if block.type in ("inverter", "tgate"):
@@ -636,7 +640,8 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
                         if placed_xs:
                             aligned_nx = int(sum(placed_xs) / len(placed_xs))
                             break
-            _place_block(result, block, aligned_nx if aligned_nx else nx, NMOS_Y)
+            effective_nx = aligned_nx if aligned_nx else nx
+            _place_block(result, block, effective_nx, NMOS_Y)
 
             # Place tail source below NMOS diff pair
             if block.type.startswith("diff_pair_n"):
@@ -662,6 +667,8 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
         # Track the rightmost x of placed top blocks to avoid overlap
         top_right_x = cur_x - H_SPACING
         for block in top_n:
+            if any(c in already_placed_blocks for c in block.components):
+                continue  # Already placed by Stage 0.5
             block_sources = set()
             for cn in block.components:
                 block_sources.add(circuit.components[cn].pins["source"])
