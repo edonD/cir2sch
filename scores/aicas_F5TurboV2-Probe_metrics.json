@@ -1,9 +1,0 @@
-{
-  "name": "aicas_F5TurboV2-Probe",
-  "components": 67,
-  "wires": 70,
-  "labels": 0,
-  "wire_crossings_estimate": 3,
-  "bounding_box_area": 160000.0,
-  "density": 418.75
-}

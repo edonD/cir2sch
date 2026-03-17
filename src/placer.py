@@ -834,12 +834,17 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
                     cx, cy = pos
                 else:
                     continue
-            # Stack vertically
+            # Stack vertically — offset y to avoid overlapping transistors at same level
+            # Try placing to the right at a slight y offset, then further right
+            base_x = _snap(cx + 120)
+            base_y = _snap(cy + 40)  # Slightly below the gate connection
             for i, name in enumerate(chain):
-                px = _snap(cx + 100)
-                py = _snap(cy - 30 + i * 80)
-                while _is_occupied(result, px, py, 80):
-                    px += 100
+                px = base_x
+                py = _snap(base_y + i * 80)
+                attempts = 0
+                while _is_occupied(result, px, py, 70) and attempts < 5:
+                    px += 120
+                    attempts += 1
                 result.placements[name] = Placement(x=px, y=py)
         else:
             # Single or longer chains: place individually at midpoint

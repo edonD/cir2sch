@@ -1,9 +1,0 @@
-{
-  "name": "aicas_ecpal",
-  "components": 13,
-  "wires": 2,
-  "labels": 0,
-  "wire_crossings_estimate": 0,
-  "bounding_box_area": 70000.0,
-  "density": 185.7142857142857
-}

@@ -1,9 +1,0 @@
-{
-  "name": "aicas_AMP_AC_CurrentBias",
-  "components": 17,
-  "wires": 4,
-  "labels": 0,
-  "wire_crossings_estimate": 0,
-  "bounding_box_area": 120000.0,
-  "density": 141.66666666666669
-}

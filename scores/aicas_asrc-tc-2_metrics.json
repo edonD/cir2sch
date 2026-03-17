@@ -1,9 +1,0 @@
-{
-  "name": "aicas_asrc-tc-2",
-  "components": 11,
-  "wires": 6,
-  "labels": 0,
-  "wire_crossings_estimate": 0,
-  "bounding_box_area": 96000.0,
-  "density": 114.58333333333333
-}

@@ -1,9 +1,0 @@
-{
-  "name": "aicas_OP_MCP6041",
-  "components": 14,
-  "wires": 7,
-  "labels": 0,
-  "wire_crossings_estimate": 1,
-  "bounding_box_area": 100000.0,
-  "density": 140.0
-}

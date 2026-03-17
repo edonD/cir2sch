@@ -1,9 +1,0 @@
-{
-  "name": "aicas_ex1b",
-  "components": 10,
-  "wires": 5,
-  "labels": 0,
-  "wire_crossings_estimate": 0,
-  "bounding_box_area": 120000.0,
-  "density": 83.33333333333334
-}
