@@ -38,37 +38,37 @@ C {devices/capa.sym} 1160 -180 0 0 {name=Cbl6
 value=10p}
 C {devices/capa.sym} 1320 -180 0 0 {name=Cbl7
 value=10p}
-C {devices/vsource.sym} 1540 0 0 0 {name=Vwl0
+C {devices/vsource.sym} 1520 0 0 0 {name=Vwl0
 value=PWL(0}
-C {devices/vsource.sym} 1540 120 0 0 {name=Vwl1
+C {devices/vsource.sym} 1520 120 0 0 {name=Vwl1
 value=PWL(0}
-C {devices/vsource.sym} 1540 240 0 0 {name=Vwl2
+C {devices/vsource.sym} 1520 240 0 0 {name=Vwl2
 value=PWL(0}
-C {devices/vsource.sym} 1540 360 0 0 {name=Vwl3
+C {devices/vsource.sym} 1520 360 0 0 {name=Vwl3
 value=PWL(0}
-C {devices/vsource.sym} 1540 480 0 0 {name=Vwl4
+C {devices/vsource.sym} 1520 480 0 0 {name=Vwl4
 value=PWL(0}
-C {devices/vsource.sym} 1540 600 0 0 {name=Vwl5
+C {devices/vsource.sym} 1520 600 0 0 {name=Vwl5
 value=0}
-C {devices/vsource.sym} 1540 720 0 0 {name=Vwl6
+C {devices/vsource.sym} 1520 720 0 0 {name=Vwl6
 value=PWL(0}
-C {devices/vsource.sym} 1540 840 0 0 {name=Vwl7
+C {devices/vsource.sym} 1520 840 0 0 {name=Vwl7
 value=PWL(0}
-C {devices/vsource.sym} 1660 0 0 0 {name=Vwwl0
+C {devices/vsource.sym} 1620 0 0 0 {name=Vwwl0
 value=0}
-C {devices/vsource.sym} 1660 120 0 0 {name=Vwwl1
+C {devices/vsource.sym} 1620 120 0 0 {name=Vwwl1
 value=0}
-C {devices/vsource.sym} 1660 240 0 0 {name=Vwwl2
+C {devices/vsource.sym} 1620 240 0 0 {name=Vwwl2
 value=0}
-C {devices/vsource.sym} 1660 360 0 0 {name=Vwwl3
+C {devices/vsource.sym} 1620 360 0 0 {name=Vwwl3
 value=0}
-C {devices/vsource.sym} 1660 480 0 0 {name=Vwwl4
+C {devices/vsource.sym} 1620 480 0 0 {name=Vwwl4
 value=0}
-C {devices/vsource.sym} 1660 600 0 0 {name=Vwwl5
+C {devices/vsource.sym} 1620 600 0 0 {name=Vwwl5
 value=0}
-C {devices/vsource.sym} 1660 720 0 0 {name=Vwwl6
+C {devices/vsource.sym} 1620 720 0 0 {name=Vwwl6
 value=0}
-C {devices/vsource.sym} 1660 840 0 0 {name=Vwwl7
+C {devices/vsource.sym} 1620 840 0 0 {name=Vwwl7
 value=0}
 C {devices/noconn.sym} 200 0 0 0 {name=Xcell_r0_c0}
 C {devices/noconn.sym} 360 0 0 0 {name=Xcell_r0_c1}
@@ -230,8 +230,8 @@ N 1320 480 1320 600 {lab=bl7}
 N 1320 600 1320 720 {lab=bl7}
 N 1320 720 1320 840 {lab=bl7}
 N 1320 -80 1320 -210 {lab=bl7}
-N 1540 -30 1540 0 {lab=wl0}
-N 1540 0 1320 0 {lab=wl0}
+N 1520 -30 1520 0 {lab=wl0}
+N 1520 0 1320 0 {lab=wl0}
 N 1320 0 1160 0 {lab=wl0}
 N 1160 0 1000 0 {lab=wl0}
 N 1000 0 840 0 {lab=wl0}
@@ -239,8 +239,8 @@ N 840 0 680 0 {lab=wl0}
 N 680 0 520 0 {lab=wl0}
 N 520 0 360 0 {lab=wl0}
 N 360 0 200 0 {lab=wl0}
-N 1540 90 1540 120 {lab=wl1}
-N 1540 120 1320 120 {lab=wl1}
+N 1520 90 1520 120 {lab=wl1}
+N 1520 120 1320 120 {lab=wl1}
 N 1320 120 1160 120 {lab=wl1}
 N 1160 120 1000 120 {lab=wl1}
 N 1000 120 840 120 {lab=wl1}
@@ -248,8 +248,8 @@ N 840 120 680 120 {lab=wl1}
 N 680 120 520 120 {lab=wl1}
 N 520 120 360 120 {lab=wl1}
 N 360 120 200 120 {lab=wl1}
-N 1540 210 1540 240 {lab=wl2}
-N 1540 240 1320 240 {lab=wl2}
+N 1520 210 1520 240 {lab=wl2}
+N 1520 240 1320 240 {lab=wl2}
 N 1320 240 1160 240 {lab=wl2}
 N 1160 240 1000 240 {lab=wl2}
 N 1000 240 840 240 {lab=wl2}
@@ -257,8 +257,8 @@ N 840 240 680 240 {lab=wl2}
 N 680 240 520 240 {lab=wl2}
 N 520 240 360 240 {lab=wl2}
 N 360 240 200 240 {lab=wl2}
-N 1540 330 1540 360 {lab=wl3}
-N 1540 360 1320 360 {lab=wl3}
+N 1520 330 1520 360 {lab=wl3}
+N 1520 360 1320 360 {lab=wl3}
 N 1320 360 1160 360 {lab=wl3}
 N 1160 360 1000 360 {lab=wl3}
 N 1000 360 840 360 {lab=wl3}
@@ -266,8 +266,8 @@ N 840 360 680 360 {lab=wl3}
 N 680 360 520 360 {lab=wl3}
 N 520 360 360 360 {lab=wl3}
 N 360 360 200 360 {lab=wl3}
-N 1540 450 1540 480 {lab=wl4}
-N 1540 480 1320 480 {lab=wl4}
+N 1520 450 1520 480 {lab=wl4}
+N 1520 480 1320 480 {lab=wl4}
 N 1320 480 1160 480 {lab=wl4}
 N 1160 480 1000 480 {lab=wl4}
 N 1000 480 840 480 {lab=wl4}
@@ -275,8 +275,8 @@ N 840 480 680 480 {lab=wl4}
 N 680 480 520 480 {lab=wl4}
 N 520 480 360 480 {lab=wl4}
 N 360 480 200 480 {lab=wl4}
-N 1540 570 1540 600 {lab=wl5}
-N 1540 600 1320 600 {lab=wl5}
+N 1520 570 1520 600 {lab=wl5}
+N 1520 600 1320 600 {lab=wl5}
 N 1320 600 1160 600 {lab=wl5}
 N 1160 600 1000 600 {lab=wl5}
 N 1000 600 840 600 {lab=wl5}
@@ -284,8 +284,8 @@ N 840 600 680 600 {lab=wl5}
 N 680 600 520 600 {lab=wl5}
 N 520 600 360 600 {lab=wl5}
 N 360 600 200 600 {lab=wl5}
-N 1540 690 1540 720 {lab=wl6}
-N 1540 720 1320 720 {lab=wl6}
+N 1520 690 1520 720 {lab=wl6}
+N 1520 720 1320 720 {lab=wl6}
 N 1320 720 1160 720 {lab=wl6}
 N 1160 720 1000 720 {lab=wl6}
 N 1000 720 840 720 {lab=wl6}
@@ -293,8 +293,8 @@ N 840 720 680 720 {lab=wl6}
 N 680 720 520 720 {lab=wl6}
 N 520 720 360 720 {lab=wl6}
 N 360 720 200 720 {lab=wl6}
-N 1540 810 1540 840 {lab=wl7}
-N 1540 840 1320 840 {lab=wl7}
+N 1520 810 1520 840 {lab=wl7}
+N 1520 840 1320 840 {lab=wl7}
 N 1320 840 1160 840 {lab=wl7}
 N 1160 840 1000 840 {lab=wl7}
 N 1000 840 840 840 {lab=wl7}
@@ -498,22 +498,22 @@ C {devices/gnd.sym} 840 -150 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 1000 -150 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 1160 -150 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 1320 -150 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 1540 30 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 1540 150 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 1540 270 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 1540 390 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 1540 510 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 1540 630 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 1540 750 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 1540 870 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 1660 30 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 1660 150 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 1660 270 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 1660 390 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 1660 510 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 1660 630 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 1660 750 0 0 {name=l_0 lab=GND}
-C {devices/gnd.sym} 1660 870 0 0 {name=l_0 lab=GND}
+C {devices/gnd.sym} 1520 30 0 0 {name=l_0 lab=GND}
+C {devices/gnd.sym} 1520 150 0 0 {name=l_0 lab=GND}
+C {devices/gnd.sym} 1520 270 0 0 {name=l_0 lab=GND}
+C {devices/gnd.sym} 1520 390 0 0 {name=l_0 lab=GND}
+C {devices/gnd.sym} 1520 510 0 0 {name=l_0 lab=GND}
+C {devices/gnd.sym} 1520 630 0 0 {name=l_0 lab=GND}
+C {devices/gnd.sym} 1520 750 0 0 {name=l_0 lab=GND}
+C {devices/gnd.sym} 1520 870 0 0 {name=l_0 lab=GND}
+C {devices/gnd.sym} 1620 30 0 0 {name=l_0 lab=GND}
+C {devices/gnd.sym} 1620 150 0 0 {name=l_0 lab=GND}
+C {devices/gnd.sym} 1620 270 0 0 {name=l_0 lab=GND}
+C {devices/gnd.sym} 1620 390 0 0 {name=l_0 lab=GND}
+C {devices/gnd.sym} 1620 510 0 0 {name=l_0 lab=GND}
+C {devices/gnd.sym} 1620 630 0 0 {name=l_0 lab=GND}
+C {devices/gnd.sym} 1620 750 0 0 {name=l_0 lab=GND}
+C {devices/gnd.sym} 1620 870 0 0 {name=l_0 lab=GND}
 C {devices/gnd.sym} 320 1030 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 200 -80 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 360 -80 0 0 {name=l_vss lab=VSS}
@@ -588,14 +588,14 @@ C {devices/gnd.sym} 1000 840 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 1160 840 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 1320 840 0 0 {name=l_vss lab=VSS}
 C {devices/lab_pin.sym} 440 1030 0 0 {name=l_pre sig_type=std_logic lab=pre}
-C {devices/lab_pin.sym} 1660 -30 0 0 {name=l_wwl0 sig_type=std_logic lab=wwl0}
-C {devices/lab_pin.sym} 1660 90 0 0 {name=l_wwl1 sig_type=std_logic lab=wwl1}
-C {devices/lab_pin.sym} 1660 210 0 0 {name=l_wwl2 sig_type=std_logic lab=wwl2}
-C {devices/lab_pin.sym} 1660 330 0 0 {name=l_wwl3 sig_type=std_logic lab=wwl3}
-C {devices/lab_pin.sym} 1660 450 0 0 {name=l_wwl4 sig_type=std_logic lab=wwl4}
-C {devices/lab_pin.sym} 1660 570 0 0 {name=l_wwl5 sig_type=std_logic lab=wwl5}
-C {devices/lab_pin.sym} 1660 690 0 0 {name=l_wwl6 sig_type=std_logic lab=wwl6}
-C {devices/lab_pin.sym} 1660 810 0 0 {name=l_wwl7 sig_type=std_logic lab=wwl7}
+C {devices/lab_pin.sym} 1620 -30 0 0 {name=l_wwl0 sig_type=std_logic lab=wwl0}
+C {devices/lab_pin.sym} 1620 90 0 0 {name=l_wwl1 sig_type=std_logic lab=wwl1}
+C {devices/lab_pin.sym} 1620 210 0 0 {name=l_wwl2 sig_type=std_logic lab=wwl2}
+C {devices/lab_pin.sym} 1620 330 0 0 {name=l_wwl3 sig_type=std_logic lab=wwl3}
+C {devices/lab_pin.sym} 1620 450 0 0 {name=l_wwl4 sig_type=std_logic lab=wwl4}
+C {devices/lab_pin.sym} 1620 570 0 0 {name=l_wwl5 sig_type=std_logic lab=wwl5}
+C {devices/lab_pin.sym} 1620 690 0 0 {name=l_wwl6 sig_type=std_logic lab=wwl6}
+C {devices/lab_pin.sym} 1620 810 0 0 {name=l_wwl7 sig_type=std_logic lab=wwl7}
 C {devices/lab_pin.sym} 200 0 0 0 {name=l_q_r0c0 sig_type=std_logic lab=q_r0c0}
 C {devices/lab_pin.sym} 200 0 0 0 {name=l_qb_r0c0 sig_type=std_logic lab=qb_r0c0}
 C {devices/lab_pin.sym} 360 0 0 0 {name=l_q_r0c1 sig_type=std_logic lab=q_r0c1}

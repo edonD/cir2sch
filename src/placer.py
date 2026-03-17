@@ -1084,11 +1084,11 @@ def _place_array_circuit(circuit: Circuit, array_info: dict) -> PlacedCircuit:
                 y=_snap(array_top - 80 - i * 100)
             )
 
-    # Row periphery: place to the right of array, close
+    # Row periphery: place to the right of array, compact
     for row, names in row_per.items():
         for i, name in enumerate(names):
             result.placements[name] = Placement(
-                x=_snap(array_left + cols * cell_h + 60 + i * 120),
+                x=_snap(array_left + cols * cell_h + 40 + i * 100),
                 y=_snap(array_top + row * cell_v)
             )
 
