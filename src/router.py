@@ -140,7 +140,7 @@ def route_nets(placed: PlacedCircuit) -> tuple[list[Wire], list[Label]]:
     LABEL_DISTANCE = 700
     # Dynamic fan-out threshold: use labels more aggressively for very dense circuits
     num_comps = len(placed.placements)
-    max_wire_fanout = 5 if num_comps <= 20 else 4
+    max_wire_fanout = 5
 
     for net_name, net in circuit.nets.items():
         conns = [(cn, pn) for cn, pn in net.connections if cn in placed.placements]
