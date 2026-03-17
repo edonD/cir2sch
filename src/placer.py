@@ -1029,7 +1029,7 @@ def _place_array_circuit(circuit: Circuit, array_info: dict) -> PlacedCircuit:
     rows, cols = array_info["rows"], array_info["cols"]
 
     # Compact spacing for array cells
-    cell_h, cell_v = 180, 140
+    cell_h, cell_v = 160, 120
     array_left, array_top = 200, 0
     array_comps = set(grid.values())
 
