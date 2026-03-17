@@ -2,7 +2,7 @@
 
 Converts `.cir` SPICE netlists into xschem `.sch` schematics with intelligent placement and routing.
 
-## Current Aggregate Score: 5.8/10
+## Current Aggregate Score: 6.0/10
 
 | Circuit | Clarity | Wires | Hierarchy | Spacing | Presentation | Avg | Crossings |
 |---------|---------|-------|-----------|---------|-------------|-----|-----------|
@@ -12,7 +12,7 @@ Converts `.cir` SPICE netlists into xschem `.sch` schematics with intelligent pl
 | ode_multiplier | 6 | 7 | 6 | 5 | 5 | **5.8** | 0 |
 | cim_bitcell | 6 | 6 | 6 | 6 | 5 | **5.8** | 1 |
 | ode_integrator | 6 | 6 | 5 | 5 | 5 | **5.4** | 1 |
-| cim_array | 4 | 5 | 4 | 3 | 3 | **3.8** | 0 |
+| cim_array | 6 | 5 | 6 | 5 | 4 | **5.2** | 0 |
 
 **Total wire crossings: 2** (down from 28 baseline)
 
