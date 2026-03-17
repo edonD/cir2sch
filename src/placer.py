@@ -183,6 +183,60 @@ def _is_p_type(block: BuildingBlock) -> bool:
     return "_p" in block.type or block.type == "inverter"
 
 
+def _sort_nmos_blocks_by_stacking(circuit: Circuit, n_blocks: list[BuildingBlock]) -> tuple[list, list]:
+    """Sort NMOS blocks into top and bottom based on stacking relationships.
+
+    If block A's source net == block B's drain net (via any component path),
+    then A is "above" B in the stack. Returns (top_blocks, bottom_blocks).
+    """
+    # Get source and drain nets for each block
+    block_sources = {}
+    block_drains = {}
+    for block in n_blocks:
+        sources = set()
+        drains = set()
+        for comp_name in block.components:
+            comp = circuit.components[comp_name]
+            sources.add(comp.pins["source"])
+            drains.add(comp.pins["drain"])
+        block_sources[id(block)] = sources
+        block_drains[id(block)] = drains
+
+    # Check if any block's source connects to another block's drain
+    # or to a free transistor's drain (through nets)
+    top = []
+    bottom = []
+
+    for block in n_blocks:
+        is_top = False
+        src_nets = block_sources[id(block)]
+        for other in n_blocks:
+            if other is block:
+                continue
+            # If this block's source connects to other's drain → this is on top
+            drain_nets = block_drains[id(other)]
+            if src_nets & drain_nets:
+                is_top = True
+                break
+
+        # Also check if source connects to any free transistor's drain
+        if not is_top:
+            for name, comp in circuit.components.items():
+                if name in block.components:
+                    continue
+                if comp.type in ("mosfet_n", "mosfet_p"):
+                    if comp.pins.get("drain") in src_nets:
+                        is_top = True
+                        break
+
+        if is_top:
+            top.append(block)
+        else:
+            bottom.append(block)
+
+    return top, bottom
+
+
 def _find_tail_source(circuit: Circuit, diff_pair_block: BuildingBlock) -> str | None:
     c1 = circuit.components[diff_pair_block.components[0]]
     shared_source = c1.pins["source"]
@@ -273,23 +327,34 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
     cur_x = 300
 
     for group in groups:
-        # Sort: PMOS blocks at top, NMOS at bottom
+        # Separate by type
         p_blocks = [b for b in group if _is_p_type(b)]
         n_blocks = [b for b in group if not _is_p_type(b)]
 
-        # Determine width: max of p and n block counts * H_SPACING
-        max_width = max(len(p_blocks), len(n_blocks), 1)
-        group_center = cur_x + (max_width - 1) * H_SPACING // 2
+        # For NMOS-only groups with multiple blocks, detect stacking
+        # (e.g., Gilbert cell: top quad sources connect to bottom pair drains)
+        if len(n_blocks) >= 2 and not p_blocks:
+            top_n, bottom_n = _sort_nmos_blocks_by_stacking(circuit, n_blocks)
+        else:
+            top_n = []
+            bottom_n = n_blocks
 
-        # Place PMOS blocks
+        # Place PMOS blocks at PMOS_Y
         px = cur_x
         for block in p_blocks:
             _place_block(result, block, px, PMOS_Y)
             px += H_SPACING * 2 + BLOCK_GAP
 
-        # Place NMOS blocks aligned under PMOS
+        # Place top NMOS blocks above bottom ones (between PMOS and NMOS bands)
+        top_y = MID_Y  # Between PMOS and NMOS
+        tx = cur_x
+        for block in top_n:
+            _place_block(result, block, tx, top_y)
+            tx += H_SPACING * 2 + BLOCK_GAP
+
+        # Place bottom NMOS blocks at NMOS_Y
         nx = cur_x
-        for block in n_blocks:
+        for block in bottom_n:
             _place_block(result, block, nx, NMOS_Y)
 
             # Place tail source below NMOS diff pair
@@ -299,7 +364,7 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
                     result.placements[tail] = Placement(x=_snap(nx), y=_snap(NMOS_Y + V_SPACING))
                     context_placed.add(tail)
 
-                # Place PMOS loads above diff pair (if not already placed as blocks)
+                # Place PMOS loads above diff pair
                 loads = _find_load_pair(circuit, block)
                 half_w = H_SPACING // 2
                 for i, load_name in enumerate(loads):
@@ -310,7 +375,7 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
 
             nx += H_SPACING * 2 + BLOCK_GAP
 
-        cur_x = max(px, nx)
+        cur_x = max(px, tx, nx)
 
     # === Stage 2: Place remaining PMOS/NMOS ===
     px = cur_x
