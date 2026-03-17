@@ -240,9 +240,9 @@ def run_all(specific_file=None):
         print(f"  Wires: {metrics['wires']}")
         print(f"  Wire crossings (est.): {metrics['wire_crossings_estimate']}")
 
-        # Save metrics
-        score_path = os.path.join(SCORES_DIR, f"{name}.json")
-        with open(score_path, "w") as f:
+        # Save automated metrics (separate from visual scores)
+        metrics_path = os.path.join(SCORES_DIR, f"{name}_metrics.json")
+        with open(metrics_path, "w") as f:
             json.dump(metrics, f, indent=2)
 
     # Summary

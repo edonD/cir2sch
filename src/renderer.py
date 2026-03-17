@@ -101,6 +101,51 @@ def _format_label_name(net_name: str) -> str:
     return mapping.get(net_name.lower(), net_name)
 
 
+def _add_array_annotations(lines: list, placed: PlacedCircuit):
+    """Add row/column annotations for array-like circuits."""
+    import re
+    pattern = re.compile(r'^(.*?)_?r(\d+)_?c(\d+)$', re.IGNORECASE)
+
+    # Find array components
+    array_comps = {}
+    for name in placed.placements:
+        m = pattern.match(name)
+        if m:
+            r, c = int(m.group(2)), int(m.group(3))
+            array_comps[(r, c)] = name
+
+    if len(array_comps) < 4:
+        # Not an array — add individual subcircuit labels instead
+        for comp_name, comp in placed.circuit.components.items():
+            if comp_name not in placed.placements:
+                continue
+            if comp.type == "subcircuit":
+                p = placed.placements[comp_name]
+                short_name = comp_name.replace("Xcell_", "").replace("Xpre", "pre")
+                lines.append(f'T {{{short_name}}} {p.x - 20} {p.y + 20} 0 0 0.25 0.25 {{}}')
+        return
+
+    rows = max(r for r, c in array_comps) + 1
+    cols = max(c for r, c in array_comps) + 1
+
+    # Add column headers
+    for c in range(cols):
+        if (0, c) in array_comps:
+            p = placed.placements[array_comps[(0, c)]]
+            lines.append(f'T {{col{c}}} {p.x} {p.y - 60} 0 0 0.3 0.3 {{}}')
+
+    # Add row headers
+    for r in range(rows):
+        if (r, 0) in array_comps:
+            p = placed.placements[array_comps[(r, 0)]]
+            lines.append(f'T {{row{r}}} {p.x - 80} {p.y} 0 0 0.3 0.3 {{}}')
+
+    # Add array dimension label
+    if (0, 0) in array_comps:
+        p = placed.placements[array_comps[(0, 0)]]
+        lines.append(f'T {{{rows}x{cols} Array}} {p.x - 80} {p.y - 80} 0 0 0.35 0.35 {{}}')
+
+
 def render_xschem(placed: PlacedCircuit, wires: list[Wire], labels: list[Label],
                   title: str = "") -> str:
     """Render a complete xschem .sch file."""
@@ -114,14 +159,21 @@ def render_xschem(placed: PlacedCircuit, wires: list[Wire], labels: list[Label],
     lines.append("S {}")
     lines.append("E {}")
 
+    # Find top-left corner of the placement for title positioning
+    all_y = [p.y for p in placed.placements.values()] if placed.placements else [-700]
+    all_x = [p.x for p in placed.placements.values()] if placed.placements else [50]
+    title_y = min(all_y) - 100
+    title_x = min(all_x) - 50
+
     # Title annotation
     if title or placed.circuit.title:
         t = title or placed.circuit.title
-        lines.append(f'T {{{t}}} 50 -700 0 0 0.6 0.6 {{}}')
+        lines.append(f'T {{{t}}} {title_x} {title_y} 0 0 0.5 0.5 {{}}')
 
-    # Section comment annotations
-    for i, comment in enumerate(placed.circuit.comments):
-        lines.append(f'T {{{comment}}} 50 {-660 + i * 30} 0 0 0.4 0.4 {{}}')
+    # Section comment annotations — limit to 3 most important, skip "===" lines
+    filtered_comments = [c for c in placed.circuit.comments if not c.startswith('=')]
+    for i, comment in enumerate(filtered_comments[:3]):
+        lines.append(f'T {{{comment}}} {title_x} {title_y + 30 + i * 25} 0 0 0.35 0.35 {{}}')
 
     # Component instances
     for comp_name, comp in placed.circuit.components.items():
@@ -133,6 +185,9 @@ def render_xschem(placed: PlacedCircuit, wires: list[Wire], labels: list[Label],
         attrs = _format_attributes(comp)
 
         lines.append(f'C {{{sym}}} {p.x} {p.y} {p.rotation} {p.flip} {{{attrs}}}')
+
+    # Array structure annotations
+    _add_array_annotations(lines, placed)
 
     # Wires
     for w in wires:
@@ -157,6 +212,40 @@ def render_xschem(placed: PlacedCircuit, wires: list[Wire], labels: list[Label],
             lines.append(f'C {{devices/vdd.sym}} {label.x} {label.y} 0 0 {{name=l_{label.net} lab={display_name}}}')
         else:
             lines.append(f'C {{devices/lab_pin.sym}} {label.x} {label.y} 0 0 {{name=l_{label.net} sig_type=std_logic lab={display_name}}}')
+
+    # Interface pins for subcircuit-based schematics
+    if placed.circuit.interface_pins:
+        all_x = [p.x for p in placed.placements.values()] if placed.placements else [0]
+        all_y = [p.y for p in placed.placements.values()] if placed.placements else [0]
+        left_x = min(all_x) - 120
+        right_x = max(all_x) + 160
+        top_y = min(all_y) - 40
+        bot_y = max(all_y) + 40
+
+        # Classify pins as input/output/supply based on naming
+        for i, pin_name in enumerate(placed.circuit.interface_pins):
+            low = pin_name.lower()
+            if low in ('vdd', 'vcc', 'avdd', 'vss', 'gnd', '0'):
+                continue  # Skip supply pins — already shown as VDD/GND symbols
+
+            # Determine pin type and position
+            if any(kw in low for kw in ['in', 'clk', 'reset', 'bias', 'vcm']):
+                # Input: place on the left
+                sym = "devices/ipin.sym"
+                px = left_x
+                py = top_y + i * 40
+            elif any(kw in low for kw in ['out']):
+                # Output: place on the right
+                sym = "devices/opin.sym"
+                px = right_x
+                py = top_y + i * 40
+            else:
+                # Bidirectional
+                sym = "devices/iopin.sym"
+                px = left_x
+                py = top_y + i * 40
+
+            lines.append(f'C {{{sym}}} {px} {py} 0 0 {{name=p_{pin_name} lab={pin_name}}}')
 
     return "\n".join(lines) + "\n"
 
