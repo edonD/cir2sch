@@ -1,0 +1,9 @@
+{
+  "name": "aicas_555-timer-2",
+  "components": 25,
+  "wires": 18,
+  "labels": 0,
+  "wire_crossings_estimate": 1,
+  "bounding_box_area": 120000.0,
+  "density": 208.33333333333334
+}

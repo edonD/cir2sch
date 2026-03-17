@@ -1,0 +1,9 @@
+{
+  "name": "aicas_behav-283",
+  "components": 15,
+  "wires": 0,
+  "labels": 0,
+  "wire_crossings_estimate": 0,
+  "bounding_box_area": 40000.0,
+  "density": 375.0
+}

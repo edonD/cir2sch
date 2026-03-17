@@ -1,0 +1,9 @@
+{
+  "name": "aicas_bootinv",
+  "components": 12,
+  "wires": 23,
+  "labels": 0,
+  "wire_crossings_estimate": 2,
+  "bounding_box_area": 124000.0,
+  "density": 96.7741935483871
+}

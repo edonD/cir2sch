@@ -46,7 +46,9 @@ def _generate_subcircuit_sym(model: str, num_pins: int, output_dir: str, is_arra
     """
     import os
     suffix = "_array" if is_array else ""
-    sym_name = f"{model}{suffix}.sym"
+    # Sanitize model name (remove path separators, spaces)
+    safe_model = model.replace("/", "_").replace("\\", "_").replace(" ", "_")
+    sym_name = f"{safe_model}{suffix}.sym"
     sym_path = os.path.join(output_dir, sym_name)
 
     if sym_path in _generated_sym_cache:

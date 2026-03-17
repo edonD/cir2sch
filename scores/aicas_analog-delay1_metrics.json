@@ -1,0 +1,9 @@
+{
+  "name": "aicas_analog-delay1",
+  "components": 30,
+  "wires": 0,
+  "labels": 0,
+  "wire_crossings_estimate": 0,
+  "bounding_box_area": 70000.0,
+  "density": 428.57142857142856
+}

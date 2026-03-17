@@ -1,0 +1,9 @@
+{
+  "name": "aicas_example",
+  "components": 426,
+  "wires": 466,
+  "labels": 0,
+  "wire_crossings_estimate": 22,
+  "bounding_box_area": 114000.0,
+  "density": 3736.842105263158
+}

@@ -1,0 +1,9 @@
+{
+  "name": "aicas_ex4",
+  "components": 13,
+  "wires": 4,
+  "labels": 0,
+  "wire_crossings_estimate": 0,
+  "bounding_box_area": 112000.0,
+  "density": 116.07142857142857
+}

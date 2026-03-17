@@ -1,0 +1,9 @@
+{
+  "name": "aicas_CurrentBias",
+  "components": 27,
+  "wires": 29,
+  "labels": 0,
+  "wire_crossings_estimate": 3,
+  "bounding_box_area": 130000.0,
+  "density": 207.69230769230768
+}

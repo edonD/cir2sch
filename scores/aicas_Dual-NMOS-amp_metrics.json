@@ -1,0 +1,9 @@
+{
+  "name": "aicas_Dual-NMOS-amp",
+  "components": 68,
+  "wires": 42,
+  "labels": 0,
+  "wire_crossings_estimate": 3,
+  "bounding_box_area": 190000.0,
+  "density": 357.89473684210526
+}

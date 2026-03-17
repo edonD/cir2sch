@@ -792,29 +792,80 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
             max_x = max((p.x for p in result.placements.values()), default=cur_x)
             result.placements[name] = Placement(x=_snap(max_x + H_SPACING), y=_snap(PMOS_Y))
 
-    # Place inline passives between their two pin connections
-    for name in inline_passives:
-        comp = circuit.components[name]
-        pos1 = _find_pin_centroid(circuit, name, "pin1", result)
-        pos2 = _find_pin_centroid(circuit, name, "pin2", result)
-        if pos1 and pos2:
-            # Place at midpoint between the two pin connections
-            cx = (pos1[0] + pos2[0]) / 2
-            cy = (pos1[1] + pos2[1]) / 2
-        elif pos1 or pos2:
-            pos = pos1 or pos2
-            cx, cy = pos[0] + 100, pos[1]
-        else:
-            pos = _find_centroid_of_neighbors(circuit, name, result)
-            if pos:
-                cx, cy = pos
+    # Place inline passives — group series chains together
+    inline_chains = _find_resistor_chains(circuit, inline_passives)
+    for chain in inline_chains:
+        if len(chain) == 2:
+            # Series divider pair: place as vertical stack near the active connection
+            # Find the non-shared node (interface or active device) for positioning
+            c0 = circuit.components[chain[0]]
+            c1 = circuit.components[chain[1]]
+            # Find shared net between the two
+            nets0 = {c0.pins.get("pin1"), c0.pins.get("pin2")}
+            nets1 = {c1.pins.get("pin1"), c1.pins.get("pin2")}
+            shared = nets0 & nets1
+            # The non-shared nets are the external connections
+            ext0 = nets0 - shared
+            ext1 = nets1 - shared
+            # Position near the active device connections of the shared node
+            # (the intermediate node connects to transistor gates, which is where
+            # the divider should be placed)
+            positions = []
+            for net in shared:
+                if net and net in circuit.nets:
+                    for cn, pn in circuit.nets[net].connections:
+                        if cn in result.placements and cn not in chain:
+                            positions.append((result.placements[cn].x, result.placements[cn].y))
+            # Fallback: use non-shared pin connections
+            if not positions:
+                for name in chain:
+                    for pin in ["pin1", "pin2"]:
+                        net = circuit.components[name].pins.get(pin, "")
+                        if net not in shared:
+                            pos = _find_pin_centroid(circuit, name, pin, result)
+                            if pos:
+                                positions.append(pos)
+            if positions:
+                cx = sum(p[0] for p in positions) / len(positions)
+                cy = sum(p[1] for p in positions) / len(positions)
             else:
-                continue
-        px = _snap(cx)
-        py = _snap(cy)
-        if _is_occupied(result, px, py, 100):
-            px = _snap(cx + 130)
-        result.placements[name] = Placement(x=px, y=py)
+                pos = _find_centroid_of_neighbors(circuit, chain[0], result)
+                if pos:
+                    cx, cy = pos
+                else:
+                    continue
+            # Stack vertically
+            for i, name in enumerate(chain):
+                px = _snap(cx + 100)
+                py = _snap(cy - 30 + i * 80)
+                while _is_occupied(result, px, py, 80):
+                    px += 100
+                result.placements[name] = Placement(x=px, y=py)
+        else:
+            # Single or longer chains: place individually at midpoint
+            for name in chain:
+                if name in result.placements:
+                    continue
+                comp = circuit.components[name]
+                pos1 = _find_pin_centroid(circuit, name, "pin1", result)
+                pos2 = _find_pin_centroid(circuit, name, "pin2", result)
+                if pos1 and pos2:
+                    cx = (pos1[0] + pos2[0]) / 2
+                    cy = (pos1[1] + pos2[1]) / 2
+                elif pos1 or pos2:
+                    pos = pos1 or pos2
+                    cx, cy = pos[0] + 100, pos[1]
+                else:
+                    pos = _find_centroid_of_neighbors(circuit, name, result)
+                    if pos:
+                        cx, cy = pos
+                    else:
+                        continue
+                px = _snap(cx)
+                py = _snap(cy)
+                if _is_occupied(result, px, py, 100):
+                    px = _snap(cx + 130)
+                result.placements[name] = Placement(x=px, y=py)
 
     # Place input passives in a compact group
     if input_passives:
@@ -915,7 +966,11 @@ def _place_block(result: PlacedCircuit, block: BuildingBlock, center_x: float, y
 
 
 def _find_resistor_chains(circuit: Circuit, passive_names: list) -> list[list[str]]:
-    """Group passives into series chains (pin2 of one = pin1 of another)."""
+    """Group passives into series chains (pin2 of one = pin1 of another).
+
+    Breaks chains at hub nodes (nets with > 2 passive connections) to keep
+    divider pairs separate.
+    """
     name_set = set(passive_names)
     # Build graph: net -> list of passives connected to it
     net_to_passives = defaultdict(list)
@@ -926,7 +981,10 @@ def _find_resistor_chains(circuit: Circuit, passive_names: list) -> list[list[st
             if net and _classify_net(circuit, net) not in ("supply", "ground"):
                 net_to_passives[net].append((name, pin))
 
-    # Find chains by following connections
+    # Identify hub nets (connected to > 2 passives) — don't follow through these
+    hub_nets = {net for net, conns in net_to_passives.items() if len(conns) > 2}
+
+    # Find chains by following connections, stopping at hub nets
     visited = set()
     chains = []
     for name in passive_names:
@@ -934,13 +992,14 @@ def _find_resistor_chains(circuit: Circuit, passive_names: list) -> list[list[st
             continue
         chain = [name]
         visited.add(name)
-        # BFS to find connected passives
         queue = [name]
         while queue:
             current = queue.pop(0)
             comp = circuit.components[current]
             for pin in ["pin1", "pin2"]:
                 net = comp.pins.get(pin, "")
+                if net in hub_nets:
+                    continue  # Don't follow through hub nodes
                 for other_name, other_pin in net_to_passives.get(net, []):
                     if other_name not in visited and other_name in name_set:
                         visited.add(other_name)

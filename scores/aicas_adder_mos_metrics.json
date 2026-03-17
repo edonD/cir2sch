@@ -1,0 +1,9 @@
+{
+  "name": "aicas_adder_mos",
+  "components": 18,
+  "wires": 31,
+  "labels": 0,
+  "wire_crossings_estimate": 3,
+  "bounding_box_area": 112000.0,
+  "density": 160.71428571428572
+}

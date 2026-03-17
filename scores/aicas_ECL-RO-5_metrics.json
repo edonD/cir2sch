@@ -1,0 +1,9 @@
+{
+  "name": "aicas_ECL-RO-5",
+  "components": 31,
+  "wires": 33,
+  "labels": 0,
+  "wire_crossings_estimate": 0,
+  "bounding_box_area": 130000.0,
+  "density": 238.46153846153845
+}
