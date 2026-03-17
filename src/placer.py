@@ -383,11 +383,26 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
             pos = _find_centroid_of_neighbors(circuit, name, result)
             if pos:
                 cx, cy = pos
-                px = _snap(cx)
                 py = _snap(PMOS_Y)
-                if _is_occupied(result, px, py, 120):
-                    px = _snap(cx + H_SPACING)
-                result.placements[name] = Placement(x=px, y=py)
+                # Try centroid x, then offsets, to find non-overlapping position
+                placed = False
+                for offset in [0, -100, 100, -H_SPACING, H_SPACING]:
+                    px = _snap(cx + offset)
+                    if not _is_occupied(result, px, py, 130):
+                        result.placements[name] = Placement(x=px, y=py)
+                        placed = True
+                        break
+                if not placed:
+                    # Place above (VDD_Y band) if PMOS_Y is full
+                    py = _snap(VDD_Y)
+                    for offset in [0, -100, 100, -H_SPACING, H_SPACING]:
+                        px = _snap(cx + offset)
+                        if not _is_occupied(result, px, py, 130):
+                            result.placements[name] = Placement(x=px, y=py)
+                            placed = True
+                            break
+                if not placed:
+                    result.placements[name] = Placement(x=_snap(cx + H_SPACING * 2), y=_snap(PMOS_Y))
             else:
                 result.placements[name] = Placement(x=_snap(cur_x), y=_snap(PMOS_Y))
                 cur_x += H_SPACING
