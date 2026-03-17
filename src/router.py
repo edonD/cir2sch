@@ -180,9 +180,21 @@ def route_nets(placed: PlacedCircuit) -> tuple[list[Wire], list[Label]]:
             x2, y2 = positions[1]
             _add_smart_l_route(wires, x1, y1, x2, y2, net_name)
 
-        # For 3-4 connection nets: chain routing (connect nearest pairs)
+        # For 3-4 connection nets: try chain routing, fall back to labels if too many crossings
         else:
-            _add_chain_route(wires, positions, net_name)
+            trial_wires = []
+            _add_chain_route(trial_wires, positions, net_name)
+            # Check if adding these wires would create crossings
+            cross_count = sum(
+                _count_crossings_for_route(wires, [(w.x1, w.y1, w.x2, w.y2)])
+                for w in trial_wires
+            )
+            if cross_count <= 1:
+                wires.extend(trial_wires)
+            else:
+                # Too many crossings — use labels instead
+                for (x, y) in positions:
+                    labels.append(Label(x=x, y=y, net=net_name))
 
     return wires, labels
 
