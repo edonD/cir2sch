@@ -487,7 +487,7 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
                                 result.placements[ncomp_name] = Placement(
                                     x=_snap(latch_x), y=_snap(latch_nmos_y))
                                 latch_placed.update([cc_p.components[pi], ncomp_name])
-                                latch_x += H_SPACING
+                                latch_x += 180  # Compact spacing for cross-coupled inverters
                                 break
 
     # Place access transistors near their latch connections

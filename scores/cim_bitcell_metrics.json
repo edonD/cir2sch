@@ -1,9 +1,9 @@
 {
   "name": "cim_bitcell",
-  "components": 44,
-  "wires": 18,
+  "components": 46,
+  "wires": 20,
   "labels": 0,
   "wire_crossings_estimate": 0,
   "bounding_box_area": 200000.0,
-  "density": 220.0
+  "density": 230.0
 }
