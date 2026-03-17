@@ -570,7 +570,11 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
         px = cur_x
         for block in p_blocks:
             _place_block(result, block, px, PMOS_Y)
-            px += H_SPACING + BLOCK_GAP
+            # Use tighter spacing for single-column blocks (inverter/tgate)
+            if block.type in ("inverter", "tgate"):
+                px += 160  # Compact spacing for single-column blocks
+            else:
+                px += H_SPACING + BLOCK_GAP
 
         # Place top NMOS blocks above bottom ones (between PMOS and NMOS bands)
         top_y = MID_Y  # Between PMOS and NMOS
