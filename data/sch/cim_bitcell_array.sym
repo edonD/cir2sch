@@ -1,0 +1,29 @@
+v {xschem version=3.4.5 file_version=1.2}
+K {type=subcircuit
+format="@name @pinlist cim_bitcell"
+template="name=X1"}
+G {}
+V {}
+S {}
+E {}
+L 4 -25 -25 25 -25 {}
+L 4 25 -25 25 25 {}
+L 4 25 25 -25 25 {}
+L 4 -25 25 -25 -25 {}
+T {@name} -23 -37 0 0 0.12 0.12 {}
+L 4 -8 -25 -8 -35 {}
+B 5 -10 -37 -6 -33 {name=pin1 dir=inout}
+L 4 8 -25 8 -35 {}
+B 5 6 -37 10 -33 {name=pin2 dir=inout}
+L 4 -25 -8 -35 -8 {}
+B 5 -37 -10 -33 -6 {name=pin3 dir=inout}
+L 4 -25 8 -35 8 {}
+B 5 -37 6 -33 10 {name=pin4 dir=inout}
+L 4 25 -8 35 -8 {}
+B 5 33 -10 37 -6 {name=pin5 dir=inout}
+L 4 25 8 35 8 {}
+B 5 33 6 37 10 {name=pin6 dir=inout}
+L 4 -8 25 -8 35 {}
+B 5 -10 33 -6 37 {name=pin7 dir=inout}
+L 4 8 25 8 35 {}
+B 5 6 33 10 37 {name=pin8 dir=inout}

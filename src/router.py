@@ -64,7 +64,61 @@ BJT_PIN_OFFSETS = {
 }
 
 
-def _get_pin_offset(comp_type: str, pin_name: str, flip: int = 0) -> tuple[int, int]:
+def _get_subcircuit_pin_offset(pin_name: str, total_pins: int, is_array: bool = False) -> tuple[int, int]:
+    """Distribute subcircuit pins around a rectangular box."""
+    import re
+    m = re.match(r'pin(\d+)', pin_name)
+    if not m:
+        return (0, 0)
+    idx = int(m.group(1))  # 1-based
+
+    if is_array and total_pins >= 6:
+        # Array mode: distribute pins on all 4 sides for clean crossbar routing
+        # Top: pin1, pin2 (bitlines - vertical)
+        # Left: pin3, pin4 (wordlines - horizontal)
+        # Right: pin5, pin6 (internal/output)
+        # Bottom: pin7, pin8 (power/ground)
+        box_hw, box_hh = 25, 25
+        four_side_map = {
+            1: (  -8, -box_hh - 10),  # top-left (bl)
+            2: (   8, -box_hh - 10),  # top-right (blb)
+            3: (-box_hw - 10,  -8),   # left-upper (wl)
+            4: (-box_hw - 10,   8),   # left-lower (wwl)
+            5: ( box_hw + 10,  -8),   # right-upper (q)
+            6: ( box_hw + 10,   8),   # right-lower (qb)
+            7: (  -8,  box_hh + 10),  # bottom-left (vdd)
+            8: (   8,  box_hh + 10),  # bottom-right (vss)
+        }
+        if idx in four_side_map:
+            return four_side_map[idx]
+        # Overflow: add more pins to sides
+        extra = idx - 8
+        side = extra % 4
+        pos = extra // 4
+        offsets = [
+            (-8 - 16 * pos, -box_hh - 10),
+            ( 8 + 16 * pos, -box_hh - 10),
+            (-box_hw - 10, -8 - 16 * pos),
+            ( box_hw + 10, -8 - 16 * pos),
+        ]
+        return offsets[side]
+
+    # Default: left/right distribution
+    pin_spacing = 20
+    pins_per_side = (total_pins + 1) // 2
+    box_half_h = max(20, pins_per_side * (pin_spacing // 2) + pin_spacing // 4)
+
+    if idx % 2 == 1:  # odd → left side
+        side_idx = (idx - 1) // 2
+        y = -box_half_h + pin_spacing // 2 + side_idx * pin_spacing
+        return (-30, y)
+    else:  # even → right side
+        side_idx = (idx - 2) // 2
+        y = -box_half_h + pin_spacing // 2 + side_idx * pin_spacing
+        return (30, y)
+
+
+def _get_pin_offset(comp_type: str, pin_name: str, flip: int = 0, total_pins: int = 0, is_array: bool = False) -> tuple[int, int]:
     if comp_type in ("mosfet_n", "mosfet_p"):
         offsets = MOSFET_PIN_OFFSETS_FLIPPED if flip else MOSFET_PIN_OFFSETS
         return offsets.get(pin_name, (0, 0))
@@ -74,13 +128,26 @@ def _get_pin_offset(comp_type: str, pin_name: str, flip: int = 0) -> tuple[int, 
         return SOURCE_PIN_OFFSETS.get(pin_name, (0, 0))
     elif comp_type in ("bjt_pnp", "bjt_npn"):
         return BJT_PIN_OFFSETS.get(pin_name, (0, 0))
+    elif comp_type == "subcircuit":
+        return _get_subcircuit_pin_offset(pin_name, total_pins, is_array)
     return (0, 0)
+
+
+import re as _re
+_ARRAY_PATTERN = _re.compile(r'r(\d+)_?c(\d+)', _re.IGNORECASE)
+
+
+def _is_array_component(comp_name: str) -> bool:
+    """Check if a component is part of an array grid based on its name."""
+    return bool(_ARRAY_PATTERN.search(comp_name))
 
 
 def _get_pin_position(placed: PlacedCircuit, comp_name: str, pin_name: str) -> tuple[int, int]:
     comp = placed.circuit.components[comp_name]
     p = placed.placements[comp_name]
-    dx, dy = _get_pin_offset(comp.type, pin_name, p.flip)
+    total_pins = len(comp.pins) if comp.type == "subcircuit" else 0
+    is_array = comp.type == "subcircuit" and _is_array_component(comp_name)
+    dx, dy = _get_pin_offset(comp.type, pin_name, p.flip, total_pins, is_array)
     return (_snap(p.x + dx), _snap(p.y + dy))
 
 
@@ -137,15 +204,25 @@ def route_nets(placed: PlacedCircuit) -> tuple[list[Wire], list[Label]]:
     labels = []
     circuit = placed.circuit
 
-    LABEL_DISTANCE = 700
-    # Dynamic fan-out threshold: use labels more aggressively for very dense circuits
-    num_comps = len(placed.placements)
-    max_wire_fanout = 5
+    # Detect array circuits: if many components match the array pattern
+    num_array_comps = sum(1 for n in placed.placements if _ARRAY_PATTERN.search(n))
+    is_array_circuit = num_array_comps > 8
+
+    if is_array_circuit:
+        LABEL_DISTANCE = 2500  # Array spans are large
+        max_wire_fanout = 20   # Bus wires have many connections
+    else:
+        LABEL_DISTANCE = 700
+        max_wire_fanout = 5
 
     for net_name, net in circuit.nets.items():
         conns = [(cn, pn) for cn, pn in net.connections if cn in placed.placements]
         if len(conns) < 2:
             if conns:
+                # Skip labels for cell-internal nets (e.g., q_r0c0, qb_r1c2)
+                # These are single-connection nets unique to one array cell
+                if _ARRAY_PATTERN.search(net_name):
+                    continue
                 x, y = _get_pin_position(placed, conns[0][0], conns[0][1])
                 labels.append(Label(x=x, y=y, net=net_name))
             continue
@@ -181,7 +258,7 @@ def route_nets(placed: PlacedCircuit) -> tuple[list[Wire], list[Label]]:
             x2, y2 = positions[1]
             _add_smart_l_route(wires, x1, y1, x2, y2, net_name)
 
-        # For 3-4 connection nets: try chain routing, fall back to labels if too many crossings
+        # For 3+ connection nets: try chain routing, fall back to labels if too many crossings
         else:
             trial_wires = []
             _add_chain_route(trial_wires, positions, net_name)
@@ -190,7 +267,9 @@ def route_nets(placed: PlacedCircuit) -> tuple[list[Wire], list[Label]]:
                 _count_crossings_for_route(wires, [(w.x1, w.y1, w.x2, w.y2)])
                 for w in trial_wires
             )
-            if cross_count <= 1:
+            # Array circuits: bus wires naturally cross, allow all crossings
+            max_crossings = 999 if is_array_circuit else 1
+            if cross_count <= max_crossings:
                 wires.extend(trial_wires)
             else:
                 # Too many crossings — use labels instead
@@ -198,7 +277,9 @@ def route_nets(placed: PlacedCircuit) -> tuple[list[Wire], list[Label]]:
                     labels.append(Label(x=x, y=y, net=net_name))
 
     # Post-process: check for crossings and convert worst offenders to labels
-    wires, labels = _eliminate_crossings(wires, labels)
+    # Skip for array circuits where bus crossings are expected
+    if not is_array_circuit:
+        wires, labels = _eliminate_crossings(wires, labels)
 
     return wires, labels
 

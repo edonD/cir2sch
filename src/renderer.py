@@ -35,7 +35,91 @@ SYMBOL_MAP = {
 }
 
 
-def _get_symbol(comp: Component) -> str:
+# Cache of generated subcircuit symbol paths
+_generated_sym_cache = {}
+
+
+def _generate_subcircuit_sym(model: str, num_pins: int, output_dir: str, is_array: bool = False) -> str:
+    """Generate a .sym file for a subcircuit type with proper pin positions.
+
+    Returns the filename (relative) of the generated symbol.
+    """
+    import os
+    suffix = "_array" if is_array else ""
+    sym_name = f"{model}{suffix}.sym"
+    sym_path = os.path.join(output_dir, sym_name)
+
+    if sym_path in _generated_sym_cache:
+        return sym_name
+
+    lines = []
+    lines.append("v {xschem version=3.4.5 file_version=1.2}")
+    lines.append(f'K {{type=subcircuit\nformat="@name @pinlist {model}"\ntemplate="name=X1"}}')
+    lines.append("G {}")
+    lines.append("V {}")
+    lines.append("S {}")
+    lines.append("E {}")
+
+    if is_array and num_pins >= 6:
+        # Array mode: 4-sided pin layout for clean crossbar
+        box_hw, box_hh = 25, 25
+        lines.append(f"L 4 {-box_hw} {-box_hh} {box_hw} {-box_hh} {{}}")
+        lines.append(f"L 4 {box_hw} {-box_hh} {box_hw} {box_hh} {{}}")
+        lines.append(f"L 4 {box_hw} {box_hh} {-box_hw} {box_hh} {{}}")
+        lines.append(f"L 4 {-box_hw} {box_hh} {-box_hw} {-box_hh} {{}}")
+        lines.append(f'T {{@name}} {-box_hw + 2} {-box_hh - 12} 0 0 0.12 0.12 {{}}')
+
+        four_side = {
+            1: (-8,  -box_hh, -8,  -box_hh - 10),  # top-left
+            2: ( 8,  -box_hh,  8,  -box_hh - 10),  # top-right
+            3: (-box_hw, -8, -box_hw - 10, -8),     # left-upper
+            4: (-box_hw,  8, -box_hw - 10,  8),     # left-lower
+            5: ( box_hw, -8,  box_hw + 10, -8),     # right-upper
+            6: ( box_hw,  8,  box_hw + 10,  8),     # right-lower
+            7: (-8,  box_hh, -8,  box_hh + 10),     # bottom-left
+            8: ( 8,  box_hh,  8,  box_hh + 10),     # bottom-right
+        }
+        for i in range(1, num_pins + 1):
+            pin_name = f"pin{i}"
+            if i in four_side:
+                bx, by, ex, ey = four_side[i]
+                lines.append(f"L 4 {bx} {by} {ex} {ey} {{}}")
+                cx, cy = ex, ey
+                lines.append(f"B 5 {cx - 2} {cy - 2} {cx + 2} {cy + 2} {{name={pin_name} dir=inout}}")
+    else:
+        # Default: left/right distribution
+        pin_spacing = 20
+        pins_per_side = (num_pins + 1) // 2
+        box_half_h = max(20, pins_per_side * (pin_spacing // 2) + pin_spacing // 4)
+        box_w = 20
+
+        lines.append(f"L 4 {-box_w} {-box_half_h} {box_w} {-box_half_h} {{}}")
+        lines.append(f"L 4 {box_w} {-box_half_h} {box_w} {box_half_h} {{}}")
+        lines.append(f"L 4 {box_w} {box_half_h} {-box_w} {box_half_h} {{}}")
+        lines.append(f"L 4 {-box_w} {box_half_h} {-box_w} {-box_half_h} {{}}")
+        lines.append(f'T {{@name}} {-box_w + 2} {-box_half_h - 12} 0 0 0.15 0.15 {{}}')
+
+        for i in range(1, num_pins + 1):
+            pin_name = f"pin{i}"
+            if i % 2 == 1:
+                side_idx = (i - 1) // 2
+                y = -box_half_h + pin_spacing // 2 + side_idx * pin_spacing
+                lines.append(f"L 4 {-box_w - 10} {y} {-box_w} {y} {{}}")
+                lines.append(f"B 5 {-box_w - 12} {y - 2} {-box_w - 8} {y + 2} {{name={pin_name} dir=inout}}")
+            else:
+                side_idx = (i - 2) // 2
+                y = -box_half_h + pin_spacing // 2 + side_idx * pin_spacing
+                lines.append(f"L 4 {box_w} {y} {box_w + 10} {y} {{}}")
+                lines.append(f"B 5 {box_w + 8} {y - 2} {box_w + 12} {y + 2} {{name={pin_name} dir=inout}}")
+
+    with open(sym_path, 'w') as f:
+        f.write('\n'.join(lines) + '\n')
+
+    _generated_sym_cache[sym_path] = sym_name
+    return sym_name
+
+
+def _get_symbol(comp: Component, output_dir: str = "") -> str:
     """Get the xschem symbol path for a component.
 
     Uses clean generic symbols (nmos4/pmos4) for presentation-ready schematics.
@@ -63,6 +147,14 @@ def _get_symbol(comp: Component) -> str:
     for key, sym in SYMBOL_MAP.items():
         if isinstance(key, str) and key in model:
             return sym
+
+    # For user-defined subcircuit types, generate a .sym file
+    if comp.type == "subcircuit" and output_dir:
+        import re
+        num_pins = len(comp.pins)
+        is_array = bool(re.search(r'r(\d+)_?c(\d+)', comp.name, re.IGNORECASE))
+        sym_name = _generate_subcircuit_sym(model, num_pins, output_dir, is_array)
+        return sym_name
 
     return "devices/noconn.sym"
 
@@ -156,7 +248,7 @@ def _add_array_annotations(lines: list, placed: PlacedCircuit):
 
 
 def render_xschem(placed: PlacedCircuit, wires: list[Wire], labels: list[Label],
-                  title: str = "") -> str:
+                  title: str = "", output_dir: str = "") -> str:
     """Render a complete xschem .sch file."""
     lines = []
 
@@ -193,7 +285,7 @@ def render_xschem(placed: PlacedCircuit, wires: list[Wire], labels: list[Label],
             continue
 
         p = placed.placements[comp_name]
-        sym = _get_symbol(comp)
+        sym = _get_symbol(comp, output_dir)
         attrs = _format_attributes(comp)
 
         lines.append(f'C {{{sym}}} {p.x} {p.y} {p.rotation} {p.flip} {{{attrs}}}')
@@ -296,7 +388,9 @@ def render_xschem(placed: PlacedCircuit, wires: list[Wire], labels: list[Label],
 def render_to_file(placed: PlacedCircuit, wires: list[Wire], labels: list[Label],
                    output_path: str, title: str = ""):
     """Render and write to a .sch file."""
-    content = render_xschem(placed, wires, labels, title)
+    import os
+    output_dir = os.path.dirname(os.path.abspath(output_path))
+    content = render_xschem(placed, wires, labels, title, output_dir)
     with open(output_path, 'w') as f:
         f.write(content)
     print(f"Written: {output_path}")

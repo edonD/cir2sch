@@ -1062,8 +1062,8 @@ def _place_array_circuit(circuit: Circuit, array_info: dict) -> PlacedCircuit:
     grid = array_info["grid"]
     rows, cols = array_info["rows"], array_info["cols"]
 
-    # Wider spacing for array cells — subcircuit boxes need room for labels
-    cell_h, cell_v = 200, 150
+    # Wider spacing for array cells — room for boxes and bus wires
+    cell_h, cell_v = 200, 170
     # Leave space on left for row periphery (WL/WWL sources)
     array_left = 500
     array_top = 0
