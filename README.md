@@ -12,7 +12,7 @@ Converts `.cir` SPICE netlists into xschem `.sch` schematics with intelligent pl
 | cim_bitcell | 5 | 5 | 5 | 5 | 4 | **4.8** | 0 |
 | ode_multiplier | 5 | 5 | 5 | 4 | 4 | **4.6** | 3 |
 | cim_adc | 4 | 6 | 4 | 4 | 3 | **4.2** | 0 |
-| cim_array | 3 | 5 | 3 | 3 | 2 | **3.2** | 0 |
+| cim_array | 3 | 5 | 4 | 3 | 2 | **3.4** | 0 |
 
 **Total wire crossings: 3** (down from 28 baseline)
 
@@ -56,7 +56,8 @@ parser.py → placer.py → router.py → renderer.py
 - **Subcircuit-aware parsing**: Auto-selects largest subcircuit when top-level is testbench
 
 ## What Still Needs Work
-- cim_array: Subcircuit instances too small to read, no row/column annotations
+- cim_array: Array grid is compact but sources still create a tall column above; needs row/column header annotations
 - cim_adc: PMOS reset devices spread too wide, needs tighter comparator layout
-- ode_multiplier: Input attenuator resistors could be more compact
+- ode_multiplier: 3 wire crossings remain from dense input attenuator routing
 - General: Component property text overlaps in dense areas
+- All circuits: could benefit from more precise pin positions based on actual xschem symbol geometry
