@@ -97,4 +97,3 @@ C {devices/lab_pin.sym} 220 30 0 0 {name=l_in1 sig_type=std_logic lab=in1}
 C {devices/lab_pin.sym} 350 30 0 0 {name=l_in2 sig_type=std_logic lab=in2}
 C {devices/lab_pin.sym} 480 30 0 0 {name=l_in3 sig_type=std_logic lab=in3}
 C {devices/lab_pin.sym} 610 30 0 0 {name=l_pwm_in sig_type=std_logic lab=pwm_in}
-C {devices/lab_pin.sym} 200 -220 0 0 {name=l_pwm_in sig_type=std_logic lab=pwm_in}

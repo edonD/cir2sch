@@ -65,7 +65,6 @@ C {devices/vdd.sym} 240 -370 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 240 -400 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 400 -400 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 560 -400 0 0 {name=l_vdd lab=VDD}
-C {devices/lab_pin.sym} 420 -280 0 0 {name=l_vcm sig_type=std_logic lab=vcm}
 C {devices/lab_pin.sym} 820 -280 0 0 {name=l_vcm sig_type=std_logic lab=vcm}
 C {devices/lab_pin.sym} 560 -340 0 0 {name=l_inp sig_type=std_logic lab=inp}
 C {devices/lab_pin.sym} 680 -340 0 0 {name=l_inn sig_type=std_logic lab=inn}

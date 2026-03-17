@@ -58,7 +58,6 @@ C {devices/gnd.sym} 240 60 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 240 30 0 0 {name=l_vss lab=VSS}
 C {devices/lab_pin.sym} 350 -150 0 0 {name=l_inn sig_type=std_logic lab=inn}
 C {devices/lab_pin.sym} 200 30 0 0 {name=l_vbias_n sig_type=std_logic lab=vbias_n}
-C {devices/lab_pin.sym} 90 -400 0 0 {name=l_pcm sig_type=std_logic lab=pcm}
 C {devices/vdd.sym} 130 -370 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 130 -400 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 280 -370 0 0 {name=l_vdd lab=VDD}

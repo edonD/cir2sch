@@ -104,8 +104,6 @@ C {devices/gnd.sym} 690 -150 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 350 20 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 350 150 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 350 120 0 0 {name=l_vss lab=VSS}
-C {devices/lab_pin.sym} 220 -430 0 0 {name=l_q sig_type=std_logic lab=q}
-C {devices/lab_pin.sym} 180 -400 0 0 {name=l_qb sig_type=std_logic lab=qb}
 C {devices/lab_pin.sym} 690 -120 0 0 {name=l_qb sig_type=std_logic lab=qb}
 C {devices/lab_pin.sym} 470 -150 0 0 {name=l_wwl sig_type=std_logic lab=wwl}
 C {devices/lab_pin.sym} 200 370 0 0 {name=l_wwl sig_type=std_logic lab=wwl}

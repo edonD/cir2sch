@@ -206,11 +206,21 @@ def render_xschem(placed: PlacedCircuit, wires: list[Wire], labels: list[Label],
         lab_attr = f"lab={w.net}" if w.net else ""
         lines.append(f'N {w.x1} {w.y1} {w.x2} {w.y2} {{{lab_attr}}}')
 
+    # Build set of wire endpoint positions per net (these already have lab= attributes)
+    wire_endpoints = set()
+    for w in wires:
+        if w.net:
+            wire_endpoints.add((w.x1, w.y1, w.net))
+            wire_endpoints.add((w.x2, w.y2, w.net))
+
     # Net labels (using lab_pin symbols)
     seen_labels = set()
     for label in labels:
         key = (label.x, label.y, label.net)
         if key in seen_labels:
+            continue
+        # Skip labels at wire endpoints (wire already carries the net name)
+        if key in wire_endpoints:
             continue
         seen_labels.add(key)
 

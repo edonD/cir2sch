@@ -99,13 +99,9 @@ N -40 -310 120 -310 {lab=outp}
 N 120 -310 120 -520 {lab=outp}
 N 120 -520 320 -520 {lab=outp}
 C {devices/lab_pin.sym} -140 -310 0 0 {name=l_xp sig_type=std_logic lab=xp}
-C {devices/lab_pin.sym} -140 -250 0 0 {name=l_xp_int sig_type=std_logic lab=xp_int}
 C {devices/lab_pin.sym} 480 -310 0 0 {name=l_xp_int sig_type=std_logic lab=xp_int}
 C {devices/lab_pin.sym} 600 -310 0 0 {name=l_xn sig_type=std_logic lab=xn}
-C {devices/lab_pin.sym} 600 -250 0 0 {name=l_xn_int sig_type=std_logic lab=xn_int}
-C {devices/lab_pin.sym} 220 -310 0 0 {name=l_xn_int sig_type=std_logic lab=xn_int}
 C {devices/lab_pin.sym} 220 -180 0 0 {name=l_yp sig_type=std_logic lab=yp}
-C {devices/lab_pin.sym} 220 -120 0 0 {name=l_yp_int sig_type=std_logic lab=yp_int}
 C {devices/lab_pin.sym} 720 -250 0 0 {name=l_yp_int sig_type=std_logic lab=yp_int}
 C {devices/lab_pin.sym} 480 -180 0 0 {name=l_yn sig_type=std_logic lab=yn}
 C {devices/lab_pin.sym} 200 30 0 0 {name=l_vbias_n sig_type=std_logic lab=vbias_n}
@@ -117,7 +113,6 @@ C {devices/gnd.sym} -240 -280 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} -40 -280 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 120 -280 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 820 -280 0 0 {name=l_vss lab=VSS}
-C {devices/lab_pin.sym} 340 -180 0 0 {name=l_mid2 sig_type=std_logic lab=mid2}
 C {devices/lab_pin.sym} 820 -250 0 0 {name=l_mid2 sig_type=std_logic lab=mid2}
 C {devices/lab_pin.sym} -240 -310 0 0 {name=l_outn sig_type=std_logic lab=outn}
 C {devices/lab_pin.sym} 820 -310 0 0 {name=l_outn sig_type=std_logic lab=outn}

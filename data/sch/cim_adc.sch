@@ -105,9 +105,7 @@ C {devices/vdd.sym} 220 -400 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 380 -370 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 380 -400 0 0 {name=l_vdd lab=VDD}
 C {devices/lab_pin.sym} 830 -430 0 0 {name=l_outn sig_type=std_logic lab=outn}
-C {devices/lab_pin.sym} 180 -400 0 0 {name=l_outn sig_type=std_logic lab=outn}
 C {devices/lab_pin.sym} 970 -430 0 0 {name=l_outp sig_type=std_logic lab=outp}
-C {devices/lab_pin.sym} 220 -430 0 0 {name=l_outp sig_type=std_logic lab=outp}
 C {devices/lab_pin.sym} 690 -400 0 0 {name=l_clk sig_type=std_logic lab=clk}
 C {devices/lab_pin.sym} 790 -400 0 0 {name=l_clk sig_type=std_logic lab=clk}
 C {devices/lab_pin.sym} 1010 -400 0 0 {name=l_clk sig_type=std_logic lab=clk}
