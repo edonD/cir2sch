@@ -282,6 +282,33 @@ def _detect_array_pattern(circuit: Circuit) -> dict:
     return {}
 
 
+def _detect_nmos_stacks(circuit: Circuit, nmos_names: list, placed: PlacedCircuit) -> list[tuple]:
+    """Detect series-stacked NMOS pairs where source of top == drain of bottom."""
+    stacks = []
+    used = set()
+    for n1 in nmos_names:
+        if n1 in used:
+            continue
+        c1 = circuit.components[n1]
+        for n2 in nmos_names:
+            if n2 in used or n2 == n1:
+                continue
+            c2 = circuit.components[n2]
+            # c1 source == c2 drain → c1 is on top, c2 on bottom
+            if c1.pins["source"] == c2.pins["drain"] and \
+               _classify_net(circuit, c1.pins["source"]) == "signal":
+                stacks.append((n1, n2))
+                used.update([n1, n2])
+                break
+            # c2 source == c1 drain → c2 is on top, c1 on bottom
+            elif c2.pins["source"] == c1.pins["drain"] and \
+                 _classify_net(circuit, c2.pins["source"]) == "signal":
+                stacks.append((n2, n1))
+                used.update([n1, n2])
+                break
+    return stacks
+
+
 def _order_inverter_chain(circuit: Circuit, inv_blocks: list[BuildingBlock]) -> list[BuildingBlock]:
     """Order inverter blocks by signal flow: output of one feeds input of next.
     Returns ordered list, or empty list if not a chain."""
@@ -363,9 +390,73 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
         else:
             other.append(name)
 
+    # === Stage 0.5: Detect and place cross-coupled latches ===
+    cc_p_blocks = [b for b in blocks if b.type == "cross_coupled_p"]
+    cc_n_blocks = [b for b in blocks if b.type == "cross_coupled_n"]
+    latch_placed = set()
+
+    if cc_p_blocks and cc_n_blocks:
+        # Match cross-coupled P and N pairs that share the same output nets
+        for cc_p in cc_p_blocks:
+            for cc_n in cc_n_blocks:
+                p0, p1 = circuit.components[cc_p.components[0]], circuit.components[cc_p.components[1]]
+                n0, n1 = circuit.components[cc_n.components[0]], circuit.components[cc_n.components[1]]
+                p_drains = {p0.pins["drain"], p1.pins["drain"]}
+                n_drains = {n0.pins["drain"], n1.pins["drain"]}
+                if p_drains == n_drains:
+                    # Form two inverters: match P and N by shared drain
+                    latch_x = 200
+                    for pi, pcomp in enumerate([p0, p1]):
+                        # Find matching N transistor (same drain)
+                        for ni, ncomp_name in enumerate(cc_n.components):
+                            nc = circuit.components[ncomp_name]
+                            if nc.pins["drain"] == pcomp.pins["drain"]:
+                                # Place as inverter: P on top, N on bottom
+                                result.placements[cc_p.components[pi]] = Placement(
+                                    x=_snap(latch_x), y=_snap(PMOS_Y))
+                                result.placements[ncomp_name] = Placement(
+                                    x=_snap(latch_x), y=_snap(NMOS_Y))
+                                latch_placed.update([cc_p.components[pi], ncomp_name])
+                                latch_x += H_SPACING
+                                break
+
+    # Place access transistors near their latch connections
+    if latch_placed:
+        # Find latch output nets (q, qb)
+        latch_nets = {}  # net_name -> x position
+        for lname in latch_placed:
+            lcomp = circuit.components[lname]
+            drain_net = lcomp.pins.get("drain", "")
+            if drain_net and _classify_net(circuit, drain_net) == "signal":
+                if lname in result.placements:
+                    latch_nets[drain_net] = result.placements[lname].x
+
+        # Find free NMOS that connect to latch nets via source (access transistors)
+        access_placed = set()
+        latch_center_x = sum(latch_nets.values()) / max(len(latch_nets), 1)
+        for name in list(nmos_free):
+            comp = circuit.components[name]
+            src_net = comp.pins.get("source", "")
+            if src_net in latch_nets:
+                lx = latch_nets[src_net]
+                # Place outward from latch center (left side goes left, right goes right)
+                direction = -1 if lx < latch_center_x else 1
+                for offset in [direction * 160, direction * 200, direction * 260]:
+                    ax = _snap(lx + offset)
+                    if not _is_occupied(result, ax, _snap(NMOS_Y), 120):
+                        result.placements[name] = Placement(x=ax, y=_snap(NMOS_Y))
+                        access_placed.add(name)
+                        context_placed.add(name)
+                        break
+
+    # Remove latch blocks from the blocks list to avoid double-placement
+    if latch_placed:
+        blocks = [b for b in blocks if not any(c in latch_placed for c in b.components)]
+        block_comps -= latch_placed
+
     # === Stage 1: Group connected blocks and place as vertical stacks ===
     groups = _group_connected_blocks(circuit, blocks)
-    cur_x = 200
+    cur_x = max(200, max((p.x for p in result.placements.values()), default=0) + H_SPACING)
 
     for group in groups:
         # Separate by type
@@ -472,7 +563,31 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
                 result.placements[name] = Placement(x=_snap(cur_x), y=_snap(PMOS_Y))
                 cur_x += H_SPACING
 
+    # Detect series-stacked NMOS pairs (source of one == drain of another)
+    nmos_stacks = _detect_nmos_stacks(circuit, nmos_free, result)
+    stacked_set = set()
+    for top_name, bot_name in nmos_stacks:
+        stacked_set.update([top_name, bot_name])
+        # Place stacked pair near gate connections, below the NMOS band
+        pos = _find_centroid_of_neighbors(circuit, top_name, result)
+        if not pos:
+            pos = _find_centroid_of_neighbors(circuit, bot_name, result)
+        cx = pos[0] if pos else cur_x
+        # Use GND_Y as starting point for stacked pairs (well below NMOS)
+        stack_y = GND_Y - 30
+        px = _snap(cx)
+        # Only check horizontal overlap at the stack level
+        for offset in [0, 130, -130, H_SPACING]:
+            test_x = _snap(cx + offset)
+            if not _is_occupied(result, test_x, _snap(stack_y), 100):
+                px = test_x
+                break
+        result.placements[top_name] = Placement(x=px, y=_snap(stack_y))
+        result.placements[bot_name] = Placement(x=px, y=_snap(stack_y + 100))
+
     for name in nmos_free:
+        if name in stacked_set:
+            continue
         if name not in result.placements and name not in context_placed:
             pos = _find_centroid_of_neighbors(circuit, name, result)
             if pos:
