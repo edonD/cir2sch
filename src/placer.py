@@ -390,8 +390,65 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
             result.placements[name] = Placement(x=_snap(nx), y=_snap(NMOS_Y))
             nx += H_SPACING
 
-    # === Stage 3: Place passives near connections ===
+    # === Stage 3: Place passives smartly ===
+    # Categorize passives:
+    # - Supply-connected (one pin to VDD/GND): place near the signal pin's component
+    # - Inline (both pins connect to placed components): place between them
+    # - Input (one pin is interface/external): place to the left
+    # - Other: place near centroid of neighbors
+    supply_passives = []
+    inline_passives = []
+    input_passives = []
+    other_passives = []
+
     for name in passives:
+        if name in result.placements:
+            continue
+        comp = circuit.components[name]
+        pin1_net = comp.pins.get("pin1", "")
+        pin2_net = comp.pins.get("pin2", "")
+        pin1_type = _classify_net(circuit, pin1_net)
+        pin2_type = _classify_net(circuit, pin2_net)
+
+        if pin1_type in ("supply", "ground") or pin2_type in ("supply", "ground"):
+            supply_passives.append(name)
+        elif _has_placed_neighbors(circuit, name, "pin1", result) and _has_placed_neighbors(circuit, name, "pin2", result):
+            inline_passives.append(name)
+        elif circuit.interface_pins and (pin1_net in circuit.interface_pins or pin2_net in circuit.interface_pins):
+            input_passives.append(name)
+        else:
+            other_passives.append(name)
+
+    # Place supply-connected passives near the signal-side component
+    for name in supply_passives:
+        comp = circuit.components[name]
+        pin1_type = _classify_net(circuit, comp.pins.get("pin1", ""))
+        signal_pin = "pin2" if pin1_type in ("supply", "ground") else "pin1"
+        pos = _find_pin_neighbor_pos(circuit, name, signal_pin, result)
+        if pos:
+            cx, cy = pos
+            px = _snap(cx + 100)
+            py = _snap(VDD_Y if pin1_type == "supply" or _classify_net(circuit, comp.pins.get("pin2", "")) == "supply" else GND_Y)
+            if _is_occupied(result, px, py, 100):
+                px = _snap(cx + H_SPACING)
+            result.placements[name] = Placement(x=px, y=py)
+        else:
+            max_x = max((p.x for p in result.placements.values()), default=cur_x)
+            result.placements[name] = Placement(x=_snap(max_x + H_SPACING), y=_snap(PMOS_Y))
+
+    # Place inline passives between their connected components
+    for name in inline_passives:
+        pos = _find_centroid_of_neighbors(circuit, name, result)
+        if pos:
+            cx, cy = pos
+            px = _snap(cx)
+            py = _snap(cy)
+            if _is_occupied(result, px, py, 100):
+                px = _snap(cx + 130)
+            result.placements[name] = Placement(x=px, y=py)
+
+    # Place remaining passives near connections
+    for name in input_passives + other_passives:
         if name in result.placements:
             continue
         pos = _find_centroid_of_neighbors(circuit, name, result)
@@ -465,6 +522,31 @@ def _place_block(result: PlacedCircuit, block: BuildingBlock, center_x: float, y
         result.placements[c2] = Placement(x=_snap(center_x + half_w), y=_snap(y), flip=int(flip_second))
         block.center_x = center_x
         block.center_y = y
+
+
+def _has_placed_neighbors(circuit: Circuit, comp_name: str, pin_name: str, placed: PlacedCircuit) -> bool:
+    """Check if the given pin connects to any already-placed component."""
+    comp = circuit.components[comp_name]
+    net_name = comp.pins.get(pin_name, "")
+    if _classify_net(circuit, net_name) in ("supply", "ground"):
+        return False
+    if net_name in circuit.nets:
+        for cn, pn in circuit.nets[net_name].connections:
+            if cn != comp_name and cn in placed.placements:
+                return True
+    return False
+
+
+def _find_pin_neighbor_pos(circuit: Circuit, comp_name: str, pin_name: str, placed: PlacedCircuit) -> tuple | None:
+    """Find the position of the nearest placed component connected to a specific pin."""
+    comp = circuit.components[comp_name]
+    net_name = comp.pins.get(pin_name, "")
+    if net_name in circuit.nets:
+        for cn, pn in circuit.nets[net_name].connections:
+            if cn != comp_name and cn in placed.placements:
+                p = placed.placements[cn]
+                return (p.x, p.y)
+    return None
 
 
 def _is_occupied(placed: PlacedCircuit, x: int, y: int, min_dist: int) -> bool:
