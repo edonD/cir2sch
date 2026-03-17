@@ -101,6 +101,16 @@ def detect_building_blocks(circuit: Circuit) -> list[BuildingBlock]:
                 blocks.append(BuildingBlock(type="inverter", components=[pname, nname]))
                 used.update([nname, pname])
 
+    # Transmission gates (NMOS + PMOS sharing drain and source, different gates)
+    for nname, nm in list(mosfets_n.items()):
+        for pname, pm in list(mosfets_p.items()):
+            if nname in used or pname in used:
+                continue
+            if nm.pins["drain"] == pm.pins["drain"] and nm.pins["source"] == pm.pins["source"]:
+                if nm.pins["gate"] != pm.pins["gate"]:
+                    blocks.append(BuildingBlock(type="tgate", components=[pname, nname]))
+                    used.update([nname, pname])
+
     # Differential pairs (including degenerated: sources connect through resistors)
     for fets, suffix in [(mosfets_n, "n"), (mosfets_p, "p")]:
         for name1, m1 in list(fets.items()):
@@ -218,8 +228,8 @@ def _group_connected_blocks(circuit: Circuit, blocks: list[BuildingBlock]) -> li
 
 
 def _is_p_type(block: BuildingBlock) -> bool:
-    """Check if a block is PMOS-based."""
-    return block.type.endswith("_p") or block.type == "inverter"
+    """Check if a block is PMOS-based (or mixed like inverter/tgate)."""
+    return block.type.endswith("_p") or block.type in ("inverter", "tgate")
 
 
 def _is_symmetric_block(block: BuildingBlock) -> bool:
@@ -812,9 +822,9 @@ def _place_block(result: PlacedCircuit, block: BuildingBlock, center_x: float, y
     """Place a building block centered at (center_x, y)."""
     half_w = H_SPACING // 2
 
-    if block.type == "inverter":
+    if block.type in ("inverter", "tgate"):
         cp, cn = block.components[0], block.components[1]
-        # Tighter vertical spacing for inverters
+        # Tighter vertical spacing for inverters/tgates
         inv_pmos_y = y
         inv_nmos_y = y + 180
         result.placements[cp] = Placement(x=_snap(center_x), y=_snap(inv_pmos_y))
