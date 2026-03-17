@@ -274,15 +274,18 @@ def _sort_nmos_blocks_by_stacking(circuit: Circuit, n_blocks: list[BuildingBlock
                 is_top = True
                 break
 
-        # Also check if source connects to any free transistor's drain
+        # Also check if source connects to another block's transistor drains
+        # (but NOT tail current sources — those are below, not above)
         if not is_top:
-            for name, comp in circuit.components.items():
-                if name in block.components:
-                    continue
-                if comp.type in ("mosfet_n", "mosfet_p"):
-                    if comp.pins.get("drain") in src_nets:
-                        is_top = True
-                        break
+            other_block_comps = set()
+            for other in n_blocks:
+                if other is not block:
+                    other_block_comps.update(other.components)
+            for name in other_block_comps:
+                comp = circuit.components[name]
+                if comp.pins.get("drain") in src_nets:
+                    is_top = True
+                    break
 
         if is_top:
             top.append(block)
@@ -472,8 +475,20 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
                 p_drains = {p0.pins["drain"], p1.pins["drain"]}
                 n_drains = {n0.pins["drain"], n1.pins["drain"]}
                 if p_drains == n_drains:
-                    # Form two inverters: match P and N by shared drain
-                    latch_x = 200
+                    # Find if cross-coupled N sources connect to a diff pair's drains
+                    # (StrongARM topology: latch sits above input diff pair)
+                    n_sources = {n0.pins["source"], n1.pins["source"]}
+                    latch_center_x = None
+                    for b in blocks:
+                        if b.type.startswith("diff_pair_n"):
+                            dp_drains = {circuit.components[c].pins["drain"] for c in b.components}
+                            if n_sources & dp_drains:
+                                # Latch should be centered above this diff pair
+                                # Use H_SPACING to estimate diff pair center
+                                latch_center_x = 200 + H_SPACING // 2
+                                break
+
+                    latch_x = latch_center_x - 90 if latch_center_x else 200
                     latch_pmos_y = PMOS_Y
                     latch_nmos_y = PMOS_Y + 180  # Tight vertical spacing
                     for pi, pcomp in enumerate([p0, p1]):
@@ -583,9 +598,9 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
                         cur_x += H_SPACING + BLOCK_GAP
                 continue
 
-        # For NMOS-only groups with multiple blocks, detect stacking
-        # (e.g., Gilbert cell: top quad sources connect to bottom pair drains)
-        if len(n_blocks) >= 2 and not p_blocks:
+        # For groups with multiple NMOS blocks, detect stacking
+        # (e.g., StrongARM: cross-coupled latch above diff pair)
+        if len(n_blocks) >= 2:
             top_n, bottom_n = _sort_nmos_blocks_by_stacking(circuit, n_blocks)
         else:
             top_n = []
@@ -602,9 +617,26 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
                 px += H_SPACING + BLOCK_GAP
 
         # Place bottom NMOS blocks FIRST (so top blocks can align above them)
+        # If a top block is already placed (e.g., by Stage 0.5 latch placement),
+        # align bottom block below it
         nx = cur_x
         for block in bottom_n:
-            _place_block(result, block, nx, NMOS_Y)
+            aligned_nx = None
+            if top_n:
+                block_drains = set()
+                for cn in block.components:
+                    block_drains.add(circuit.components[cn].pins["drain"])
+                for top_block in top_n:
+                    top_sources = set()
+                    for cn in top_block.components:
+                        top_sources.add(circuit.components[cn].pins["source"])
+                    if block_drains & top_sources:
+                        # Check if top block is already placed
+                        placed_xs = [result.placements[cn].x for cn in top_block.components if cn in result.placements]
+                        if placed_xs:
+                            aligned_nx = int(sum(placed_xs) / len(placed_xs))
+                            break
+            _place_block(result, block, aligned_nx if aligned_nx else nx, NMOS_Y)
 
             # Place tail source below NMOS diff pair
             if block.type.startswith("diff_pair_n"):
