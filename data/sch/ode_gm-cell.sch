@@ -4,67 +4,66 @@ K {}
 V {}
 S {}
 E {}
-T {SKY130 Programmable OTA (Gm Cell) — Optimized} 50 -700 0 0 0.6 0.6 {}
-T {.subckt gm_cell inp inn outp outn vbias_n vbias_p vcm vdd vss} 50 -660 0 0 0.4 0.4 {}
-C {sky130_fd_pr/nfet_01v8.sym} 580 -210 0 0 {name=XM1
+T {SKY130 Programmable OTA (Gm Cell) — Optimized} 250 -500 0 0 0.5 0.5 {}
+T {.subckt gm_cell inp inn outp outn vbias_n vbias_p vcm vdd vss} 250 -470 0 0 0.35 0.35 {}
+C {sky130_fd_pr/nfet_01v8.sym} 300 -150 0 0 {name=XM1
 W={W_in}
 L={L_in}
 spiceprefix=X}
-C {sky130_fd_pr/nfet_01v8.sym} 760 -100 0 0 {name=XM2
+C {sky130_fd_pr/nfet_01v8.sym} 500 -150 0 0 {name=XM2
 W={W_in}
 L={L_in}
 spiceprefix=X}
-C {devices/res.sym} 900 -430 0 0 {name=Rs1
+C {devices/res.sym} 680 -150 0 0 {name=Rs1
 value={Rs_deg}}
-C {devices/res.sym} 1060 -310 0 0 {name=Rs2
+C {devices/res.sym} 1000 -150 0 0 {name=Rs2
 value={Rs_deg}}
-C {sky130_fd_pr/nfet_01v8.sym} 910 -220 0 0 {name=XMT
+C {sky130_fd_pr/nfet_01v8.sym} 840 -150 0 0 {name=XMT
 W={W_tail}
 L={L_tail}
 spiceprefix=X}
-C {sky130_fd_pr/pfet_01v8.sym} 580 -370 0 0 {name=XMP1
+C {sky130_fd_pr/pfet_01v8.sym} 300 -400 0 0 {name=XMP1
 W={W_load}
 L={L_load}
 spiceprefix=X}
-C {sky130_fd_pr/pfet_01v8.sym} 730 -310 0 0 {name=XMP2
+C {sky130_fd_pr/pfet_01v8.sym} 540 -400 0 0 {name=XMP2
 W={W_load}
 L={L_load}
 spiceprefix=X}
-C {devices/res.sym} 1040 -120 0 0 {name=Rcmfb
+C {devices/res.sym} 710 -400 0 0 {name=Rcmfb
 value=1k}
-C {devices/capa.sym} 890 -10 0 0 {name=Ccmfb
+C {devices/capa.sym} 780 -300 0 0 {name=Ccmfb
 value=10p}
-N 580 -240 580 -400 {lab=outn}
-N 580 -180 900 -180 {lab=s1}
-N 900 -180 900 -460 {lab=s1}
-N 760 -130 730 -130 {lab=outp}
-N 730 -130 730 -340 {lab=outp}
-N 760 -70 1060 -70 {lab=s2}
-N 1060 -70 1060 -340 {lab=s2}
-N 900 -400 960 -400 {lab=ntail}
-N 960 -400 960 -310 {lab=ntail}
-N 1060 -280 960 -280 {lab=ntail}
-N 960 -280 960 -310 {lab=ntail}
-N 910 -250 960 -250 {lab=ntail}
-N 960 -250 960 -310 {lab=ntail}
-N 560 -370 800 -370 {lab=pcm}
-N 800 -370 800 -200 {lab=pcm}
-N 710 -310 800 -310 {lab=pcm}
-N 800 -310 800 -200 {lab=pcm}
-N 1040 -90 800 -90 {lab=pcm}
-N 800 -90 800 -200 {lab=pcm}
-N 890 -40 800 -40 {lab=pcm}
-N 800 -40 800 -200 {lab=pcm}
-C {devices/lab_pin.sym} 560 -210 0 0 {name=l_inp sig_type=std_logic lab=inp}
-C {devices/gnd.sym} 600 -210 0 0 {name=l_vss lab=VSS}
-C {devices/gnd.sym} 780 -100 0 0 {name=l_vss lab=VSS}
-C {devices/gnd.sym} 910 -190 0 0 {name=l_vss lab=VSS}
-C {devices/gnd.sym} 930 -220 0 0 {name=l_vss lab=VSS}
-C {devices/lab_pin.sym} 740 -100 0 0 {name=l_inn sig_type=std_logic lab=inn}
-C {devices/lab_pin.sym} 890 -220 0 0 {name=l_vbias_n sig_type=std_logic lab=vbias_n}
-C {devices/vdd.sym} 580 -340 0 0 {name=l_vdd lab=VDD}
-C {devices/vdd.sym} 600 -370 0 0 {name=l_vdd lab=VDD}
-C {devices/vdd.sym} 730 -280 0 0 {name=l_vdd lab=VDD}
-C {devices/vdd.sym} 750 -310 0 0 {name=l_vdd lab=VDD}
-C {devices/lab_pin.sym} 1040 -150 0 0 {name=l_pcm_int sig_type=std_logic lab=pcm_int}
-C {devices/gnd.sym} 890 20 0 0 {name=l_0 lab=GND}
+N 300 -180 300 -430 {lab=outn}
+N 300 -120 680 -120 {lab=s1}
+N 680 -120 680 -180 {lab=s1}
+N 500 -180 540 -180 {lab=outp}
+N 540 -180 540 -430 {lab=outp}
+N 500 -120 1000 -120 {lab=s2}
+N 1000 -120 1000 -180 {lab=s2}
+N 680 -120 840 -120 {lab=ntail}
+N 840 -120 840 -140 {lab=ntail}
+N 1000 -120 840 -120 {lab=ntail}
+N 840 -120 840 -140 {lab=ntail}
+N 840 -180 840 -140 {lab=ntail}
+N 280 -400 570 -400 {lab=pcm}
+N 570 -400 570 -380 {lab=pcm}
+N 520 -400 570 -400 {lab=pcm}
+N 570 -400 570 -380 {lab=pcm}
+N 710 -370 570 -370 {lab=pcm}
+N 570 -370 570 -380 {lab=pcm}
+N 780 -330 570 -330 {lab=pcm}
+N 570 -330 570 -380 {lab=pcm}
+C {devices/lab_pin.sym} 280 -150 0 0 {name=l_inp sig_type=std_logic lab=inp}
+C {devices/gnd.sym} 320 -150 0 0 {name=l_vss lab=VSS}
+C {devices/gnd.sym} 520 -150 0 0 {name=l_vss lab=VSS}
+C {devices/gnd.sym} 840 -120 0 0 {name=l_vss lab=VSS}
+C {devices/gnd.sym} 860 -150 0 0 {name=l_vss lab=VSS}
+C {devices/lab_pin.sym} 480 -150 0 0 {name=l_inn sig_type=std_logic lab=inn}
+C {devices/lab_pin.sym} 820 -150 0 0 {name=l_vbias_n sig_type=std_logic lab=vbias_n}
+C {devices/vdd.sym} 300 -370 0 0 {name=l_vdd lab=VDD}
+C {devices/vdd.sym} 320 -400 0 0 {name=l_vdd lab=VDD}
+C {devices/vdd.sym} 540 -370 0 0 {name=l_vdd lab=VDD}
+C {devices/vdd.sym} 560 -400 0 0 {name=l_vdd lab=VDD}
+C {devices/lab_pin.sym} 710 -430 0 0 {name=l_pcm_int sig_type=std_logic lab=pcm_int}
+C {devices/gnd.sym} 780 -270 0 0 {name=l_0 lab=GND}

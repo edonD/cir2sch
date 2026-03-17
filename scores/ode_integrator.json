@@ -1,0 +1,9 @@
+{
+  "name": "ode_integrator",
+  "components": 20,
+  "wires": 42,
+  "labels": 0,
+  "wire_crossings_estimate": 12,
+  "bounding_box_area": 120000.0,
+  "density": 166.66666666666669
+}
