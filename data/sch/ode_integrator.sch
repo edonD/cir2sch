@@ -89,8 +89,8 @@ C {devices/lab_pin.sym} 480 -220 0 0 {name=l_reset sig_type=std_logic lab=reset}
 C {devices/lab_pin.sym} 760 -220 0 0 {name=l_reset sig_type=std_logic lab=reset}
 C {devices/ipin.sym} 100 -310 0 0 {name=p_inp lab=inp}
 C {devices/ipin.sym} 100 -270 0 0 {name=p_inn lab=inn}
-C {devices/ipin.sym} 100 -220 0 0 {name=p_reset lab=reset}
+C {devices/ipin.sym} 100 -225 0 0 {name=p_reset lab=reset}
 C {devices/ipin.sym} 100 -440 0 0 {name=p_vbias_n lab=vbias_n}
-C {devices/ipin.sym} 100 -150 0 0 {name=p_vcm lab=vcm}
+C {devices/ipin.sym} 100 -190 0 0 {name=p_vcm lab=vcm}
 C {devices/opin.sym} 1140 -310 0 0 {name=p_outp lab=outp}
 C {devices/opin.sym} 1140 -270 0 0 {name=p_outn lab=outn}

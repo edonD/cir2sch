@@ -244,13 +244,15 @@ def render_xschem(placed: PlacedCircuit, wires: list[Wire], labels: list[Label],
             if low in ('vdd', 'vcc', 'avdd', 'vss', 'gnd', '0'):
                 continue
 
-            # Find y-position of connections for this pin
+            # Find y-position as centroid of all connections for this pin
             pin_y = None
             if pin_name in placed.circuit.nets:
+                ys = []
                 for cn, pn in placed.circuit.nets[pin_name].connections:
                     if cn in placed.placements:
-                        pin_y = placed.placements[cn].y
-                        break
+                        ys.append(placed.placements[cn].y)
+                if ys:
+                    pin_y = int(sum(ys) / len(ys))
 
             if any(kw in low for kw in ['in', 'clk', 'reset', 'bias', 'vcm']):
                 input_pins.append((pin_name, "devices/ipin.sym", pin_y))

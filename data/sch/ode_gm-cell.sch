@@ -75,5 +75,5 @@ C {devices/ipin.sym} -10 -110 0 0 {name=p_inn lab=inn}
 C {devices/ipin.sym} -10 30 0 0 {name=p_vbias_n lab=vbias_n}
 C {devices/ipin.sym} -10 -440 0 0 {name=p_vbias_p lab=vbias_p}
 C {devices/ipin.sym} -10 -400 0 0 {name=p_vcm lab=vcm}
-C {devices/opin.sym} 720 -150 0 0 {name=p_outp lab=outp}
-C {devices/opin.sym} 720 -110 0 0 {name=p_outn lab=outn}
+C {devices/opin.sym} 720 -275 0 0 {name=p_outp lab=outp}
+C {devices/opin.sym} 720 -235 0 0 {name=p_outn lab=outn}
