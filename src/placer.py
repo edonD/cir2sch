@@ -520,9 +520,34 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
                         context_placed.add(name)
                         break
 
+    # Place diff pairs connected to latch directly below it
+    if latch_placed and latch_nets:
+        latch_x_center = sum(latch_nets.values()) / max(len(latch_nets), 1)
+        for block in blocks:
+            if block.type.startswith("diff_pair"):
+                # Check if this diff pair's drains connect to latch nets
+                c0 = circuit.components[block.components[0]]
+                c1 = circuit.components[block.components[1]]
+                pair_drains = {c0.pins["drain"], c1.pins["drain"]}
+                latch_net_names = set(latch_nets.keys())
+                if pair_drains & latch_net_names:
+                    # Place diff pair centered below the latch
+                    dp_y = latch_nmos_y + 120 if 'latch_nmos_y' in dir() else NMOS_Y
+                    _place_block(result, block, latch_x_center, dp_y)
+                    block_comps.update(block.components)
+                    context_placed.update(block.components)
+                    # Place tail source below diff pair
+                    tail = _find_tail_source(circuit, block)
+                    if tail and tail not in result.placements:
+                        result.placements[tail] = Placement(
+                            x=_snap(latch_x_center), y=_snap(dp_y + V_SPACING))
+                        context_placed.add(tail)
+
     # Remove latch blocks from the blocks list to avoid double-placement
     if latch_placed:
         blocks = [b for b in blocks if not any(c in latch_placed for c in b.components)]
+        # Also remove diff pairs we already placed
+        blocks = [b for b in blocks if not any(c in context_placed for c in b.components)]
         block_comps -= latch_placed
 
     # === Stage 1: Group connected blocks and place as vertical stacks ===
