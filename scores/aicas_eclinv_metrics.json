@@ -1,0 +1,9 @@
+{
+  "name": "aicas_eclinv",
+  "components": 20,
+  "wires": 6,
+  "labels": 0,
+  "wire_crossings_estimate": 0,
+  "bounding_box_area": 96000.0,
+  "density": 208.33333333333334
+}

@@ -1,0 +1,9 @@
+{
+  "name": "aicas_behav-568",
+  "components": 21,
+  "wires": 31,
+  "labels": 0,
+  "wire_crossings_estimate": 0,
+  "bounding_box_area": 112000.0,
+  "density": 187.5
+}

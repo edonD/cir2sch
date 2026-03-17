@@ -1,0 +1,9 @@
+{
+  "name": "aicas_RampVg2",
+  "components": 12,
+  "wires": 8,
+  "labels": 0,
+  "wire_crossings_estimate": 0,
+  "bounding_box_area": 96000.0,
+  "density": 125.0
+}

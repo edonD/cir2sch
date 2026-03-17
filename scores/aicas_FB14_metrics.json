@@ -1,0 +1,9 @@
+{
+  "name": "aicas_FB14",
+  "components": 141,
+  "wires": 44,
+  "labels": 0,
+  "wire_crossings_estimate": 0,
+  "bounding_box_area": 234000.0,
+  "density": 602.5641025641025
+}

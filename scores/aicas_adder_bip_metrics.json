@@ -1,0 +1,9 @@
+{
+  "name": "aicas_adder_bip",
+  "components": 54,
+  "wires": 4,
+  "labels": 0,
+  "wire_crossings_estimate": 0,
+  "bounding_box_area": 122000.0,
+  "density": 442.62295081967216
+}

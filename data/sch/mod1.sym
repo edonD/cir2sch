@@ -1,0 +1,23 @@
+v {xschem version=3.4.5 file_version=1.2}
+K {type=subcircuit
+format="@name @pinlist mod1"
+template="name=X1"}
+G {}
+V {}
+S {}
+E {}
+L 4 -20 -35 20 -35 {}
+L 4 20 -35 20 35 {}
+L 4 20 35 -20 35 {}
+L 4 -20 35 -20 -35 {}
+T {@name} -18 -47 0 0 0.15 0.15 {}
+L 4 -30 -25 -20 -25 {}
+B 5 -32 -27 -28 -23 {name=pin1 dir=inout}
+L 4 20 -25 30 -25 {}
+B 5 28 -27 32 -23 {name=pin2 dir=inout}
+L 4 -30 -5 -20 -5 {}
+B 5 -32 -7 -28 -3 {name=pin3 dir=inout}
+L 4 20 -5 30 -5 {}
+B 5 28 -7 32 -3 {name=pin4 dir=inout}
+L 4 -30 15 -20 15 {}
+B 5 -32 13 -28 17 {name=pin5 dir=inout}

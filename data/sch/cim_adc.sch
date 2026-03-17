@@ -50,7 +50,7 @@ w={Wcomp_latch}u
 l={Lcomp_latch}u
 model=sky130_fd_pr__pfet_01v8
 spiceprefix=X}
-C {devices/pmos4.sym} 370 -400 0 0 {name=XMp2
+C {devices/pmos4.sym} 400 -400 0 0 {name=XMp2
 w={Wcomp_latch}u
 l={Lcomp_latch}u
 model=sky130_fd_pr__pfet_01v8
@@ -81,11 +81,10 @@ N 420 -190 420 -430 {lab=d2}
 N 420 -430 710 -430 {lab=d2}
 N 200 -400 200 -220 {lab=outn}
 N 200 -400 200 -430 {lab=outn}
-N 200 -430 390 -430 {lab=outn}
-N 390 -430 390 -250 {lab=outn}
-N 390 -250 420 -250 {lab=outn}
+N 200 -430 420 -430 {lab=outn}
+N 420 -430 420 -250 {lab=outn}
 N 240 -430 240 -400 {lab=outp}
-N 240 -400 350 -400 {lab=outp}
+N 240 -400 380 -400 {lab=outp}
 N 240 -430 240 -250 {lab=outp}
 N 240 -250 240 -220 {lab=outp}
 N 240 -220 380 -220 {lab=outp}
@@ -108,8 +107,8 @@ C {devices/vdd.sym} 990 -370 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 990 -400 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 240 -370 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 240 -400 0 0 {name=l_vdd lab=VDD}
-C {devices/vdd.sym} 390 -370 0 0 {name=l_vdd lab=VDD}
-C {devices/vdd.sym} 390 -400 0 0 {name=l_vdd lab=VDD}
+C {devices/vdd.sym} 420 -370 0 0 {name=l_vdd lab=VDD}
+C {devices/vdd.sym} 420 -400 0 0 {name=l_vdd lab=VDD}
 C {devices/lab_pin.sym} 810 -430 0 0 {name=l_outn sig_type=std_logic lab=outn}
 C {devices/lab_pin.sym} 990 -430 0 0 {name=l_outp sig_type=std_logic lab=outp}
 C {devices/ipin.sym} 80 -150 0 0 {name=p_inp lab=inp}

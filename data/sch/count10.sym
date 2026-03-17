@@ -1,0 +1,41 @@
+v {xschem version=3.4.5 file_version=1.2}
+K {type=subcircuit
+format="@name @pinlist count10"
+template="name=X1"}
+G {}
+V {}
+S {}
+E {}
+L 4 -20 -75 20 -75 {}
+L 4 20 -75 20 75 {}
+L 4 20 75 -20 75 {}
+L 4 -20 75 -20 -75 {}
+T {@name} -18 -87 0 0 0.15 0.15 {}
+L 4 -30 -65 -20 -65 {}
+B 5 -32 -67 -28 -63 {name=pin1 dir=inout}
+L 4 20 -65 30 -65 {}
+B 5 28 -67 32 -63 {name=pin2 dir=inout}
+L 4 -30 -45 -20 -45 {}
+B 5 -32 -47 -28 -43 {name=pin3 dir=inout}
+L 4 20 -45 30 -45 {}
+B 5 28 -47 32 -43 {name=pin4 dir=inout}
+L 4 -30 -25 -20 -25 {}
+B 5 -32 -27 -28 -23 {name=pin5 dir=inout}
+L 4 20 -25 30 -25 {}
+B 5 28 -27 32 -23 {name=pin6 dir=inout}
+L 4 -30 -5 -20 -5 {}
+B 5 -32 -7 -28 -3 {name=pin7 dir=inout}
+L 4 20 -5 30 -5 {}
+B 5 28 -7 32 -3 {name=pin8 dir=inout}
+L 4 -30 15 -20 15 {}
+B 5 -32 13 -28 17 {name=pin9 dir=inout}
+L 4 20 15 30 15 {}
+B 5 28 13 32 17 {name=pin10 dir=inout}
+L 4 -30 35 -20 35 {}
+B 5 -32 33 -28 37 {name=pin11 dir=inout}
+L 4 20 35 30 35 {}
+B 5 28 33 32 37 {name=pin12 dir=inout}
+L 4 -30 55 -20 55 {}
+B 5 -32 53 -28 57 {name=pin13 dir=inout}
+L 4 20 55 30 55 {}
+B 5 28 53 32 57 {name=pin14 dir=inout}

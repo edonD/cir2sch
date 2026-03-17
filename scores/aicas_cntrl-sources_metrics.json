@@ -1,0 +1,9 @@
+{
+  "name": "aicas_cntrl-sources",
+  "components": 23,
+  "wires": 4,
+  "labels": 0,
+  "wire_crossings_estimate": 0,
+  "bounding_box_area": 120000.0,
+  "density": 191.66666666666669
+}

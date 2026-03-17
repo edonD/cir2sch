@@ -1,0 +1,9 @@
+{
+  "name": "aicas_binning-1",
+  "components": 23,
+  "wires": 16,
+  "labels": 0,
+  "wire_crossings_estimate": 0,
+  "bounding_box_area": 96000.0,
+  "density": 239.58333333333331
+}

@@ -313,25 +313,42 @@ def _eliminate_crossings(wires: list[Wire], labels: list[Label]) -> tuple[list[W
                 net_crossings[w1.net] += 1
                 net_crossings[w2.net] += 1
 
-    # Only eliminate nets with many crossings (> 4)
+    # Eliminate nets with 2+ crossings (convert to labels), but only if
+    # the net's bounding box spans a large area (> 300 units). Short local
+    # wires that cross are generally unavoidable; long-spanning bus wires
+    # that cross signal paths should be labeled.
     crossing_nets = set()
     for net, count in net_crossings.items():
-        if count > 4:
-            wire_count = sum(1 for w in wires if w.net == net)
-            if wire_count <= 3:  # Small nets are more likely label candidates
+        if count > 1:
+            net_wires = [w for w in wires if w.net == net]
+            wire_count = len(net_wires)
+            if net_wires:
+                all_xs = [w.x1 for w in net_wires] + [w.x2 for w in net_wires]
+                all_ys = [w.y1 for w in net_wires] + [w.y2 for w in net_wires]
+                bb_span = (max(all_xs) - min(all_xs)) + (max(all_ys) - min(all_ys))
+            else:
+                bb_span = 0
+            if wire_count <= 6 and bb_span > 300:
                 crossing_nets.add(net)
 
     if not crossing_nets:
         return wires, labels
 
-    # Move crossing net wires to labels
+    # Move crossing net wires to labels.
+    # Collect unique pin positions per net to avoid duplicate labels at junctions.
+    from collections import defaultdict
+    crossing_positions = defaultdict(set)
     new_wires = []
     for w in wires:
         if w.net in crossing_nets:
-            labels.append(Label(x=w.x1, y=w.y1, net=w.net))
-            labels.append(Label(x=w.x2, y=w.y2, net=w.net))
+            crossing_positions[w.net].add((w.x1, w.y1))
+            crossing_positions[w.net].add((w.x2, w.y2))
         else:
             new_wires.append(w)
+
+    for net, positions in crossing_positions.items():
+        for x, y in positions:
+            labels.append(Label(x=x, y=y, net=net))
 
     return new_wires, labels
 

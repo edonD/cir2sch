@@ -1,0 +1,9 @@
+{
+  "name": "aicas_TLV9002-test",
+  "components": 19,
+  "wires": 5,
+  "labels": 0,
+  "wire_crossings_estimate": 0,
+  "bounding_box_area": 160000.0,
+  "density": 118.75
+}

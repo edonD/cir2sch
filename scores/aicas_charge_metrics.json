@@ -1,0 +1,9 @@
+{
+  "name": "aicas_charge",
+  "components": 16,
+  "wires": 10,
+  "labels": 0,
+  "wire_crossings_estimate": 1,
+  "bounding_box_area": 146000.0,
+  "density": 109.58904109589042
+}

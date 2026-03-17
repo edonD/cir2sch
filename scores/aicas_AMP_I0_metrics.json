@@ -1,0 +1,9 @@
+{
+  "name": "aicas_AMP_I0",
+  "components": 20,
+  "wires": 3,
+  "labels": 0,
+  "wire_crossings_estimate": 0,
+  "bounding_box_area": 120000.0,
+  "density": 166.66666666666669
+}

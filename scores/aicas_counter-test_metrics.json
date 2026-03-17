@@ -1,0 +1,9 @@
+{
+  "name": "aicas_counter-test",
+  "components": 17,
+  "wires": 23,
+  "labels": 0,
+  "wire_crossings_estimate": 0,
+  "bounding_box_area": 130000.0,
+  "density": 130.76923076923077
+}

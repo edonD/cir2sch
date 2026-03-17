@@ -1,0 +1,9 @@
+{
+  "name": "aicas_behav-tristate",
+  "components": 8,
+  "wires": 0,
+  "labels": 0,
+  "wire_crossings_estimate": 0,
+  "bounding_box_area": 76000.0,
+  "density": 105.26315789473685
+}

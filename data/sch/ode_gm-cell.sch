@@ -16,9 +16,9 @@ w=45u
 l=4u
 model=sky130_fd_pr__nfet_01v8
 spiceprefix=X}
-C {devices/res.sym} 340 -60 0 0 {name=Rs1
+C {devices/res.sym} 300 -60 0 0 {name=Rs1
 value=4.1k}
-C {devices/res.sym} 340 20 0 0 {name=Rs2
+C {devices/res.sym} 420 -80 0 0 {name=Rs2
 value=4.1k}
 C {devices/nmos4.sym} 220 30 0 0 {name=XMT
 w=95u
@@ -41,18 +41,14 @@ C {devices/capa.sym} 460 -340 0 0 {name=Ccmfb
 value=10p}
 N 130 -180 130 -430 {lab=outn}
 N 130 -120 130 -90 {lab=s1}
-N 130 -90 340 -90 {lab=s1}
+N 130 -90 300 -90 {lab=s1}
 N 310 -180 310 -430 {lab=outp}
-N 310 -120 340 -120 {lab=s2}
-N 340 -120 340 -10 {lab=s2}
-N 340 -30 340 50 {lab=ntail}
-N 340 -30 340 0 {lab=ntail}
-N 340 0 240 0 {lab=ntail}
-N 90 -400 350 -400 {lab=pcm}
-N 350 -400 350 -370 {lab=pcm}
-N 350 -370 460 -370 {lab=pcm}
-N 460 -370 460 -260 {lab=pcm}
-N 460 -260 600 -260 {lab=pcm}
+N 310 -120 310 -110 {lab=s2}
+N 310 -110 420 -110 {lab=s2}
+N 300 -30 300 0 {lab=ntail}
+N 300 0 240 0 {lab=ntail}
+N 300 -30 300 -50 {lab=ntail}
+N 300 -50 420 -50 {lab=ntail}
 C {devices/lab_pin.sym} 90 -150 0 0 {name=l_inp sig_type=std_logic lab=inp}
 C {devices/gnd.sym} 130 -150 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 310 -150 0 0 {name=l_vss lab=VSS}
@@ -66,6 +62,12 @@ C {devices/vdd.sym} 310 -370 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 310 -400 0 0 {name=l_vdd lab=VDD}
 C {devices/lab_pin.sym} 600 -320 0 0 {name=l_pcm_int sig_type=std_logic lab=pcm_int}
 C {devices/gnd.sym} 460 -310 0 0 {name=l_0 lab=GND}
+C {devices/lab_pin.sym} 460 -260 0 0 {name=l_pcm sig_type=std_logic lab=pcm}
+C {devices/lab_pin.sym} 350 -370 0 0 {name=l_pcm sig_type=std_logic lab=pcm}
+C {devices/lab_pin.sym} 460 -370 0 0 {name=l_pcm sig_type=std_logic lab=pcm}
+C {devices/lab_pin.sym} 600 -260 0 0 {name=l_pcm sig_type=std_logic lab=pcm}
+C {devices/lab_pin.sym} 350 -400 0 0 {name=l_pcm sig_type=std_logic lab=pcm}
+C {devices/lab_pin.sym} 90 -400 0 0 {name=l_pcm sig_type=std_logic lab=pcm}
 C {devices/ipin.sym} -10 -150 0 0 {name=p_inp lab=inp}
 C {devices/ipin.sym} -10 -110 0 0 {name=p_inn lab=inn}
 C {devices/ipin.sym} -10 30 0 0 {name=p_vbias_n lab=vbias_n}

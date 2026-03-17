@@ -1,0 +1,9 @@
+{
+  "name": "aicas_URC-TM-SUB",
+  "components": 5,
+  "wires": 2,
+  "labels": 0,
+  "wire_crossings_estimate": 0,
+  "bounding_box_area": 130000.0,
+  "density": 38.46153846153846
+}

@@ -608,6 +608,20 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
             top_n = []
             bottom_n = n_blocks
 
+        # Detect Gilbert cell: exactly 2 top diff pairs above 1 bottom diff pair,
+        # where each top pair's source connects to a different half of the bottom pair.
+        gilbert_cell = False
+        if len(top_n) == 2 and len(bottom_n) == 1:
+            bblock = bottom_n[0]
+            bcomps = bblock.components
+            if len(bcomps) == 2:
+                b_drains = [circuit.components[c].pins.get('drain', '') for c in bcomps]
+                top0_srcs = {circuit.components[c].pins.get('source', '') for c in top_n[0].components}
+                top1_srcs = {circuit.components[c].pins.get('source', '') for c in top_n[1].components}
+                if ((b_drains[0] in top0_srcs and b_drains[1] in top1_srcs) or
+                        (b_drains[0] in top1_srcs and b_drains[1] in top0_srcs)):
+                    gilbert_cell = True
+
         # Place PMOS blocks at PMOS_Y (skip already-placed latch blocks)
         px = cur_x
         for block in p_blocks:
@@ -625,6 +639,9 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
         # align bottom block below it
         nx = cur_x
         for block in bottom_n:
+            # Skip blocks already placed by Stage 0.5 (latch placement)
+            if any(c in already_placed_blocks for c in block.components):
+                continue
             aligned_nx = None
             if top_n:
                 block_drains = set()
@@ -641,7 +658,19 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
                             aligned_nx = int(sum(placed_xs) / len(placed_xs))
                             break
             effective_nx = aligned_nx if aligned_nx else nx
-            _place_block(result, block, effective_nx, NMOS_Y)
+
+            if gilbert_cell and block is bottom_n[0]:
+                # Gilbert cell: place the bottom pair wider so both top pairs fit above
+                # without their source wires crossing. Separation = H_SPACING + BLOCK_GAP.
+                GILBERT_HALF_SEP = (H_SPACING + BLOCK_GAP) // 2  # = 140
+                bcomps = block.components
+                result.placements[bcomps[0]] = Placement(
+                    x=_snap(effective_nx - GILBERT_HALF_SEP), y=_snap(NMOS_Y))
+                result.placements[bcomps[1]] = Placement(
+                    x=_snap(effective_nx + GILBERT_HALF_SEP), y=_snap(NMOS_Y), flip=1)
+                block.center_x = effective_nx
+            else:
+                _place_block(result, block, effective_nx, NMOS_Y)
 
             # Place tail source below NMOS diff pair
             if block.type.startswith("diff_pair_n"):
@@ -659,39 +688,86 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
                         result.placements[load_name] = Placement(x=_snap(lx), y=_snap(PMOS_Y))
                         context_placed.add(load_name)
 
-            nx += H_SPACING + BLOCK_GAP
+            nx += (H_SPACING + BLOCK_GAP) * (2 if gilbert_cell else 1)
 
         # Place top NMOS blocks aligned above their bottom stacking partners
         top_y = MID_Y
         tx = cur_x
-        # Track the rightmost x of placed top blocks to avoid overlap
-        top_right_x = cur_x - H_SPACING
+        # Track the rightmost x of placed top blocks to avoid overlap.
+        # Start at a sentinel value so the first top block isn't artificially pushed right.
+        top_right_x = -9999
         for block in top_n:
             if any(c in already_placed_blocks for c in block.components):
                 continue  # Already placed by Stage 0.5
-            block_sources = set()
-            for cn in block.components:
-                block_sources.add(circuit.components[cn].pins["source"])
-            aligned_x = None
+
+            # Try per-component alignment: match each top component to its specific
+            # bottom stacking partner so they share the same x column.
+            # Build a map: bottom_drain_net → placed x of bottom component
+            drain_x_map = {}
             for bot_block in bottom_n:
                 for cn in bot_block.components:
-                    drain_net = circuit.components[cn].pins["drain"]
-                    if drain_net in block_sources and cn in result.placements:
-                        aligned_x = result.placements[cn].x
-                        break
-                if aligned_x is not None:
-                    break
+                    if cn in result.placements:
+                        drain_net = circuit.components[cn].pins.get("drain", "")
+                        if drain_net:
+                            drain_x_map[drain_net] = result.placements[cn].x
 
-            if aligned_x is not None:
-                # Ensure no overlap with previously placed top blocks
-                min_x = top_right_x + H_SPACING + BLOCK_GAP
-                if aligned_x < min_x:
-                    aligned_x = min_x
-                _place_block(result, block, aligned_x, top_y)
+            # Check if every component in the top block has an individual alignment partner
+            per_comp_x = {}
+            for cn in block.components:
+                src_net = circuit.components[cn].pins.get("source", "")
+                if src_net and src_net in drain_x_map:
+                    per_comp_x[cn] = drain_x_map[src_net]
+
+            # Only use per-component alignment when each component maps to a
+            # DISTINCT x partner. If two components share the same source
+            # (e.g., top diff pair over a cascode), fall back to centered alignment.
+            per_comp_x_values = list(per_comp_x.values())
+            all_distinct = (len(set(per_comp_x_values)) == len(per_comp_x_values))
+            if (len(per_comp_x) == len(block.components) and len(block.components) == 2
+                    and all_distinct):
+                # Individual alignment: place each component at its partner's x
+                c1, c2 = block.components[0], block.components[1]
+                x1, x2 = per_comp_x[c1], per_comp_x[c2]
+                flip_second = _is_symmetric_block(block)
+                result.placements[c1] = Placement(x=_snap(x1), y=_snap(top_y))
+                result.placements[c2] = Placement(x=_snap(x2), y=_snap(top_y), flip=int(flip_second))
+                block.center_x = (x1 + x2) / 2
             else:
-                _place_block(result, block, tx, top_y)
-            top_right_x = max(result.placements[c].x for c in block.components)
-            tx = top_right_x + BLOCK_GAP + H_SPACING // 2
+                # Fall back to centered alignment using first match
+                block_sources = {circuit.components[cn].pins.get("source", "") for cn in block.components}
+                aligned_x = None
+                for bot_block in bottom_n:
+                    for cn in bot_block.components:
+                        drain_net = circuit.components[cn].pins["drain"]
+                        if drain_net in block_sources and cn in result.placements:
+                            aligned_x = result.placements[cn].x
+                            break
+                    if aligned_x is not None:
+                        break
+
+                if aligned_x is not None:
+                    # For Gilbert cell top pairs, use tighter spacing (BLOCK_GAP
+                    # as half-width instead of H_SPACING//2) so the quad fits above
+                    # the narrow bottom pair without going off-screen.
+                    half_w = BLOCK_GAP if gilbert_cell else H_SPACING // 2
+                    new_left_x = aligned_x - half_w
+                    if new_left_x < top_right_x + BLOCK_GAP:
+                        aligned_x = top_right_x + BLOCK_GAP + half_w
+                    # Place with appropriate half-width
+                    if gilbert_cell:
+                        c1, c2 = block.components[0], block.components[1]
+                        flip_second = _is_symmetric_block(block)
+                        result.placements[c1] = Placement(x=_snap(aligned_x - half_w), y=_snap(top_y))
+                        result.placements[c2] = Placement(x=_snap(aligned_x + half_w), y=_snap(top_y), flip=int(flip_second))
+                        block.center_x = aligned_x
+                    else:
+                        _place_block(result, block, aligned_x, top_y)
+                else:
+                    _place_block(result, block, tx, top_y)
+
+            # top_right_x is the RIGHT EDGE of the placed block (center + half-width)
+            top_right_x = max(result.placements[c].x for c in block.components) + H_SPACING // 2
+            tx = top_right_x + BLOCK_GAP
 
         cur_x = max(px, tx, nx)
 
@@ -735,17 +811,19 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
         if not pos:
             pos = _find_centroid_of_neighbors(circuit, bot_name, result)
         cx = pos[0] if pos else cur_x
-        # Use GND_Y as starting point for stacked pairs (well below NMOS)
-        stack_y = GND_Y - 30
+        # Place stacked pair at NMOS band, offset horizontally from the main latch.
+        # Top device at NMOS_Y, bottom device V_SPACING//2 below.
+        stack_y = NMOS_Y
         px = _snap(cx)
-        # Only check horizontal overlap at the stack level
-        for offset in [0, 130, -130, H_SPACING]:
+        # Find a non-overlapping x position. Prefer right side first so the
+        # stacked pair appears to the right of the main structure, not buried inside.
+        for offset in [H_SPACING * 2, H_SPACING * 3, H_SPACING, -H_SPACING, 0, -H_SPACING * 2]:
             test_x = _snap(cx + offset)
             if not _is_occupied(result, test_x, _snap(stack_y), 100):
                 px = test_x
                 break
         result.placements[top_name] = Placement(x=px, y=_snap(stack_y))
-        result.placements[bot_name] = Placement(x=px, y=_snap(stack_y + 100))
+        result.placements[bot_name] = Placement(x=px, y=_snap(stack_y + V_SPACING // 2))
 
     for name in nmos_free:
         if name in stacked_set:
@@ -995,7 +1073,9 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
             oy += V_SPACING
 
     # === Stage 7: Resolve overlaps (only for non-block components) ===
-    _resolve_overlaps(result, frozen=block_comps | context_placed)
+    # Keep latch/block components frozen so overlap resolution doesn't
+    # disrupt carefully placed structural elements.
+    _resolve_overlaps(result, frozen=block_comps | context_placed | already_placed_blocks)
 
     return result
 
@@ -1047,7 +1127,8 @@ def _find_resistor_chains(circuit: Circuit, passive_names: list) -> list[list[st
         elif net in circuit.nets and len(circuit.nets[net].connections) > 4:
             hub_nets.add(net)
 
-    # Find chains by following connections, stopping at hub nets
+    # Find chains by following STRICT series connections: pin2 of one → pin1 of another.
+    # This avoids grouping degeneration resistors that share a tail node on their pin2.
     visited = set()
     chains = []
     for name in passive_names:
@@ -1059,12 +1140,19 @@ def _find_resistor_chains(circuit: Circuit, passive_names: list) -> list[list[st
         while queue:
             current = queue.pop(0)
             comp = circuit.components[current]
-            for pin in ["pin1", "pin2"]:
-                net = comp.pins.get(pin, "")
-                if net in hub_nets:
-                    continue  # Don't follow through hub nodes
-                for other_name, other_pin in net_to_passives.get(net, []):
-                    if other_name not in visited and other_name in name_set:
+            # Only follow pin2 → pin1 connections (series direction)
+            pin2_net = comp.pins.get("pin2", "")
+            if pin2_net and pin2_net not in hub_nets:
+                for other_name, other_pin in net_to_passives.get(pin2_net, []):
+                    if other_pin == "pin1" and other_name not in visited and other_name in name_set:
+                        visited.add(other_name)
+                        chain.append(other_name)
+                        queue.append(other_name)
+            # Also follow pin1 → pin2 of predecessor (reverse direction)
+            pin1_net = comp.pins.get("pin1", "")
+            if pin1_net and pin1_net not in hub_nets:
+                for other_name, other_pin in net_to_passives.get(pin1_net, []):
+                    if other_pin == "pin2" and other_name not in visited and other_name in name_set:
                         visited.add(other_name)
                         chain.append(other_name)
                         queue.append(other_name)
