@@ -718,12 +718,12 @@ def _place_array_circuit(circuit: Circuit, array_info: dict) -> PlacedCircuit:
         else:
             unplaced.append(name)
 
-    # Column periphery: place above array, close
-    for col, names in col_per.items():
+    # Column periphery: place above array, spread horizontally per column
+    for col, names in sorted(col_per.items()):
         for i, name in enumerate(names):
             result.placements[name] = Placement(
                 x=_snap(array_left + col * cell_h),
-                y=_snap(array_top - (i + 1) * 120)
+                y=_snap(array_top - 80 - i * 100)
             )
 
     # Row periphery: place to the right of array, close

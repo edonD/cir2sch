@@ -101,6 +101,51 @@ def _format_label_name(net_name: str) -> str:
     return mapping.get(net_name.lower(), net_name)
 
 
+def _add_array_annotations(lines: list, placed: PlacedCircuit):
+    """Add row/column annotations for array-like circuits."""
+    import re
+    pattern = re.compile(r'^(.*?)_?r(\d+)_?c(\d+)$', re.IGNORECASE)
+
+    # Find array components
+    array_comps = {}
+    for name in placed.placements:
+        m = pattern.match(name)
+        if m:
+            r, c = int(m.group(2)), int(m.group(3))
+            array_comps[(r, c)] = name
+
+    if len(array_comps) < 4:
+        # Not an array — add individual subcircuit labels instead
+        for comp_name, comp in placed.circuit.components.items():
+            if comp_name not in placed.placements:
+                continue
+            if comp.type == "subcircuit":
+                p = placed.placements[comp_name]
+                short_name = comp_name.replace("Xcell_", "").replace("Xpre", "pre")
+                lines.append(f'T {{{short_name}}} {p.x - 20} {p.y + 20} 0 0 0.25 0.25 {{}}')
+        return
+
+    rows = max(r for r, c in array_comps) + 1
+    cols = max(c for r, c in array_comps) + 1
+
+    # Add column headers
+    for c in range(cols):
+        if (0, c) in array_comps:
+            p = placed.placements[array_comps[(0, c)]]
+            lines.append(f'T {{col{c}}} {p.x} {p.y - 60} 0 0 0.3 0.3 {{}}')
+
+    # Add row headers
+    for r in range(rows):
+        if (r, 0) in array_comps:
+            p = placed.placements[array_comps[(r, 0)]]
+            lines.append(f'T {{row{r}}} {p.x - 80} {p.y} 0 0 0.3 0.3 {{}}')
+
+    # Add array dimension label
+    if (0, 0) in array_comps:
+        p = placed.placements[array_comps[(0, 0)]]
+        lines.append(f'T {{{rows}x{cols} Array}} {p.x - 80} {p.y - 80} 0 0 0.35 0.35 {{}}')
+
+
 def render_xschem(placed: PlacedCircuit, wires: list[Wire], labels: list[Label],
                   title: str = "") -> str:
     """Render a complete xschem .sch file."""
@@ -141,16 +186,8 @@ def render_xschem(placed: PlacedCircuit, wires: list[Wire], labels: list[Label],
 
         lines.append(f'C {{{sym}}} {p.x} {p.y} {p.rotation} {p.flip} {{{attrs}}}')
 
-    # Component name annotations for subcircuit instances
-    # (makes array cells readable)
-    for comp_name, comp in placed.circuit.components.items():
-        if comp_name not in placed.placements:
-            continue
-        if comp.type == "subcircuit":
-            p = placed.placements[comp_name]
-            # Short label below the component
-            short_name = comp_name.replace("Xcell_", "").replace("Xpre", "pre")
-            lines.append(f'T {{{short_name}}} {p.x - 20} {p.y + 20} 0 0 0.25 0.25 {{}}')
+    # Array structure annotations
+    _add_array_annotations(lines, placed)
 
     # Wires
     for w in wires:
