@@ -4,10 +4,10 @@ K {}
 V {}
 S {}
 E {}
-T {SKY130 Four-Quadrant Analog Multiplier} -70 -650 0 0 0.5 0.5 {}
-T {.subckt multiplier xp xn yp yn outp outn vbias_n vbias_p vcm vdd vss} -70 -620 0 0 0.35 0.35 {}
-T {X input attenuators: ~5:1 (+-300mV to +-60mV)} -70 -595 0 0 0.35 0.35 {}
-T {Y input attenuators: ~2.25:1 (+-300mV to +-133mV)} -70 -570 0 0 0.35 0.35 {}
+T {SKY130 Four-Quadrant Analog Multiplier} -70 -745 0 0 0.5 0.5 {}
+T {.subckt multiplier xp xn yp yn outp outn vbias_n vbias_p vcm vdd vss} -70 -715 0 0 0.35 0.35 {}
+T {X input attenuators: ~5:1 (+-300mV to +-60mV)} -70 -690 0 0 0.35 0.35 {}
+T {Y input attenuators: ~2.25:1 (+-300mV to +-133mV)} -70 -665 0 0 0.35 0.35 {}
 C {devices/res.sym} -20 -280 0 0 {name=Rax1
 value=4k}
 C {devices/res.sym} -20 -180 0 0 {name=Rax2

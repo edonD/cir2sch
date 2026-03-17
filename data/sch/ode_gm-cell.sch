@@ -4,8 +4,8 @@ K {}
 V {}
 S {}
 E {}
-T {SKY130 Programmable OTA (Gm Cell) — Optimized} -50 -500 0 0 0.5 0.5 {}
-T {.subckt gm_cell inp inn outp outn vbias_n vbias_p vcm vdd vss} -50 -470 0 0 0.35 0.35 {}
+T {SKY130 Programmable OTA (Gm Cell) — Optimized} -50 -545 0 0 0.5 0.5 {}
+T {.subckt gm_cell inp inn outp outn vbias_n vbias_p vcm vdd vss} -50 -515 0 0 0.35 0.35 {}
 C {devices/nmos4.sym} 180 -150 0 0 {name=XM1
 w=45u
 l=4u

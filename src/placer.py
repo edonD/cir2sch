@@ -406,6 +406,8 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
                 if p_drains == n_drains:
                     # Form two inverters: match P and N by shared drain
                     latch_x = 200
+                    latch_pmos_y = PMOS_Y
+                    latch_nmos_y = PMOS_Y + 180  # Tight vertical spacing
                     for pi, pcomp in enumerate([p0, p1]):
                         # Find matching N transistor (same drain)
                         for ni, ncomp_name in enumerate(cc_n.components):
@@ -413,9 +415,9 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
                             if nc.pins["drain"] == pcomp.pins["drain"]:
                                 # Place as inverter: P on top, N on bottom
                                 result.placements[cc_p.components[pi]] = Placement(
-                                    x=_snap(latch_x), y=_snap(PMOS_Y))
+                                    x=_snap(latch_x), y=_snap(latch_pmos_y))
                                 result.placements[ncomp_name] = Placement(
-                                    x=_snap(latch_x), y=_snap(NMOS_Y))
+                                    x=_snap(latch_x), y=_snap(latch_nmos_y))
                                 latch_placed.update([cc_p.components[pi], ncomp_name])
                                 latch_x += H_SPACING
                                 break
@@ -439,12 +441,13 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
             src_net = comp.pins.get("source", "")
             if src_net in latch_nets:
                 lx = latch_nets[src_net]
-                # Place outward from latch center (left side goes left, right goes right)
+                # Place outward from latch center at the latch NMOS level
+                latch_nmos_level = PMOS_Y + 180
                 direction = -1 if lx < latch_center_x else 1
                 for offset in [direction * 160, direction * 200, direction * 260]:
                     ax = _snap(lx + offset)
-                    if not _is_occupied(result, ax, _snap(NMOS_Y), 120):
-                        result.placements[name] = Placement(x=ax, y=_snap(NMOS_Y))
+                    if not _is_occupied(result, ax, _snap(latch_nmos_level), 120):
+                        result.placements[name] = Placement(x=ax, y=_snap(latch_nmos_level))
                         access_placed.add(name)
                         context_placed.add(name)
                         break

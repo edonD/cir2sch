@@ -4,8 +4,8 @@ K {}
 V {}
 S {}
 E {}
-T {PWM Wordline Driver for CIM} 210 -500 0 0 0.5 0.5 {}
-T {Converts 4-bit input code to proportional pulse width on wordline} 210 -470 0 0 0.35 0.35 {}
+T {PWM Wordline Driver for CIM} 210 -545 0 0 0.5 0.5 {}
+T {Converts 4-bit input code to proportional pulse width on wordline} 210 -515 0 0 0.35 0.35 {}
 C {devices/vsource.sym} 260 -10 0 0 {name=Vdd
 value=1.8}
 C {devices/vsource.sym} 390 -10 0 0 {name=Vss

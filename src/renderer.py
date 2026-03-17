@@ -171,7 +171,11 @@ def render_xschem(placed: PlacedCircuit, wires: list[Wire], labels: list[Label],
     # Find top-left corner of the placement for title positioning
     all_y = [p.y for p in placed.placements.values()] if placed.placements else [-700]
     all_x = [p.x for p in placed.placements.values()] if placed.placements else [50]
-    title_y = min(all_y) - 100
+    # Count comments to determine title gap
+    filtered_comments = [c for c in placed.circuit.comments if not c.startswith('=')]
+    num_comments = min(len(filtered_comments), 3)
+    title_gap = 120 + num_comments * 25  # Enough room for title + comments
+    title_y = min(all_y) - title_gap
     title_x = min(all_x) - 50
 
     # Title annotation
@@ -180,7 +184,6 @@ def render_xschem(placed: PlacedCircuit, wires: list[Wire], labels: list[Label],
         lines.append(f'T {{{t}}} {title_x} {title_y} 0 0 0.5 0.5 {{}}')
 
     # Section comment annotations — limit to 3 most important, skip "===" lines
-    filtered_comments = [c for c in placed.circuit.comments if not c.startswith('=')]
     for i, comment in enumerate(filtered_comments[:3]):
         lines.append(f'T {{{comment}}} {title_x} {title_y + 30 + i * 25} 0 0 0.35 0.35 {{}}')
 

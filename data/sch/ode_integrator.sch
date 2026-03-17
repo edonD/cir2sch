@@ -4,8 +4,8 @@ K {}
 V {}
 S {}
 E {}
-T {SKY130 Gm-C Integrator with Transmission Gate Reset} -350 -500 0 0 0.5 0.5 {}
-T {.subckt integrator inp inn outp outn reset vbias_n vcm vdd vss} -350 -470 0 0 0.35 0.35 {}
+T {SKY130 Gm-C Integrator with Transmission Gate Reset} -350 -545 0 0 0.5 0.5 {}
+T {.subckt integrator inp inn outp outn reset vbias_n vcm vdd vss} -350 -515 0 0 0.35 0.35 {}
 C {devices/nmos4.sym} 230 -220 0 0 {name=XMinv_n
 w=4u
 l=0.15u

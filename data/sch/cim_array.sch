@@ -4,10 +4,10 @@ K {}
 V {}
 S {}
 E {}
-T {CIM Array -- 64x64 Compute-in-Memory Array} 150 -280 0 0 0.5 0.5 {}
-T {8T SRAM: 6T storage + 2T decoupled read port} 150 -250 0 0 0.35 0.35 {}
-T {Ports: bl blb wl wwl q qb vdd vss} 150 -225 0 0 0.35 0.35 {}
-T {Ports: bl pre vdd vss} 150 -200 0 0 0.35 0.35 {}
+T {CIM Array -- 64x64 Compute-in-Memory Array} 150 -375 0 0 0.5 0.5 {}
+T {8T SRAM: 6T storage + 2T decoupled read port} 150 -345 0 0 0.35 0.35 {}
+T {Ports: bl blb wl wwl q qb vdd vss} 150 -320 0 0 0.35 0.35 {}
+T {Ports: bl pre vdd vss} 150 -295 0 0 0.35 0.35 {}
 C {devices/vsource.sym} 200 1220 0 0 {name=Vdd
 value=1.8}
 C {devices/vsource.sym} 320 1220 0 0 {name=Vss
