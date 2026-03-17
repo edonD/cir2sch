@@ -234,30 +234,49 @@ def render_xschem(placed: PlacedCircuit, wires: list[Wire], labels: list[Label],
         top_y = min(all_y) - 40
         bot_y = max(all_y) + 40
 
-        # Classify pins as input/output/supply based on naming
-        for i, pin_name in enumerate(placed.circuit.interface_pins):
+        # Classify pins and position at the y-level of their connections
+        input_pins = []
+        output_pins = []
+        other_pins = []
+
+        for pin_name in placed.circuit.interface_pins:
             low = pin_name.lower()
             if low in ('vdd', 'vcc', 'avdd', 'vss', 'gnd', '0'):
-                continue  # Skip supply pins — already shown as VDD/GND symbols
+                continue
 
-            # Determine pin type and position
+            # Find y-position of connections for this pin
+            pin_y = None
+            if pin_name in placed.circuit.nets:
+                for cn, pn in placed.circuit.nets[pin_name].connections:
+                    if cn in placed.placements:
+                        pin_y = placed.placements[cn].y
+                        break
+
             if any(kw in low for kw in ['in', 'clk', 'reset', 'bias', 'vcm']):
-                # Input: place on the left
-                sym = "devices/ipin.sym"
-                px = left_x
-                py = top_y + i * 40
+                input_pins.append((pin_name, "devices/ipin.sym", pin_y))
             elif any(kw in low for kw in ['out']):
-                # Output: place on the right
-                sym = "devices/opin.sym"
-                px = right_x
-                py = top_y + i * 40
+                output_pins.append((pin_name, "devices/opin.sym", pin_y))
             else:
-                # Bidirectional
-                sym = "devices/iopin.sym"
-                px = left_x
-                py = top_y + i * 40
+                other_pins.append((pin_name, "devices/iopin.sym", pin_y))
 
-            lines.append(f'C {{{sym}}} {px} {py} 0 0 {{name=p_{pin_name} lab={pin_name}}}')
+        # Place input pins on left, spaced to avoid overlap
+        used_y = set()
+        for pin_name, sym, pin_y in input_pins + other_pins:
+            py = pin_y if pin_y is not None else top_y
+            # Avoid overlap with already-placed pins
+            while py in used_y or any(abs(py - uy) < 35 for uy in used_y):
+                py += 40
+            used_y.add(py)
+            lines.append(f'C {{{sym}}} {left_x} {py} 0 0 {{name=p_{pin_name} lab={pin_name}}}')
+
+        # Place output pins on right
+        used_y_out = set()
+        for pin_name, sym, pin_y in output_pins:
+            py = pin_y if pin_y is not None else top_y
+            while py in used_y_out or any(abs(py - uy) < 35 for uy in used_y_out):
+                py += 40
+            used_y_out.add(py)
+            lines.append(f'C {{{sym}}} {right_x} {py} 0 0 {{name=p_{pin_name} lab={pin_name}}}')
 
     return "\n".join(lines) + "\n"
 

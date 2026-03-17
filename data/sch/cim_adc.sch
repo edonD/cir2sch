@@ -114,8 +114,8 @@ C {devices/lab_pin.sym} 220 -430 0 0 {name=l_outp sig_type=std_logic lab=outp}
 C {devices/lab_pin.sym} 770 -400 0 0 {name=l_clk sig_type=std_logic lab=clk}
 C {devices/lab_pin.sym} 1010 -400 0 0 {name=l_clk sig_type=std_logic lab=clk}
 C {devices/lab_pin.sym} 1270 -400 0 0 {name=l_clk sig_type=std_logic lab=clk}
-C {devices/ipin.sym} 80 -440 0 0 {name=p_inp lab=inp}
-C {devices/ipin.sym} 80 -400 0 0 {name=p_inm lab=inm}
-C {devices/opin.sym} 1410 -360 0 0 {name=p_outp lab=outp}
-C {devices/opin.sym} 1410 -320 0 0 {name=p_outn lab=outn}
-C {devices/ipin.sym} 80 -280 0 0 {name=p_clk lab=clk}
+C {devices/ipin.sym} 80 -150 0 0 {name=p_inp lab=inp}
+C {devices/ipin.sym} 80 -110 0 0 {name=p_inm lab=inm}
+C {devices/ipin.sym} 80 30 0 0 {name=p_clk lab=clk}
+C {devices/opin.sym} 1410 -400 0 0 {name=p_outp lab=outp}
+C {devices/opin.sym} 1410 -360 0 0 {name=p_outn lab=outn}

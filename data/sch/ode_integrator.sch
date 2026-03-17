@@ -84,10 +84,10 @@ C {devices/vdd.sym} 1240 -400 0 0 {name=l_vdd lab=VDD}
 C {devices/lab_pin.sym} 810 -280 0 0 {name=l_vcm sig_type=std_logic lab=vcm}
 C {devices/lab_pin.sym} 950 -340 0 0 {name=l_inp sig_type=std_logic lab=inp}
 C {devices/lab_pin.sym} 1290 -340 0 0 {name=l_inn sig_type=std_logic lab=inn}
-C {devices/ipin.sym} 100 -440 0 0 {name=p_inp lab=inp}
-C {devices/ipin.sym} 100 -400 0 0 {name=p_inn lab=inn}
-C {devices/opin.sym} 1450 -360 0 0 {name=p_outp lab=outp}
-C {devices/opin.sym} 1450 -320 0 0 {name=p_outn lab=outn}
-C {devices/ipin.sym} 100 -280 0 0 {name=p_reset lab=reset}
-C {devices/ipin.sym} 100 -240 0 0 {name=p_vbias_n lab=vbias_n}
-C {devices/ipin.sym} 100 -200 0 0 {name=p_vcm lab=vcm}
+C {devices/ipin.sym} 100 -310 0 0 {name=p_inp lab=inp}
+C {devices/ipin.sym} 100 -270 0 0 {name=p_inn lab=inn}
+C {devices/ipin.sym} 100 -220 0 0 {name=p_reset lab=reset}
+C {devices/ipin.sym} 100 -440 0 0 {name=p_vbias_n lab=vbias_n}
+C {devices/ipin.sym} 100 -150 0 0 {name=p_vcm lab=vcm}
+C {devices/opin.sym} 1450 -310 0 0 {name=p_outp lab=outp}
+C {devices/opin.sym} 1450 -270 0 0 {name=p_outn lab=outn}
