@@ -1,1 +1,1 @@
-{"name":"cim_bitcell","clarity":5,"wire_cleanliness":5,"hierarchy":5,"spacing":5,"presentation_ready":4,"average":4.8,"notes":"Cross-coupled PMOS top, NMOS middle. Access transistors near storage nodes. Read port below. Sources compact. 0 crossings. SRAM structure recognizable."}
+{"name":"cim_bitcell","clarity":5,"wire_cleanliness":5,"hierarchy":5,"spacing":5,"presentation_ready":4,"average":4.8}
