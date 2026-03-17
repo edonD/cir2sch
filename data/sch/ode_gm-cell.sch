@@ -39,19 +39,17 @@ C {devices/res.sym} 560 -290 0 0 {name=Rcmfb
 value=1k}
 C {devices/capa.sym} 440 -340 0 0 {name=Ccmfb
 value=10p}
+N 130 -180 130 -430 {lab=outn}
 N 130 -120 130 -90 {lab=s1}
 N 130 -90 300 -90 {lab=s1}
+N 310 -180 310 -430 {lab=outp}
+N 310 -430 280 -430 {lab=outp}
 N 310 -120 310 -110 {lab=s2}
 N 310 -110 420 -110 {lab=s2}
 N 300 -30 300 0 {lab=ntail}
 N 300 0 240 0 {lab=ntail}
 N 300 -30 300 -50 {lab=ntail}
 N 300 -50 420 -50 {lab=ntail}
-N 90 -400 320 -400 {lab=pcm}
-N 320 -400 320 -370 {lab=pcm}
-N 320 -370 440 -370 {lab=pcm}
-N 440 -370 440 -260 {lab=pcm}
-N 440 -260 560 -260 {lab=pcm}
 C {devices/lab_pin.sym} 90 -150 0 0 {name=l_inp sig_type=std_logic lab=inp}
 C {devices/gnd.sym} 130 -150 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 310 -150 0 0 {name=l_vss lab=VSS}
@@ -59,17 +57,16 @@ C {devices/gnd.sym} 240 60 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 240 30 0 0 {name=l_vss lab=VSS}
 C {devices/lab_pin.sym} 350 -150 0 0 {name=l_inn sig_type=std_logic lab=inn}
 C {devices/lab_pin.sym} 200 30 0 0 {name=l_vbias_n sig_type=std_logic lab=vbias_n}
+C {devices/lab_pin.sym} 90 -400 0 0 {name=l_pcm sig_type=std_logic lab=pcm}
+C {devices/lab_pin.sym} 320 -400 0 0 {name=l_pcm sig_type=std_logic lab=pcm}
+C {devices/lab_pin.sym} 560 -260 0 0 {name=l_pcm sig_type=std_logic lab=pcm}
+C {devices/lab_pin.sym} 440 -370 0 0 {name=l_pcm sig_type=std_logic lab=pcm}
 C {devices/vdd.sym} 130 -370 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 130 -400 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 280 -370 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 280 -400 0 0 {name=l_vdd lab=VDD}
 C {devices/lab_pin.sym} 560 -320 0 0 {name=l_pcm_int sig_type=std_logic lab=pcm_int}
 C {devices/gnd.sym} 440 -310 0 0 {name=l_0 lab=GND}
-C {devices/lab_pin.sym} 130 -180 0 0 {name=l_outn sig_type=std_logic lab=outn}
-C {devices/lab_pin.sym} 130 -430 0 0 {name=l_outn sig_type=std_logic lab=outn}
-C {devices/lab_pin.sym} 310 -180 0 0 {name=l_outp sig_type=std_logic lab=outp}
-C {devices/lab_pin.sym} 310 -430 0 0 {name=l_outp sig_type=std_logic lab=outp}
-C {devices/lab_pin.sym} 280 -430 0 0 {name=l_outp sig_type=std_logic lab=outp}
 C {devices/ipin.sym} -10 -150 0 0 {name=p_inp lab=inp}
 C {devices/ipin.sym} -10 -110 0 0 {name=p_inn lab=inn}
 C {devices/ipin.sym} -10 30 0 0 {name=p_vbias_n lab=vbias_n}
