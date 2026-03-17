@@ -624,8 +624,9 @@ def _place_array_circuit(circuit: Circuit, array_info: dict) -> PlacedCircuit:
     grid = array_info["grid"]
     rows, cols = array_info["rows"], array_info["cols"]
 
-    cell_h, cell_v = H_SPACING, V_SPACING
-    array_left, array_top = 500, -200
+    # Compact spacing for array cells
+    cell_h, cell_v = 180, 140
+    array_left, array_top = 200, 0
     array_comps = set(grid.values())
 
     for (r, c), name in grid.items():
@@ -649,30 +650,33 @@ def _place_array_circuit(circuit: Circuit, array_info: dict) -> PlacedCircuit:
         else:
             unplaced.append(name)
 
+    # Column periphery: place above array, close
     for col, names in col_per.items():
         for i, name in enumerate(names):
             result.placements[name] = Placement(
                 x=_snap(array_left + col * cell_h),
-                y=_snap(array_top - (i + 1) * V_SPACING)
+                y=_snap(array_top - (i + 1) * 120)
             )
 
+    # Row periphery: place to the right of array, close
     for row, names in row_per.items():
         for i, name in enumerate(names):
             result.placements[name] = Placement(
-                x=_snap(array_left - (i + 1) * H_SPACING),
+                x=_snap(array_left + cols * cell_h + 60 + i * 120),
                 y=_snap(array_top + row * cell_v)
             )
 
     # Unplaced: compact grid below array
-    ux, uy = array_left, array_top + rows * cell_v + V_SPACING
-    cols_limit = max(cols, 4)
+    ux = array_left
+    uy = array_top + rows * cell_v + 100
+    cols_limit = max(cols, 6)
     col_idx = 0
     for name in unplaced:
-        result.placements[name] = Placement(x=_snap(ux + col_idx * 160), y=_snap(uy))
+        result.placements[name] = Placement(x=_snap(ux + col_idx * 120), y=_snap(uy))
         col_idx += 1
         if col_idx >= cols_limit:
             col_idx = 0
-            uy += V_SPACING
+            uy += 120
 
     return result
 

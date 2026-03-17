@@ -141,6 +141,17 @@ def render_xschem(placed: PlacedCircuit, wires: list[Wire], labels: list[Label],
 
         lines.append(f'C {{{sym}}} {p.x} {p.y} {p.rotation} {p.flip} {{{attrs}}}')
 
+    # Component name annotations for subcircuit instances
+    # (makes array cells readable)
+    for comp_name, comp in placed.circuit.components.items():
+        if comp_name not in placed.placements:
+            continue
+        if comp.type == "subcircuit":
+            p = placed.placements[comp_name]
+            # Short label below the component
+            short_name = comp_name.replace("Xcell_", "").replace("Xpre", "pre")
+            lines.append(f'T {{{short_name}}} {p.x - 20} {p.y + 20} 0 0 0.25 0.25 {{}}')
+
     # Wires
     for w in wires:
         lab_attr = f"lab={w.net}" if w.net else ""
