@@ -197,7 +197,40 @@ def route_nets(placed: PlacedCircuit) -> tuple[list[Wire], list[Label]]:
                 for (x, y) in positions:
                     labels.append(Label(x=x, y=y, net=net_name))
 
+    # Post-process: check for crossings and convert worst offenders to labels
+    wires, labels = _eliminate_crossings(wires, labels)
+
     return wires, labels
+
+
+def _eliminate_crossings(wires: list[Wire], labels: list[Label]) -> tuple[list[Wire], list[Label]]:
+    """Remove wires that create crossings, replacing them with labels."""
+    # Find all crossing pairs
+    crossing_nets = set()
+    for i, w1 in enumerate(wires):
+        for w2 in wires[i+1:]:
+            if _segments_cross(w1.x1, w1.y1, w1.x2, w1.y2, w2.x1, w2.y1, w2.x2, w2.y2):
+                # Convert the net with fewer total wires to labels
+                count1 = sum(1 for w in wires if w.net == w1.net)
+                count2 = sum(1 for w in wires if w.net == w2.net)
+                if count1 <= count2:
+                    crossing_nets.add(w1.net)
+                else:
+                    crossing_nets.add(w2.net)
+
+    if not crossing_nets:
+        return wires, labels
+
+    # Move crossing net wires to labels
+    new_wires = []
+    for w in wires:
+        if w.net in crossing_nets:
+            labels.append(Label(x=w.x1, y=w.y1, net=w.net))
+            labels.append(Label(x=w.x2, y=w.y2, net=w.net))
+        else:
+            new_wires.append(w)
+
+    return new_wires, labels
 
 
 def _add_smart_l_route(wires: list[Wire], x1: int, y1: int, x2: int, y2: int, net: str):

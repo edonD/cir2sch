@@ -62,8 +62,6 @@ C {devices/vsource.sym} 310 340 0 0 {name=Vwl
 value=PWL(0}
 C {devices/vsource.sym} 450 340 0 0 {name=Vbl
 value={Vsupply}}
-N 320 -180 320 170 {lab=blw}
-N 320 170 450 170 {lab=blw}
 N 280 -150 540 -150 {lab=wwl}
 N 280 -150 280 310 {lab=wwl}
 N 280 310 170 310 {lab=wwl}
@@ -108,3 +106,6 @@ C {devices/lab_pin.sym} 150 -150 0 0 {name=l_qb sig_type=std_logic lab=qb}
 C {devices/lab_pin.sym} 410 -430 0 0 {name=l_qb sig_type=std_logic lab=qb}
 C {devices/lab_pin.sym} 410 -180 0 0 {name=l_qb sig_type=std_logic lab=qb}
 C {devices/lab_pin.sym} 580 -120 0 0 {name=l_qb sig_type=std_logic lab=qb}
+C {devices/lab_pin.sym} 320 -180 0 0 {name=l_blw sig_type=std_logic lab=blw}
+C {devices/lab_pin.sym} 320 170 0 0 {name=l_blw sig_type=std_logic lab=blw}
+C {devices/lab_pin.sym} 450 170 0 0 {name=l_blw sig_type=std_logic lab=blw}
