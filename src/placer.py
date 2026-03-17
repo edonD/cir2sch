@@ -1,11 +1,13 @@
 """
 Component placement engine for analog schematics.
 
-Uses a combination of:
-1. Building block detection (diff pair, current mirror, cascode, inverter)
-2. Hierarchical rule-based placement (VDD top, GND bottom, signal L→R)
-3. Connectivity-aware positioning (place connected components nearby)
-4. Array detection for regular structures (e.g., bitcell arrays)
+Strategy:
+1. Detect building blocks (diff pair, current mirror, cascode, inverter, cross-coupled)
+2. Group connected blocks into vertical stacks (PMOS top, NMOS bottom)
+3. Place remaining transistors in PMOS/NMOS bands
+4. Place passives near their connections
+5. Place sources compactly
+6. Array detection for regular structures
 """
 
 import math
@@ -14,48 +16,42 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from parser import Circuit, Component, Net
 
-# xschem coordinate grid — snap to multiples of 10
 GRID = 10
-# Spacing between components
-H_SPACING = 260   # horizontal spacing between components
-V_SPACING = 200   # vertical spacing between components
-BLOCK_GAP = 100   # extra gap between building blocks
+H_SPACING = 260
+V_SPACING = 200
+BLOCK_GAP = 80
 
-# Layout Y bands (negative Y is up in xschem)
-VDD_Y = -600
+# Y bands
+VDD_Y = -550
 PMOS_Y = -400
-MID_Y = -300
+MID_Y = -280
 NMOS_Y = -150
 GND_Y = 50
 
 
 @dataclass
 class Placement:
-    """Placement result for a single component."""
     x: float = 0
     y: float = 0
-    rotation: int = 0   # 0-3 (0°, 90°, 180°, 270°)
-    flip: int = 0        # 0 or 1 (horizontal mirror)
+    rotation: int = 0
+    flip: int = 0
 
 
 @dataclass
 class PlacedCircuit:
-    """Circuit with placement information."""
     circuit: Circuit
-    placements: dict = field(default_factory=dict)  # comp_name -> Placement
+    placements: dict = field(default_factory=dict)
 
 
 @dataclass
 class BuildingBlock:
-    """Detected analog building block."""
-    type: str           # diff_pair, current_mirror, cascode, inverter, cross_coupled, etc.
-    components: list    # Component names in this block
+    type: str
+    components: list
     center_x: float = 0
     center_y: float = 0
 
 
 def _snap(val: float) -> int:
-    """Snap a coordinate to the grid."""
     return round(val / GRID) * GRID
 
 
@@ -67,9 +63,9 @@ def detect_building_blocks(circuit: Circuit) -> list[BuildingBlock]:
 
     mosfets_n = {n: c for n, c in comps.items() if c.type == "mosfet_n"}
     mosfets_p = {n: c for n, c in comps.items() if c.type == "mosfet_p"}
-
-    # --- Detect cross-coupled pairs first (highest priority) ---
     all_fets = {**mosfets_n, **mosfets_p}
+
+    # Cross-coupled pairs (highest priority)
     for name1, m1 in list(all_fets.items()):
         for name2, m2 in list(all_fets.items()):
             if name1 >= name2 or name1 in used or name2 in used:
@@ -81,7 +77,7 @@ def detect_building_blocks(circuit: Circuit) -> list[BuildingBlock]:
                 blocks.append(BuildingBlock(type=cc_type, components=[name1, name2]))
                 used.update([name1, name2])
 
-    # --- Detect CMOS inverters ---
+    # CMOS inverters
     for nname, nm in list(mosfets_n.items()):
         for pname, pm in list(mosfets_p.items()):
             if nname in used or pname in used:
@@ -90,22 +86,19 @@ def detect_building_blocks(circuit: Circuit) -> list[BuildingBlock]:
                 blocks.append(BuildingBlock(type="inverter", components=[pname, nname]))
                 used.update([nname, pname])
 
-    # --- Detect differential pairs ---
+    # Differential pairs
     for fets, suffix in [(mosfets_n, "n"), (mosfets_p, "p")]:
         for name1, m1 in list(fets.items()):
             for name2, m2 in list(fets.items()):
                 if name1 >= name2 or name1 in used or name2 in used:
                     continue
                 if m1.pins["source"] == m2.pins["source"]:
-                    gate1, gate2 = m1.pins["gate"], m2.pins["gate"]
-                    if gate1 != gate2 and gate1 != m1.pins["drain"] and gate2 != m2.pins["drain"]:
-                        blocks.append(BuildingBlock(
-                            type=f"diff_pair_{suffix}",
-                            components=[name1, name2]
-                        ))
+                    g1, g2 = m1.pins["gate"], m2.pins["gate"]
+                    if g1 != g2 and g1 != m1.pins["drain"] and g2 != m2.pins["drain"]:
+                        blocks.append(BuildingBlock(type=f"diff_pair_{suffix}", components=[name1, name2]))
                         used.update([name1, name2])
 
-    # --- Detect current mirrors ---
+    # Current mirrors
     for name1, m1 in list(all_fets.items()):
         for name2, m2 in list(all_fets.items()):
             if name1 >= name2 or name1 in used or name2 in used:
@@ -116,18 +109,17 @@ def detect_building_blocks(circuit: Circuit) -> list[BuildingBlock]:
                 d1 = m1.pins["gate"] == m1.pins["drain"]
                 d2 = m2.pins["gate"] == m2.pins["drain"]
                 if d1 or d2:
-                    mirror_type = "current_mirror_n" if m1.type == "mosfet_n" else "current_mirror_p"
+                    mt = "current_mirror_n" if m1.type == "mosfet_n" else "current_mirror_p"
                     if d1:
-                        blocks.append(BuildingBlock(type=mirror_type, components=[name1, name2]))
+                        blocks.append(BuildingBlock(type=mt, components=[name1, name2]))
                     else:
-                        blocks.append(BuildingBlock(type=mirror_type, components=[name2, name1]))
+                        blocks.append(BuildingBlock(type=mt, components=[name2, name1]))
                     used.update([name1, name2])
 
     return blocks
 
 
 def _classify_net(circuit: Circuit, net_name: str) -> str:
-    """Classify a net as supply, ground, signal, or bias."""
     low = net_name.lower()
     if low in ('vdd', 'vcc', 'avdd'):
         return "supply"
@@ -138,43 +130,62 @@ def _classify_net(circuit: Circuit, net_name: str) -> str:
     return "signal"
 
 
-def _detect_array_pattern(circuit: Circuit) -> dict:
-    """Detect if components form a regular array pattern."""
-    array_pattern = re.compile(r'^(.*?)_?r(\d+)_?c(\d+)$', re.IGNORECASE)
-    prefix_counts = defaultdict(list)
+def _block_signal_nets(circuit: Circuit, block: BuildingBlock) -> set:
+    """Get signal nets connected to a building block."""
+    nets = set()
+    for comp_name in block.components:
+        comp = circuit.components[comp_name]
+        for pin, net in comp.pins.items():
+            if _classify_net(circuit, net) == "signal":
+                nets.add(net)
+    return nets
 
-    for name in circuit.components:
-        m = array_pattern.match(name)
-        if m:
-            prefix = m.group(1)
-            row, col = int(m.group(2)), int(m.group(3))
-            prefix_counts[prefix].append((row, col, name))
 
-    best_prefix = None
-    best_count = 0
-    for prefix, items in prefix_counts.items():
-        if len(items) > best_count:
-            best_count = len(items)
-            best_prefix = prefix
+def _group_connected_blocks(circuit: Circuit, blocks: list[BuildingBlock]) -> list[list[BuildingBlock]]:
+    """Group building blocks that share signal nets into stacks."""
+    if not blocks:
+        return []
 
-    if best_prefix and best_count >= 4:
-        items = prefix_counts[best_prefix]
-        rows = max(r for r, c, n in items) + 1
-        cols = max(c for r, c, n in items) + 1
-        grid = {}
-        for r, c, n in items:
-            grid[(r, c)] = n
-        return {"rows": rows, "cols": cols, "prefix": best_prefix, "grid": grid}
+    # Build adjacency
+    n = len(blocks)
+    block_nets = [_block_signal_nets(circuit, b) for b in blocks]
+    adj = defaultdict(set)
 
-    return {}
+    for i in range(n):
+        for j in range(i + 1, n):
+            if block_nets[i] & block_nets[j]:
+                adj[i].add(j)
+                adj[j].add(i)
+
+    # BFS to find connected components
+    visited = set()
+    groups = []
+    for i in range(n):
+        if i in visited:
+            continue
+        group = []
+        queue = [i]
+        visited.add(i)
+        while queue:
+            node = queue.pop(0)
+            group.append(blocks[node])
+            for neighbor in adj[node]:
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    queue.append(neighbor)
+        groups.append(group)
+
+    return groups
+
+
+def _is_p_type(block: BuildingBlock) -> bool:
+    """Check if a block is PMOS-based."""
+    return "_p" in block.type or block.type == "inverter"
 
 
 def _find_tail_source(circuit: Circuit, diff_pair_block: BuildingBlock) -> str | None:
-    """Find the tail current source transistor for a differential pair."""
-    c1_name = diff_pair_block.components[0]
-    c1 = circuit.components[c1_name]
+    c1 = circuit.components[diff_pair_block.components[0]]
     shared_source = c1.pins["source"]
-
     for name, comp in circuit.components.items():
         if name in diff_pair_block.components:
             continue
@@ -185,41 +196,55 @@ def _find_tail_source(circuit: Circuit, diff_pair_block: BuildingBlock) -> str |
 
 
 def _find_load_pair(circuit: Circuit, diff_pair_block: BuildingBlock) -> list[str]:
-    """Find PMOS load transistors connected to a NMOS diff pair's drains."""
-    c1_name, c2_name = diff_pair_block.components
-    c1, c2 = circuit.components[c1_name], circuit.components[c2_name]
-    drain1, drain2 = c1.pins["drain"], c2.pins["drain"]
-
+    c1, c2 = [circuit.components[n] for n in diff_pair_block.components]
+    drains = {c1.pins["drain"], c2.pins["drain"]}
     loads = []
     for name, comp in circuit.components.items():
         if name in diff_pair_block.components:
             continue
-        if comp.type == "mosfet_p":
-            if comp.pins["drain"] == drain1 or comp.pins["drain"] == drain2:
-                loads.append(name)
+        if comp.type == "mosfet_p" and comp.pins["drain"] in drains:
+            loads.append(name)
     return loads
+
+
+def _detect_array_pattern(circuit: Circuit) -> dict:
+    array_pattern = re.compile(r'^(.*?)_?r(\d+)_?c(\d+)$', re.IGNORECASE)
+    prefix_counts = defaultdict(list)
+    for name in circuit.components:
+        m = array_pattern.match(name)
+        if m:
+            prefix_counts[m.group(1)].append((int(m.group(2)), int(m.group(3)), name))
+
+    best_prefix = max(prefix_counts, key=lambda p: len(prefix_counts[p]), default=None)
+    if best_prefix and len(prefix_counts[best_prefix]) >= 4:
+        items = prefix_counts[best_prefix]
+        grid = {(r, c): n for r, c, n in items}
+        return {
+            "rows": max(r for r, c, n in items) + 1,
+            "cols": max(c for r, c, n in items) + 1,
+            "prefix": best_prefix,
+            "grid": grid
+        }
+    return {}
 
 
 def place_circuit(circuit: Circuit) -> PlacedCircuit:
     """Place all components in a circuit."""
     result = PlacedCircuit(circuit=circuit)
 
-    # Check for array pattern first
+    # Array circuits
     array_info = _detect_array_pattern(circuit)
     if array_info and len(array_info.get("grid", {})) > 8:
         return _place_array_circuit(circuit, array_info)
 
     blocks = detect_building_blocks(circuit)
-
-    # Track which components are in blocks
     block_comps = set()
     for b in blocks:
         block_comps.update(b.components)
 
-    # Track components that get placed as part of block context
     context_placed = set()
 
-    # Classify remaining components
+    # Classify free components
     sources = []
     pmos_free = []
     nmos_free = []
@@ -243,72 +268,51 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
         else:
             other.append(name)
 
-    # === Stage 1: Place building blocks with their context ===
+    # === Stage 1: Group connected blocks and place as vertical stacks ===
+    groups = _group_connected_blocks(circuit, blocks)
     cur_x = 300
 
-    for block in blocks:
-        if block.type.startswith("diff_pair"):
-            c1, c2 = block.components[0], block.components[1]
-            is_n = "n" in block.type
+    for group in groups:
+        # Sort: PMOS blocks at top, NMOS at bottom
+        p_blocks = [b for b in group if _is_p_type(b)]
+        n_blocks = [b for b in group if not _is_p_type(b)]
 
-            if is_n:
-                pair_y = NMOS_Y
-            else:
-                pair_y = PMOS_Y
+        # Determine width: max of p and n block counts * H_SPACING
+        max_width = max(len(p_blocks), len(n_blocks), 1)
+        group_center = cur_x + (max_width - 1) * H_SPACING // 2
 
-            # Place the pair symmetrically
-            half_w = H_SPACING // 2
-            result.placements[c1] = Placement(x=_snap(cur_x - half_w), y=_snap(pair_y))
-            result.placements[c2] = Placement(x=_snap(cur_x + half_w), y=_snap(pair_y), flip=1)
-            block.center_x = cur_x
-            block.center_y = pair_y
+        # Place PMOS blocks
+        px = cur_x
+        for block in p_blocks:
+            _place_block(result, block, px, PMOS_Y)
+            px += H_SPACING * 2 + BLOCK_GAP
 
-            # Place tail current source directly below
-            if is_n:
+        # Place NMOS blocks aligned under PMOS
+        nx = cur_x
+        for block in n_blocks:
+            _place_block(result, block, nx, NMOS_Y)
+
+            # Place tail source below NMOS diff pair
+            if block.type.startswith("diff_pair_n"):
                 tail = _find_tail_source(circuit, block)
                 if tail and tail not in result.placements:
-                    result.placements[tail] = Placement(x=_snap(cur_x), y=_snap(pair_y + V_SPACING))
+                    result.placements[tail] = Placement(x=_snap(nx), y=_snap(NMOS_Y + V_SPACING))
                     context_placed.add(tail)
 
-                # Place PMOS loads above the diff pair
+                # Place PMOS loads above diff pair (if not already placed as blocks)
                 loads = _find_load_pair(circuit, block)
+                half_w = H_SPACING // 2
                 for i, load_name in enumerate(loads):
-                    if load_name not in result.placements:
-                        lx = cur_x - half_w if i == 0 else cur_x + half_w
+                    if load_name not in result.placements and load_name not in block_comps:
+                        lx = nx - half_w if i == 0 else nx + half_w
                         result.placements[load_name] = Placement(x=_snap(lx), y=_snap(PMOS_Y))
                         context_placed.add(load_name)
 
-            cur_x += H_SPACING * 2 + BLOCK_GAP
+            nx += H_SPACING * 2 + BLOCK_GAP
 
-        elif block.type.startswith("current_mirror"):
-            c1, c2 = block.components[0], block.components[1]
-            y = NMOS_Y if "n" in block.type else PMOS_Y
-            half_w = H_SPACING // 2
-            result.placements[c1] = Placement(x=_snap(cur_x - half_w), y=_snap(y))
-            result.placements[c2] = Placement(x=_snap(cur_x + half_w), y=_snap(y))
-            block.center_x = cur_x
-            block.center_y = y
-            cur_x += H_SPACING * 2 + BLOCK_GAP
+        cur_x = max(px, nx)
 
-        elif block.type.startswith("cross_coupled"):
-            c1, c2 = block.components[0], block.components[1]
-            y = NMOS_Y if "n" in block.type else PMOS_Y
-            half_w = H_SPACING // 2
-            result.placements[c1] = Placement(x=_snap(cur_x - half_w), y=_snap(y))
-            result.placements[c2] = Placement(x=_snap(cur_x + half_w), y=_snap(y), flip=1)
-            block.center_x = cur_x
-            block.center_y = y
-            cur_x += H_SPACING * 2 + BLOCK_GAP
-
-        elif block.type == "inverter":
-            cp, cn = block.components[0], block.components[1]
-            result.placements[cp] = Placement(x=_snap(cur_x), y=_snap(PMOS_Y))
-            result.placements[cn] = Placement(x=_snap(cur_x), y=_snap(NMOS_Y))
-            block.center_x = cur_x
-            block.center_y = MID_Y
-            cur_x += H_SPACING + BLOCK_GAP
-
-    # === Stage 2: Place remaining PMOS near top, NMOS near bottom ===
+    # === Stage 2: Place remaining PMOS/NMOS ===
     px = cur_x
     for name in pmos_free:
         if name not in result.placements and name not in context_placed:
@@ -321,46 +325,50 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
             result.placements[name] = Placement(x=_snap(nx), y=_snap(NMOS_Y))
             nx += H_SPACING
 
-    # === Stage 3: Place passives near connected components ===
+    # === Stage 3: Place passives near connections ===
     for name in passives:
         if name in result.placements:
             continue
         pos = _find_centroid_of_neighbors(circuit, name, result)
         if pos:
             cx, cy = pos
-            # Place nearby but offset slightly to avoid overlap
-            candidate_x = _snap(cx + 120)
+            candidate_x = _snap(cx + 130)
             candidate_y = _snap(cy)
-            # Check if this would overlap
-            if _is_occupied(result, candidate_x, candidate_y, 100):
+            if _is_occupied(result, candidate_x, candidate_y, 120):
                 candidate_x = _snap(cx + H_SPACING)
+            if _is_occupied(result, candidate_x, candidate_y, 120):
+                candidate_y = _snap(cy + V_SPACING // 2)
             result.placements[name] = Placement(x=candidate_x, y=candidate_y)
         else:
             max_x = max((p.x for p in result.placements.values()), default=cur_x)
             result.placements[name] = Placement(x=_snap(max_x + H_SPACING), y=_snap(MID_Y))
 
-    # === Stage 4: Place sources ===
-    # Group voltage sources: place test/bias sources to the left
-    src_x = 50
-    src_y = MID_Y
-    for name in sources:
-        if name not in result.placements:
-            result.placements[name] = Placement(x=_snap(src_x), y=_snap(src_y))
-            src_y += V_SPACING
+    # === Stage 4: Place sources compactly ===
+    # Use a grid layout for sources instead of a column
+    if sources:
+        src_cols = min(3, len(sources))
+        src_x_start = 50
+        src_y_start = PMOS_Y
+        for i, name in enumerate(sources):
+            if name not in result.placements:
+                row = i // src_cols
+                col = i % src_cols
+                result.placements[name] = Placement(
+                    x=_snap(src_x_start + col * 160),
+                    y=_snap(src_y_start + row * V_SPACING)
+                )
 
-    # === Stage 5: Place subcircuit instances in a grid ===
+    # === Stage 5: Place subcircuit instances ===
     if subcircuits:
         cols = max(1, int(math.sqrt(len(subcircuits))))
-        sub_x_start = max((p.x for p in result.placements.values()), default=300) + H_SPACING
+        sub_x = max((p.x for p in result.placements.values()), default=300) + H_SPACING
         for i, name in enumerate(subcircuits):
-            row = i // cols
-            col = i % cols
             result.placements[name] = Placement(
-                x=_snap(sub_x_start + col * H_SPACING),
-                y=_snap(-300 + row * V_SPACING)
+                x=_snap(sub_x + (i % cols) * H_SPACING),
+                y=_snap(-300 + (i // cols) * V_SPACING)
             )
 
-    # === Stage 6: Place remaining ===
+    # === Stage 6: Remaining ===
     max_x = max((p.x for p in result.placements.values()), default=cur_x)
     ox = max_x + H_SPACING
     oy = MID_Y
@@ -369,124 +377,39 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
             result.placements[name] = Placement(x=_snap(ox), y=_snap(oy))
             oy += V_SPACING
 
-    # === Stage 7: Resolve any overlaps ===
+    # === Stage 7: Resolve overlaps ===
     _resolve_overlaps(result)
 
     return result
 
 
+def _place_block(result: PlacedCircuit, block: BuildingBlock, center_x: float, y: float):
+    """Place a building block centered at (center_x, y)."""
+    half_w = H_SPACING // 2
+
+    if block.type == "inverter":
+        cp, cn = block.components[0], block.components[1]
+        result.placements[cp] = Placement(x=_snap(center_x), y=_snap(PMOS_Y))
+        result.placements[cn] = Placement(x=_snap(center_x), y=_snap(NMOS_Y))
+        block.center_x = center_x
+        block.center_y = MID_Y
+    else:
+        c1, c2 = block.components[0], block.components[1]
+        flip_second = block.type.startswith("diff_pair") or block.type.startswith("cross_coupled")
+        result.placements[c1] = Placement(x=_snap(center_x - half_w), y=_snap(y))
+        result.placements[c2] = Placement(x=_snap(center_x + half_w), y=_snap(y), flip=int(flip_second))
+        block.center_x = center_x
+        block.center_y = y
+
+
 def _is_occupied(placed: PlacedCircuit, x: int, y: int, min_dist: int) -> bool:
-    """Check if a position is too close to existing placements."""
     for p in placed.placements.values():
-        dx = abs(p.x - x)
-        dy = abs(p.y - y)
-        if dx < min_dist and dy < min_dist:
+        if abs(p.x - x) < min_dist and abs(p.y - y) < min_dist:
             return True
     return False
 
 
-def _place_array_circuit(circuit: Circuit, array_info: dict) -> PlacedCircuit:
-    """Place a circuit with a regular array structure."""
-    result = PlacedCircuit(circuit=circuit)
-    grid = array_info["grid"]
-    rows = array_info["rows"]
-    cols = array_info["cols"]
-
-    cell_h = H_SPACING
-    cell_v = V_SPACING
-
-    array_left = 500
-    array_top = -200
-    array_comps = set(grid.values())
-
-    for (r, c), name in grid.items():
-        result.placements[name] = Placement(
-            x=_snap(array_left + c * cell_h),
-            y=_snap(array_top + r * cell_v)
-        )
-
-    # Place periphery
-    periphery = [n for n in circuit.components if n not in array_comps]
-    col_periphery = defaultdict(list)
-    row_periphery = defaultdict(list)
-    unplaced = []
-
-    for name in periphery:
-        placed_col = _find_array_column(name, circuit, grid, cols)
-        placed_row = _find_array_row(name, circuit, grid, rows)
-        if placed_col is not None:
-            col_periphery[placed_col].append(name)
-        elif placed_row is not None:
-            row_periphery[placed_row].append(name)
-        else:
-            unplaced.append(name)
-
-    for col, names in col_periphery.items():
-        for i, name in enumerate(names):
-            result.placements[name] = Placement(
-                x=_snap(array_left + col * cell_h),
-                y=_snap(array_top - (i + 1) * V_SPACING)
-            )
-
-    for row, names in row_periphery.items():
-        for i, name in enumerate(names):
-            result.placements[name] = Placement(
-                x=_snap(array_left - (i + 1) * H_SPACING),
-                y=_snap(array_top + row * cell_v)
-            )
-
-    ux = array_left
-    uy = array_top + rows * cell_v + V_SPACING
-    for name in unplaced:
-        result.placements[name] = Placement(x=_snap(ux), y=_snap(uy))
-        ux += H_SPACING
-        if ux > array_left + cols * cell_h:
-            ux = array_left
-            uy += V_SPACING
-
-    return result
-
-
-def _find_array_column(comp_name: str, circuit: Circuit, grid: dict, cols: int) -> int | None:
-    """Check if a component connects to a specific array column's nets."""
-    comp = circuit.components[comp_name]
-    comp_nets = set(comp.pins.values())
-
-    col_connections = defaultdict(int)
-    for (r, c), arr_name in grid.items():
-        arr_comp = circuit.components[arr_name]
-        arr_nets = set(arr_comp.pins.values())
-        shared = comp_nets & arr_nets
-        shared = {n for n in shared if _classify_net(circuit, n) == "signal"}
-        if shared:
-            col_connections[c] += len(shared)
-
-    if col_connections:
-        return max(col_connections, key=col_connections.get)
-    return None
-
-
-def _find_array_row(comp_name: str, circuit: Circuit, grid: dict, rows: int) -> int | None:
-    """Check if a component connects to a specific array row's nets."""
-    comp = circuit.components[comp_name]
-    comp_nets = set(comp.pins.values())
-
-    row_connections = defaultdict(int)
-    for (r, c), arr_name in grid.items():
-        arr_comp = circuit.components[arr_name]
-        arr_nets = set(arr_comp.pins.values())
-        shared = comp_nets & arr_nets
-        shared = {n for n in shared if _classify_net(circuit, n) == "signal"}
-        if shared:
-            row_connections[r] += len(shared)
-
-    if row_connections:
-        return max(row_connections, key=row_connections.get)
-    return None
-
-
 def _find_centroid_of_neighbors(circuit: Circuit, comp_name: str, placed: PlacedCircuit) -> tuple | None:
-    """Find the centroid of already-placed components connected to comp_name."""
     comp = circuit.components[comp_name]
     positions = []
     for pin_name, net_name in comp.pins.items():
@@ -498,37 +421,116 @@ def _find_centroid_of_neighbors(circuit: Circuit, comp_name: str, placed: Placed
                     p = placed.placements[cn]
                     positions.append((p.x, p.y))
     if positions:
-        cx = sum(x for x, y in positions) / len(positions)
-        cy = sum(y for x, y in positions) / len(positions)
-        return (cx, cy)
+        return (sum(x for x, y in positions) / len(positions),
+                sum(y for x, y in positions) / len(positions))
     return None
 
 
 def _resolve_overlaps(placed: PlacedCircuit):
-    """Push overlapping components apart."""
     names = list(placed.placements.keys())
-    min_dist_x = 160
-    min_dist_y = 100
+    min_dx = 150
+    min_dy = 90
 
-    for _ in range(30):
+    for _ in range(40):
         moved = False
         for i in range(len(names)):
             for j in range(i + 1, len(names)):
                 p1, p2 = placed.placements[names[i]], placed.placements[names[j]]
                 dx = abs(p2.x - p1.x)
                 dy = abs(p2.y - p1.y)
-                if dx < min_dist_x and dy < min_dist_y:
-                    # Push apart horizontally
-                    push_x = (min_dist_x - dx) / 2 + 10
+                if dx < min_dx and dy < min_dy:
+                    push = (min_dx - dx) / 2 + 10
                     if p2.x >= p1.x:
-                        p1.x = _snap(p1.x - push_x)
-                        p2.x = _snap(p2.x + push_x)
+                        p1.x = _snap(p1.x - push)
+                        p2.x = _snap(p2.x + push)
                     else:
-                        p1.x = _snap(p1.x + push_x)
-                        p2.x = _snap(p2.x - push_x)
+                        p1.x = _snap(p1.x + push)
+                        p2.x = _snap(p2.x - push)
                     moved = True
         if not moved:
             break
+
+
+def _place_array_circuit(circuit: Circuit, array_info: dict) -> PlacedCircuit:
+    result = PlacedCircuit(circuit=circuit)
+    grid = array_info["grid"]
+    rows, cols = array_info["rows"], array_info["cols"]
+
+    cell_h, cell_v = H_SPACING, V_SPACING
+    array_left, array_top = 500, -200
+    array_comps = set(grid.values())
+
+    for (r, c), name in grid.items():
+        result.placements[name] = Placement(
+            x=_snap(array_left + c * cell_h),
+            y=_snap(array_top + r * cell_v)
+        )
+
+    periphery = [n for n in circuit.components if n not in array_comps]
+    col_per = defaultdict(list)
+    row_per = defaultdict(list)
+    unplaced = []
+
+    for name in periphery:
+        pc = _find_array_column(name, circuit, grid, cols)
+        pr = _find_array_row(name, circuit, grid, rows)
+        if pc is not None:
+            col_per[pc].append(name)
+        elif pr is not None:
+            row_per[pr].append(name)
+        else:
+            unplaced.append(name)
+
+    for col, names in col_per.items():
+        for i, name in enumerate(names):
+            result.placements[name] = Placement(
+                x=_snap(array_left + col * cell_h),
+                y=_snap(array_top - (i + 1) * V_SPACING)
+            )
+
+    for row, names in row_per.items():
+        for i, name in enumerate(names):
+            result.placements[name] = Placement(
+                x=_snap(array_left - (i + 1) * H_SPACING),
+                y=_snap(array_top + row * cell_v)
+            )
+
+    # Unplaced: compact grid below array
+    ux, uy = array_left, array_top + rows * cell_v + V_SPACING
+    cols_limit = max(cols, 4)
+    col_idx = 0
+    for name in unplaced:
+        result.placements[name] = Placement(x=_snap(ux + col_idx * 160), y=_snap(uy))
+        col_idx += 1
+        if col_idx >= cols_limit:
+            col_idx = 0
+            uy += V_SPACING
+
+    return result
+
+
+def _find_array_column(comp_name, circuit, grid, cols):
+    comp = circuit.components[comp_name]
+    comp_nets = set(comp.pins.values())
+    col_conn = defaultdict(int)
+    for (r, c), arr_name in grid.items():
+        shared = comp_nets & set(circuit.components[arr_name].pins.values())
+        shared = {n for n in shared if _classify_net(circuit, n) == "signal"}
+        if shared:
+            col_conn[c] += len(shared)
+    return max(col_conn, key=col_conn.get) if col_conn else None
+
+
+def _find_array_row(comp_name, circuit, grid, rows):
+    comp = circuit.components[comp_name]
+    comp_nets = set(comp.pins.values())
+    row_conn = defaultdict(int)
+    for (r, c), arr_name in grid.items():
+        shared = comp_nets & set(circuit.components[arr_name].pins.values())
+        shared = {n for n in shared if _classify_net(circuit, n) == "signal"}
+        if shared:
+            row_conn[r] += len(shared)
+    return max(row_conn, key=row_conn.get) if row_conn else None
 
 
 if __name__ == "__main__":
