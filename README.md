@@ -8,13 +8,13 @@ Converts `.cir` SPICE netlists into xschem `.sch` schematics with intelligent pl
 |---------|---------|-------|-----------|---------|-------------|-----|-----------|
 | ode_gm-cell | 8 | 8 | 8 | 7 | 7 | **7.6** | 0 |
 | cim_pwm-driver | 7 | 7 | 7 | 6 | 6 | **6.6** | 0 |
+| cim_bitcell | 6 | 7 | 6 | 6 | 5 | **6.0** | 0 |
 | cim_adc | 6 | 7 | 6 | 5 | 5 | **5.8** | 0 |
 | ode_multiplier | 6 | 7 | 6 | 5 | 5 | **5.8** | 0 |
-| cim_bitcell | 6 | 6 | 6 | 6 | 5 | **5.8** | 1 |
-| ode_integrator | 6 | 6 | 6 | 5 | 5 | **5.6** | 1 |
+| ode_integrator | 6 | 7 | 6 | 5 | 5 | **5.8** | 0 |
 | cim_array | 6 | 5 | 6 | 5 | 4 | **5.2** | 0 |
 
-**Total wire crossings: 2** (down from 28 baseline)
+**Total wire crossings: 0** (down from 28 baseline)
 
 ## Renders
 
