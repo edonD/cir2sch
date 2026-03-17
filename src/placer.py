@@ -713,7 +713,16 @@ def _place_array_circuit(circuit: Circuit, array_info: dict) -> PlacedCircuit:
     for name in periphery:
         pc = _find_array_column(name, circuit, grid, cols)
         pr = _find_array_row(name, circuit, grid, rows)
-        if pc is not None:
+        pc_unique = _count_unique_cols(name, circuit, grid)
+        pr_unique = _count_unique_rows(name, circuit, grid)
+
+        # If connects to many columns but few rows → row periphery (e.g., wordline)
+        # If connects to many rows but few columns → column periphery (e.g., bitline cap)
+        if pr is not None and pc_unique > 2 and pr_unique <= 2:
+            row_per[pr].append(name)
+        elif pc is not None and pr_unique > 2 and pc_unique <= 2:
+            col_per[pc].append(name)
+        elif pc is not None:
             col_per[pc].append(name)
         elif pr is not None:
             row_per[pr].append(name)
@@ -749,6 +758,32 @@ def _place_array_circuit(circuit: Circuit, array_info: dict) -> PlacedCircuit:
             uy += 120
 
     return result
+
+
+def _count_unique_cols(comp_name, circuit, grid):
+    """Count how many unique columns a component connects to."""
+    comp = circuit.components[comp_name]
+    comp_nets = set(comp.pins.values())
+    cols_seen = set()
+    for (r, c), arr_name in grid.items():
+        shared = comp_nets & set(circuit.components[arr_name].pins.values())
+        shared = {n for n in shared if _classify_net(circuit, n) == "signal"}
+        if shared:
+            cols_seen.add(c)
+    return len(cols_seen)
+
+
+def _count_unique_rows(comp_name, circuit, grid):
+    """Count how many unique rows a component connects to."""
+    comp = circuit.components[comp_name]
+    comp_nets = set(comp.pins.values())
+    rows_seen = set()
+    for (r, c), arr_name in grid.items():
+        shared = comp_nets & set(circuit.components[arr_name].pins.values())
+        shared = {n for n in shared if _classify_net(circuit, n) == "signal"}
+        if shared:
+            rows_seen.add(r)
+    return len(rows_seen)
 
 
 def _find_array_column(comp_name, circuit, grid, cols):
