@@ -566,7 +566,7 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
             chain = _order_inverter_chain(circuit, inv_blocks)
             if chain:
                 # Place inverter chain with tight spacing
-                INV_SPACING = 280
+                INV_SPACING = 260
                 ix = cur_x
                 for block in chain:
                     _place_block(result, block, ix, PMOS_Y)
