@@ -1,0 +1,24 @@
+* NGSPICE file created from inverter.ext - technology: sky130A
+
+.lib /usr/local/share/pdk/sky130A/libs.tech/ngspice/sky130.lib.spice tt
+
+Vdd vdd gnd DC 1.8
+V1 in gnd pulse(0 1.8 0p 20p 20p 1n 2n)
+
+.subckt inverter vss vdd a y
+X0 y a vss vss sky130_fd_pr__nfet_01v8 ad=0.168 pd=1.64 as=0.168 ps=1.64 w=0.42 l=0.15
+**devattr s=1680,164 d=1680,164
+X1 y a vdd vdd sky130_fd_pr__pfet_01v8 ad=0.504 pd=3.32 as=0.504 ps=3.32 w=1.26 l=0.15
+**devattr s=5040,332 d=5040,332
+.ends
+
+Xnot1 gnd vdd in out inverter
+Xnot2 gnd vdd out out2 inverter
+
+
+.tran 10ps 5ns
+
+.control
+run
+plot in out out2
+.endc

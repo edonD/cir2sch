@@ -1,0 +1,52 @@
+* SKY130 Analog ODE Solver — Full Integration
+* Complete Lorenz attractor analog computer with bias generation,
+* output buffers, and startup sequencing.
+*
+* Top-level interface:
+*   .subckt ode_solver vxp_buf vxn_buf vyp_buf vyn_buf vzp_buf vzn_buf reset vdd vss
+
+.include ../lorenz-core/design.cir
+.include ../integrator/design.cir
+.include ../multiplier/design.cir
+
+.subckt ode_solver vxp_buf vxn_buf vyp_buf vyn_buf vzp_buf vzn_buf reset vdd vss
+
+* ============================================================
+* Bias Generation
+* ============================================================
+* VCM = VDD/2 — LOW IMPEDANCE behavioral source
+* Critical: the B-sources in lorenz-core inject/sink current from VCM,
+* so it must be a stiff node (not a resistive divider)
+Evcm vcm 0 VOL = {V(vdd) / 2}
+
+* NMOS bias for integrator reset switches
+* 0.6V — sufficient for switch overdrive across PVT
+Evbn vbias_n 0 VOL = {0.6}
+
+* PMOS bias — tracks VDD for PVT robustness
+Evbp vbias_p 0 VOL = {V(vdd) / 2}
+
+* ============================================================
+* Lorenz Core Instance
+* ============================================================
+XCore vxp vxn vyp vyn vzp vzn reset vbias_n vbias_p vcm vdd vss lorenz_core
+
+* ============================================================
+* Startup Perturbation
+* ============================================================
+* Differential current kick on x-channel after reset release
+* Pushes x off the unstable origin to initiate chaos
+* Duration: 20ns (reset releases at 500ns, kick ends at 520ns)
+Bkick vcm vxp I = 1u * (V(reset) < 0.5 ? (time < 520n ? 1 : 0) : 0)
+
+* ============================================================
+* Output Buffers (behavioral — isolate core from external loads)
+* ============================================================
+Ebuf_xp vxp_buf 0 vxp 0 1.0
+Ebuf_xn vxn_buf 0 vxn 0 1.0
+Ebuf_yp vyp_buf 0 vyp 0 1.0
+Ebuf_yn vyn_buf 0 vyn 0 1.0
+Ebuf_zp vzp_buf 0 vzp 0 1.0
+Ebuf_zn vzn_buf 0 vzn 0 1.0
+
+.ends ode_solver

@@ -1,0 +1,95 @@
+* SKY130 Two-Stage Miller OTA
+* PMOS input pair, NMOS active load, NMOS second stage
+
+.lib "sky130_models/sky130.lib.spice" tt
+
+* Supply
+Vdd vdd 0 1.8
+Vss vss 0 0
+
+* Input stimulus
+Vdiff diff 0 DC 0 AC 1
+Vcm cm 0 DC 0.9
+Einp inp 0 POLY(2) cm 0 diff 0 0 1 0.5
+Einm inm 0 POLY(2) cm 0 diff 0 0 1 -0.5
+
+* === FIRST STAGE: PMOS diff pair + NMOS current mirror load ===
+
+* Tail current source (PMOS)
+XM5 tail biasp vdd vdd sky130_fd_pr__pfet_01v8 W={W5}u L={L5}u nf=1
+
+* Differential pair (PMOS)
+XM1 n1 inp tail vdd sky130_fd_pr__pfet_01v8 W={W1}u L={L1}u nf=1
+XM2 n2 inm tail vdd sky130_fd_pr__pfet_01v8 W={W1}u L={L1}u nf=1
+
+* Active load (NMOS current mirror)
+XM3 n1 n1 vss vss sky130_fd_pr__nfet_01v8 W={W3}u L={L3}u nf=1
+XM4 n2 n1 vss vss sky130_fd_pr__nfet_01v8 W={W3}u L={L3}u nf=1
+
+* === SECOND STAGE: NMOS common-source + PMOS load ===
+
+XM6 out n2 vss vss sky130_fd_pr__nfet_01v8 W={W6}u L={L6}u nf=1
+XM7 out biasp vdd vdd sky130_fd_pr__pfet_01v8 W={W7}u L={L7}u nf=1
+
+* === Miller compensation (series Rc for RHP zero cancellation) ===
+Cc out n2rc {Cc}p
+Rc n2rc n2 {Rc}
+
+* === Bias generation ===
+* Current sink: VDD -> XMbp -> biasp -> Ibias -> VSS
+Ibias biasp vss {Ibias}
+XMbp biasp biasp vdd vdd sky130_fd_pr__pfet_01v8 W={Wbias}u L={Lbias}u nf=1
+
+* === Load ===
+CL out 0 5p
+
+* === Measurements ===
+.control
+* Operating point
+op
+
+* Power measurement (scalar from OP)
+let pwr = abs(v(vdd) * i(Vdd)) * 1e6
+echo "RESULT_POWER_UW" $&pwr
+
+* AC analysis — differential mode
+ac dec 50 1 100Meg
+wrdata ac_data v(out)
+
+* DC gain
+meas ac dc_gain_db find vdb(out) at=10
+echo "RESULT_DC_GAIN_DB" $&dc_gain_db
+
+* GBW (0dB crossing)
+meas ac gbw_hz when vdb(out)=0
+echo "RESULT_GBW_HZ" $&gbw_hz
+
+* Phase margin from vp() (backup — Python uses wrdata for proper unwrapped PM)
+meas ac phase_at_gbw find vp(out) when vdb(out)=0
+let pm_approx = 180 + phase_at_gbw
+echo "RESULT_PHASE_MARGIN_DEG" $&pm_approx
+
+* === CMRR: measure common-mode gain ===
+* Switch to common-mode AC excitation
+alter Vdiff ac = 0
+alter Vcm ac = 1
+ac dec 50 1 100Meg
+meas ac cm_gain_db find vdb(out) at=10
+let cmrr = dc_gain_db - cm_gain_db
+echo "RESULT_CMRR_DB" $&cmrr
+
+* Restore differential excitation
+alter Vdiff ac = 1
+alter Vcm ac = 0
+
+* === Output swing: DC sweep ===
+dc Vdiff -0.5 0.5 0.001
+meas dc vout_max max v(out)
+meas dc vout_min min v(out)
+let swing = vout_max - vout_min
+echo "RESULT_OUTPUT_SWING_V" $&swing
+
+echo "RESULT_DONE"
+.endc
+
+.end

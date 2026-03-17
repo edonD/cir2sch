@@ -1,0 +1,87 @@
+* Two-Stage Miller OTA — Parametric Design
+* All parametric values are optimized by DE. Do not set values manually.
+
+* ===== Supply =====
+Vdd vdd 0 DC 5
+Vss 0 vss DC 0
+
+* ===== Input stimulus (for AC analysis) =====
+Vicm inp 0 DC 2.5 AC 0.5
+Vim  inm 0 DC 2.5 AC -0.5
+
+* ===== First stage: differential pair + active load =====
+* NMOS differential pair
+M1 d1 inp tail 0 NMOS W={W1}u L={L1}u
+M2 d2 inm tail 0 NMOS W={W1}u L={L1}u
+
+* PMOS active load (current mirror)
+M3 d1 d1 vdd vdd PMOS W={W3}u L={L3}u
+M4 d2 d1 vdd vdd PMOS W={W3}u L={L3}u
+
+* Tail current source
+M5 tail nbias 0 0 NMOS W={W5}u L={L5}u
+
+* ===== Second stage: common-source amplifier =====
+M6 out d2 vdd vdd PMOS W={W6}u L={L6}u
+M7 out nbias 0 0 NMOS W={W7}u L={L7}u
+
+* ===== Miller compensation =====
+Cc d2 comp {Cc}
+Rc comp out {Rc}
+
+* ===== Bias generation =====
+Ibias vdd nbias {Ibias}
+Mbias nbias nbias 0 0 NMOS W={Wbias}u L={Lbias}u
+
+* ===== Load =====
+CL out 0 10p
+RL out 0 100k
+
+* ===== Models (Level 1 CMOS) =====
+.model NMOS NMOS (LEVEL=1 VTO=0.7 KP=110u GAMMA=0.4 LAMBDA=0.04 PHI=0.65 TOX=9e-9)
+.model PMOS PMOS (LEVEL=1 VTO=-0.7 KP=50u GAMMA=0.57 LAMBDA=0.05 PHI=0.65 TOX=9e-9)
+
+* ===== Analysis =====
+.control
+* Operating point
+op
+
+* Check bias: all transistors should be in saturation
+let vgs1 = v(inp) - v(tail)
+let vds1 = v(d1) - v(tail)
+let vgs5 = v(nbias)
+let vds5 = v(tail)
+let vgs6 = v(d2) - v(vdd)
+let vds6 = v(out) - v(vdd)
+
+echo "RESULT_VGS1" $&vgs1
+echo "RESULT_VDS1" $&vds1
+echo "RESULT_VGS5" $&vgs5
+echo "RESULT_VDS5" $&vds5
+echo "RESULT_VGS6" $&vgs6
+echo "RESULT_VDS6" $&vds6
+
+* AC analysis
+ac dec 100 1 10G
+
+* Differential gain = V(out) with differential input
+meas ac dc_gain_db find vdb(out) at=100
+meas ac gbw_hz when vdb(out)=0 fall=1
+
+* Phase margin: phase at GBW frequency
+meas ac phase_at_gbw find vp(out) at=gbw_hz
+
+* Output swing via DC sweep
+dc Vicm 0.5 4.5 0.01
+meas dc vout_min min v(out)
+meas dc vout_max max v(out)
+
+* Power
+let pwr = abs(i(Vdd)) * 5
+echo "RESULT_POWER" $&pwr
+
+echo "RESULT_DONE"
+quit
+.endc
+
+.end

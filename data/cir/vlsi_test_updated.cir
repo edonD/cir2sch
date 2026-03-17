@@ -1,0 +1,122 @@
+* SkyWater PDK
+
+.lib /usr/local/share/pdk/sky130A/libs.tech/ngspice/sky130.lib.spice tt
+
+Vdd vdd gnd DC 1.8
+V1 in1 gnd pulse(0 1.8 0p 10p 10p 1n 2n)
+V2 in2 gnd pulse(0 1.8 0p 0p 0p 1.25n 2.5n)
+V3 in3 gnd pulse(0 1.8 0p 0p 0p 1.5n 3n)
+*PULSE(VL VH TD TR TF PW PER PHASE)
+
+* NGSPICE file created from and3.ext - technology: sky130A
+
+.subckt and3 a b c y vdd vss
+X0 y inverter_0/a vss vss sky130_fd_pr__nfet_01v8 ad=0.168 pd=1.64 as=0.168 ps=1.64 w=0.42 l=0.15
+X1 y inverter_0/a vdd vdd sky130_fd_pr__pfet_01v8 ad=0.504 pd=3.32 as=0.504 ps=4.52 w=1.26 l=0.15
+X2 vdd b inverter_0/a vdd sky130_fd_pr__pfet_01v8 ad=0.168 pd=1.506667 as=0.168 ps=1.64 w=0.42 l=0.15
+X3 a_n999_25# a inverter_0/a vss sky130_fd_pr__nfet_01v8 ad=0.168 pd=1.64 as=0.168 ps=1.64 w=0.42 l=0.15
+X4 vdd a inverter_0/a vdd sky130_fd_pr__pfet_01v8 ad=0.168 pd=1.506667 as=0.168 ps=1.64 w=0.42 l=0.15
+X5 vdd b inverter_0/a vdd sky130_fd_pr__pfet_01v8 ad=0.168 pd=1.506667 as=0.168 ps=1.64 w=0.42 l=0.15
+X6 inverter_0/a b vdd vdd sky130_fd_pr__pfet_01v8 ad=0.168 pd=1.64 as=0.168 ps=1.506667 w=0.42 l=0.15
+X7 a_n866_25# a a_n999_25# vss sky130_fd_pr__nfet_01v8 ad=0.168 pd=1.64 as=0.168 ps=1.64 w=0.42 l=0.15
+X8 a_n999_25# b a_n600_25# vss sky130_fd_pr__nfet_01v8 ad=0.168 pd=1.64 as=0.168 ps=1.64 w=0.42 l=0.15
+X9 inverter_0/a c vdd vdd sky130_fd_pr__pfet_01v8 ad=0.168 pd=1.64 as=0.168 ps=1.506667 w=0.42 l=0.15
+X10 inverter_0/a c vdd vdd sky130_fd_pr__pfet_01v8 ad=0.168 pd=1.64 as=0.168 ps=1.506667 w=0.42 l=0.15
+X11 a_n600_25# b a_n733_25# vss sky130_fd_pr__nfet_01v8 ad=0.168 pd=1.64 as=0.168 ps=1.64 w=0.42 l=0.15
+X12 vss c a_n334_25# vss sky130_fd_pr__nfet_01v8 ad=0.168 pd=1.64 as=0.168 ps=1.64 w=0.42 l=0.15
+X13 inverter_0/a a vdd vdd sky130_fd_pr__pfet_01v8 ad=0.168 pd=1.64 as=0.168 ps=1.506667 w=0.42 l=0.15
+X14 vdd c inverter_0/a vdd sky130_fd_pr__pfet_01v8 ad=0.168 pd=1.506667 as=0.168 ps=1.64 w=0.42 l=0.15
+X15 a_n600_25# c vss vss sky130_fd_pr__nfet_01v8 ad=0.168 pd=1.64 as=0.168 ps=1.64 w=0.42 l=0.15
+X16 inverter_0/a a vdd vdd sky130_fd_pr__pfet_01v8 ad=0.168 pd=1.64 as=0.168 ps=1.506667 w=0.42 l=0.15
+X17 vss c a_n600_25# vss sky130_fd_pr__nfet_01v8 ad=0.168 pd=1.64 as=0.168 ps=1.64 w=0.42 l=0.15
+X18 a_n334_25# b a_n999_25# vss sky130_fd_pr__nfet_01v8 ad=0.168 pd=1.64 as=0.168 ps=1.64 w=0.42 l=0.15
+X19 a_n733_25# a a_n866_25# vss sky130_fd_pr__nfet_01v8 ad=0.168 pd=1.64 as=0.168 ps=1.64 w=0.42 l=0.15
+C0 y inverter_0/a 0.033725f
+C1 a_n999_25# a_n733_25# 0.085656f
+C2 a_n999_25# a 0.049584f
+C3 a_n733_25# a 0.003414f
+C4 a_n999_25# inverter_0/a 0.087636f
+C5 inverter_0/a a_n733_25# 0.039959f
+C6 inverter_0/a a 0.097888f
+C7 a_n334_25# c 0.007454f
+C8 b c 0.026556f
+C9 a_n334_25# b 0.01116f
+C10 a_n600_25# c 0.074303f
+C11 y vdd 0.146586f
+C12 a_n334_25# a_n600_25# 0.085022f
+C13 a_n999_25# a_n866_25# 0.113065f
+C14 a_n733_25# a_n866_25# 0.027838f
+C15 a_n600_25# b 0.074194f
+C16 a_n866_25# a 0.039048f
+C17 inverter_0/a a_n866_25# 0.049768f
+C18 a_n999_25# vdd 0.011314f
+C19 a_n733_25# vdd 0.003007f
+C20 vdd a 0.256924f
+C21 inverter_0/a vdd 1.565672f
+C22 y c 6.52e-19
+C23 a_n866_25# vdd 0.03959f
+C24 a_n999_25# c 1.15e-19
+C25 y a_n600_25# 9.32e-19
+C26 a_n999_25# a_n334_25# 0.02646f
+C27 a_n999_25# b 0.040516f
+C28 a_n733_25# b 0.00334f
+C29 b a 0.016929f
+C30 inverter_0/a c 0.087538f
+C31 inverter_0/a a_n334_25# 0.009416f
+C32 inverter_0/a b 0.077796f
+C33 a_n999_25# a_n600_25# 0.199483f
+C34 a_n600_25# a_n733_25# 0.027835f
+C35 a_n600_25# a 1.6e-19
+C36 inverter_0/a a_n600_25# 0.208894f
+C37 a_n866_25# c 2.23e-20
+C38 a_n866_25# b 3.19e-19
+C39 vdd c 0.264664f
+C40 a_n600_25# a_n866_25# 0.002615f
+C41 vdd b 0.25469f
+C42 a_n600_25# vdd 0.133176f
+C43 vdd vss 3.082862f
+C44 c vss 0.735632f
+C45 b vss 0.676959f
+C46 a vss 0.70516f
+C47 a_n334_25# vss 0.089937f
+C48 a_n600_25# vss 0.362112f
+C49 a_n733_25# vss 0.033854f
+C50 a_n866_25# vss 0.06308f
+C51 a_n999_25# vss 0.514174f
+C52 y vss 0.167236f
+C53 inverter_0/a vss 1.063686f
+.ends
+
+
+Xckt in1 in2 in3 out vdd gnd and3
+c3 out gnd 0.5fF
+
+.tran 10ps 10ns
+
+.control
+run
+
+* Measure rise time (time to rise from 20% to 80% of the final value)
+meas tran tr1 TRIG v(out) VAL=0.36 RISE=1
++ TARG v(out) VAL=1.44 RISE=1
+
+* Measure fall time (time to fall from 80% to 20% of the final value)
+meas tran tf1 TRIG v(out) VAL=1.44 FALL=1
++ TARG v(out) VAL=0.36 FALL=1
+
+* Measure propagation delay (tpLH: low-to-high)
+meas tran tpLH TRIG v(in1) VAL=0.9 FALL=1
++ TARG v(out) VAL=0.9 RISE=1
+
+* Measure propagation delay (tpHL: high-to-low)
+meas tran tpHL TRIG v(in1) VAL=0.9 RISE=1
++ TARG v(out) VAL=0.9 FALL=1
+
+let tp =(tpLH + tpHL)/2
+print tp
+
+plot out in1 in2 in3
+.endc
+
+
+

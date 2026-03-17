@@ -1,0 +1,152 @@
+* SkyWater PDK
+
+.lib /usr/local/share/pdk/sky130A/libs.tech/ngspice/sky130.lib.spice tt
+
+Vdd vdd gnd DC 1.8
+V1 in gnd pulse(0 1.8 0p 10p 10p .8n 1.6n)
+V2 clk gnd pulse(0 1.8 0p 0p 0p 1n 2n)
+V3 clkn gnd pulse(0 1.8 0p 0p 0p 1n 2n 180)
+*PULSE(VL VH TD TR TF PW PER PHASE)
+
+* NGSPICE file created from d_latch.ext - technology: sky130A
+
+.subckt inverter vss vdd a y
+X0 y a vdd vdd sky130_fd_pr__pfet_01v8 ad=0.504 pd=3.32 as=0.504 ps=3.32 w=1.26 l=0.15
+**devattr s=5040,332 d=5040,332
+X1 y a vss vss sky130_fd_pr__nfet_01v8 ad=0.168 pd=1.64 as=0.168 ps=1.64 w=0.42 l=0.15
+**devattr s=1680,164 d=1680,164
+C0 vdd y 0.146586f
+C1 vdd a 0.119273f
+C2 a y 0.031239f
+C3 y vss 0.168883f
+C4 a vss 0.333831f
+C5 vdd vss 0.633435f
+.ends
+
+.subckt transmission_gate_new y s1 s2 w_n58_76# SUB a_n40_0# a_n40_94#
+X0 y s2 a_n40_0# SUB sky130_fd_pr__nfet_01v8 ad=0.168 pd=1.64 as=0.168 ps=1.64 w=0.42 l=0.15
+**devattr s=1680,164 d=1680,164
+X1 y s1 a_n40_94# w_n58_76# sky130_fd_pr__pfet_01v8 ad=0.452 pd=3.06 as=0.452 ps=3.06 w=1.13 l=0.15
+**devattr s=4520,306 d=4520,306
+C0 w_n58_76# y 0.013985f
+C1 s2 a_n40_0# 0.003901f
+C2 y a_n40_0# 0.027898f
+C3 a_n40_94# s2 4.31e-19
+C4 y a_n40_94# 0.075292f
+C5 s1 s2 0.016352f
+C6 s1 y 0.015466f
+C7 w_n58_76# a_n40_0# 0.00115f
+C8 w_n58_76# a_n40_94# 0.005552f
+C9 y s2 0.01119f
+C10 a_n40_94# a_n40_0# 0.011957f
+C11 w_n58_76# s1 0.034609f
+C12 s1 a_n40_0# 1.17e-19
+C13 w_n58_76# s2 0.001504f
+C14 s1 a_n40_94# 0.010975f
+C15 s2 SUB 0.160526f
+C16 y SUB 0.175512f
+C17 s1 SUB 0.134949f
+C18 a_n40_0# SUB 0.032621f
+C19 a_n40_94# SUB 0.049611f
+C20 w_n58_76# SUB 0.234228f
+.ends
+
+.subckt d_latch D Y clk not_clk1 clk1 not_clk Vdd Vss
+Xinverter_0 Vss Vdd D inverter_0/y inverter
+Xinverter_1 Vss Vdd Y inverter_1/y inverter
+Xinverter_2 Vss Vdd inverter_2/a Y inverter
+Xtransmission_gate_new_0 inverter_2/a not_clk clk transmission_gate_new_0/w_n58_76#
++ Vss inverter_1/y inverter_1/y transmission_gate_new
+Xtransmission_gate_new_1 inverter_0/y clk1 not_clk1 transmission_gate_new_1/w_n58_76#
++ Vss inverter_2/a inverter_2/a transmission_gate_new
+C0 clk inverter_1/y 0.007754f
+C1 Y D 0.006629f
+C2 not_clk not_clk1 0.001632f
+C3 Y Vdd 0.082603f
+C4 not_clk clk 1.09e-20
+C5 not_clk1 D 0.009299f
+C6 Y clk1 0.013357f
+C7 clk D 6.62e-19
+C8 inverter_1/y inverter_0/y 0.290534f
+C9 not_clk1 Vdd 0.032613f
+C10 inverter_2/a inverter_1/y 0.048642f
+C11 clk Vdd 1.24e-19
+C12 clk1 not_clk1 0.255754f
+C13 not_clk inverter_0/y 0.00635f
+C14 transmission_gate_new_0/w_n58_76# Y 0.002509f
+C15 clk clk1 1.85e-19
+C16 inverter_0/y D 0.001441f
+C17 not_clk inverter_2/a 0.00131f
+C18 inverter_2/a D 7.01e-21
+C19 transmission_gate_new_0/w_n58_76# not_clk1 0.002567f
+C20 inverter_0/y Vdd 0.850915f
+C21 clk1 inverter_0/y 0.205627f
+C22 inverter_2/a Vdd 0.145792f
+C23 transmission_gate_new_1/w_n58_76# inverter_1/y 1.27e-19
+C24 clk1 inverter_2/a 0.034554f
+C25 transmission_gate_new_1/w_n58_76# not_clk 9.18e-19
+C26 transmission_gate_new_0/w_n58_76# inverter_0/y 0.005338f
+C27 transmission_gate_new_0/w_n58_76# inverter_2/a 0.003657f
+C28 Y not_clk1 0.17881f
+C29 clk Y 0.006343f
+C30 transmission_gate_new_1/w_n58_76# Vdd 0.010442f
+C31 transmission_gate_new_1/w_n58_76# clk1 0.003833f
+C32 clk not_clk1 0.538848f
+C33 Y inverter_0/y 0.118611f
+C34 Y inverter_2/a 0.531989f
+C35 inverter_0/y not_clk1 0.032496f
+C36 clk inverter_0/y 0.001706f
+C37 inverter_2/a not_clk1 0.044542f
+C38 clk inverter_2/a 2.58e-19
+C39 not_clk inverter_1/y 0.005836f
+C40 inverter_1/y D 1.09e-19
+C41 transmission_gate_new_1/w_n58_76# Y 0.00198f
+C42 inverter_2/a inverter_0/y 0.41069f
+C43 inverter_1/y Vdd 0.021193f
+C44 not_clk D 3.82e-19
+C45 clk1 inverter_1/y 0.026328f
+C46 transmission_gate_new_1/w_n58_76# not_clk1 0.001437f
+C47 not_clk Vdd 0.319205f
+C48 not_clk clk1 0.622056f
+C49 Vdd D 0.001984f
+C50 transmission_gate_new_0/w_n58_76# inverter_1/y 0.007037f
+C51 clk1 D 0.006652f
+C52 transmission_gate_new_1/w_n58_76# inverter_0/y 0.001561f
+C53 transmission_gate_new_0/w_n58_76# not_clk 6.28e-19
+C54 clk1 Vdd 0.372433f
+C55 transmission_gate_new_1/w_n58_76# inverter_2/a 0.015198f
+C56 transmission_gate_new_0/w_n58_76# D 3.39e-21
+C57 transmission_gate_new_0/w_n58_76# Vdd 0.008518f
+C58 Y inverter_1/y 0.246652f
+C59 transmission_gate_new_0/w_n58_76# clk1 0.00511f
+C60 not_clk Y 0.004602f
+C61 inverter_1/y not_clk1 0.035158f
+C62 not_clk1 Vss 0.735167f
+C63 inverter_0/y Vss 0.429457f
+C64 clk1 Vss 0.336237f
+C65 inverter_2/a Vss 0.73401f
+C66 transmission_gate_new_1/w_n58_76# Vss 0.234228f
+C67 clk Vss 0.807384f
+C68 not_clk Vss 0.428105f
+C69 inverter_1/y Vss 0.24072f
+C70 transmission_gate_new_0/w_n58_76# Vss 0.234228f
+C71 Y Vss 1.534533f
+C72 Vdd Vss 2.159732f
+C73 D Vss 0.331609f
+.ends
+
+
+
+Xckt in out clk clkn clk clkn vdd gnd d_latch
+*c3 out gnd 0.5fF
+
+.tran 10ps 10ns
+
+.control
+run
+
+plot in out clk 
+.endc
+
+
+

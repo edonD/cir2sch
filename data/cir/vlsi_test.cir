@@ -1,0 +1,29 @@
+* SkyWater PDK
+
+.lib /usr/local/share/pdk/sky130A/libs.tech/ngspice/sky130.lib.spice tt
+
+Vin in gnd pulse(0 1.8 0p 20p 20p 2n 4n)
+V1 s1 gnd DC 0
+V2 s2 gnd DC 1.8
+*V1 s1 gnd pulse(0 1.8 0p 20p 20p 1n 2n)
+*V2 s2 gnd pulse(0 1.8 1n 20p 20p 1n 2n)
+*PULSE(VL VH TD TR TF PW PER PHASE) 
+C1 out gnd 1f
+
+.subckt transmission_gate_new a y s1 s2
+X0 y s2 a a sky130_fd_pr__nfet_01v8 ad=0.168 pd=1.64 as=0.6972 ps=5 w=0.42 l=0.15
+**devattr s=1680,164 d=1680,164
+X1 y s1 a a sky130_fd_pr__pfet_01v8 ad=0.504 pd=3.32 as=0.6804 ps=5 w=1.26 l=0.15
+**devattr s=5040,332 d=5040,332
+.ends
+
+Xckt in out s1 s2 transmission_gate_new
+
+.tran 10ps 5ns
+
+.control
+run
+plot s1 s2
+plot in
+plot out
+.endc

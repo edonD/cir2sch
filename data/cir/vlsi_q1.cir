@@ -1,0 +1,29 @@
+* SkyWater PDK
+* simple inverter
+
+.lib /usr/local/share/pdk/sky130A/libs.tech/ngspice/sky130.lib.spice tt
+
+* voltage source
+Vdd vdd gnd DC 1.8
+V1 in gnd pulse(0 1.8 0p 20p 20p 1n 2n)
+
+Xnot1 in vdd gnd out not1
+.subckt not1 a vdd vss z
+xm01  z a  vdd vdd sky130_fd_pr__pfet_01v8 l=0.15 w=1.25 as=0.375 ad=0.375 ps=3.1 pd=3.1
+xm02  z a  vss vss sky130_fd_pr__nfet_01v8 l=0.15 w=0.4 as=0.12 ad=0.12 ps=1.4 pd=1.4
+.ends
+
+Xnot2 out vdd gnd out2 not2
+.subckt not2 a vdd vss z
+xm03  z a  vdd vdd sky130_fd_pr__pfet_01v8 l=0.15 w=1.25 as=0.375 ad=0.375 ps=3.1 pd=3.1
+xm04  z a  vss vss sky130_fd_pr__nfet_01v8 l=0.15 w=0.4 as=0.12 ad=0.12 ps=1.4 pd=1.4
+.ends
+
+
+*sim command
+.dc V1 0 1.8 0.02
+
+.control
+run
+plot in out out2
+.endc
