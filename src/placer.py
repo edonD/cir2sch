@@ -702,7 +702,13 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
         elif _has_placed_neighbors(circuit, name, "pin1", result) and _has_placed_neighbors(circuit, name, "pin2", result):
             inline_passives.append(name)
         elif circuit.interface_pins and (pin1_net in circuit.interface_pins or pin2_net in circuit.interface_pins):
-            input_passives.append(name)
+            # If the non-interface pin has placed neighbors, treat as inline
+            if pin1_net in circuit.interface_pins and _has_placed_neighbors(circuit, name, "pin2", result):
+                inline_passives.append(name)
+            elif pin2_net in circuit.interface_pins and _has_placed_neighbors(circuit, name, "pin1", result):
+                inline_passives.append(name)
+            else:
+                input_passives.append(name)
         else:
             other_passives.append(name)
 
