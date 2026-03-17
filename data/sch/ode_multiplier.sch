@@ -101,6 +101,9 @@ N 130 -250 190 -250 {lab=mid1}
 N 190 -250 370 -250 {lab=mid1}
 N 130 -120 130 -90 {lab=src_b1}
 N 130 -90 340 -90 {lab=src_b1}
+N 310 -180 310 -250 {lab=mid2}
+N 310 -250 580 -250 {lab=mid2}
+N 580 -250 760 -250 {lab=mid2}
 N 310 -120 340 -120 {lab=src_b2}
 N 340 -120 340 -10 {lab=src_b2}
 N 760 -310 760 -520 {lab=outn}
@@ -120,9 +123,6 @@ C {devices/gnd.sym} 190 -280 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 370 -280 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 580 -280 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 760 -280 0 0 {name=l_vss lab=VSS}
-C {devices/lab_pin.sym} 310 -180 0 0 {name=l_mid2 sig_type=std_logic lab=mid2}
-C {devices/lab_pin.sym} 580 -250 0 0 {name=l_mid2 sig_type=std_logic lab=mid2}
-C {devices/lab_pin.sym} 760 -250 0 0 {name=l_mid2 sig_type=std_logic lab=mid2}
 C {devices/lab_pin.sym} 190 -310 0 0 {name=l_outn sig_type=std_logic lab=outn}
 C {devices/vdd.sym} 580 -580 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 700 -580 0 0 {name=l_vdd lab=VDD}
