@@ -282,6 +282,47 @@ def _detect_array_pattern(circuit: Circuit) -> dict:
     return {}
 
 
+def _order_inverter_chain(circuit: Circuit, inv_blocks: list[BuildingBlock]) -> list[BuildingBlock]:
+    """Order inverter blocks by signal flow: output of one feeds input of next.
+    Returns ordered list, or empty list if not a chain."""
+    if len(inv_blocks) < 2:
+        return inv_blocks
+
+    # For each inverter, find its input net (gate) and output net (drain)
+    block_io = {}
+    for block in inv_blocks:
+        # Inverter: components[0]=PMOS, components[1]=NMOS
+        comp = circuit.components[block.components[1]]  # NMOS
+        gate_net = comp.pins["gate"]
+        drain_net = comp.pins["drain"]
+        block_io[id(block)] = (gate_net, drain_net)
+
+    # Build chain: find the first inverter (whose input doesn't come from another inverter's output)
+    all_outputs = {io[1] for io in block_io.values()}
+    starts = [b for b in inv_blocks if block_io[id(b)][0] not in all_outputs]
+
+    if len(starts) != 1:
+        # Not a clean chain, just return in original order
+        return inv_blocks
+
+    chain = [starts[0]]
+    remaining = set(id(b) for b in inv_blocks) - {id(starts[0])}
+
+    while remaining:
+        current_output = block_io[id(chain[-1])][1]
+        found = False
+        for block in inv_blocks:
+            if id(block) in remaining and block_io[id(block)][0] == current_output:
+                chain.append(block)
+                remaining.remove(id(block))
+                found = True
+                break
+        if not found:
+            break
+
+    return chain if len(chain) == len(inv_blocks) else inv_blocks
+
+
 def place_circuit(circuit: Circuit) -> PlacedCircuit:
     """Place all components in a circuit."""
     result = PlacedCircuit(circuit=circuit)
@@ -330,6 +371,30 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
         # Separate by type
         p_blocks = [b for b in group if _is_p_type(b)]
         n_blocks = [b for b in group if not _is_p_type(b)]
+
+        # Check if this group is an inverter chain
+        inv_blocks = [b for b in group if b.type == "inverter"]
+        if len(inv_blocks) >= 2:
+            # Order inverters by signal flow (output of one → input of next)
+            chain = _order_inverter_chain(circuit, inv_blocks)
+            if chain:
+                # Place inverter chain with tight spacing
+                INV_SPACING = 240
+                ix = cur_x
+                for block in chain:
+                    _place_block(result, block, ix, PMOS_Y)
+                    ix += INV_SPACING
+                cur_x = ix + BLOCK_GAP
+
+                # Place non-inverter blocks normally
+                for block in group:
+                    if block not in chain:
+                        if _is_p_type(block):
+                            _place_block(result, block, cur_x, PMOS_Y)
+                        else:
+                            _place_block(result, block, cur_x, NMOS_Y)
+                        cur_x += H_SPACING * 2 + BLOCK_GAP
+                continue
 
         # For NMOS-only groups with multiple blocks, detect stacking
         # (e.g., Gilbert cell: top quad sources connect to bottom pair drains)
@@ -459,12 +524,20 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
     for name in supply_passives:
         comp = circuit.components[name]
         pin1_type = _classify_net(circuit, comp.pins.get("pin1", ""))
+        pin2_type = _classify_net(circuit, comp.pins.get("pin2", ""))
         signal_pin = "pin2" if pin1_type in ("supply", "ground") else "pin1"
         pos = _find_pin_neighbor_pos(circuit, name, signal_pin, result)
         if pos:
             cx, cy = pos
-            px = _snap(cx + 100)
-            py = _snap(VDD_Y if pin1_type == "supply" or _classify_net(circuit, comp.pins.get("pin2", "")) == "supply" else GND_Y)
+            # Capacitors: place near signal connection, not at supply rail
+            if comp.type == "capacitor":
+                px = _snap(cx + 100)
+                py = _snap(cy + 60)
+                if _is_occupied(result, px, py, 100):
+                    px = _snap(cx + 150)
+            else:
+                px = _snap(cx + 100)
+                py = _snap(VDD_Y if pin1_type == "supply" or pin2_type == "supply" else GND_Y)
             if _is_occupied(result, px, py, 100):
                 px = _snap(cx + H_SPACING)
             result.placements[name] = Placement(x=px, y=py)
@@ -521,16 +594,17 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
         # Find the bottom and left of the circuit so far
         all_y = [p.y for p in result.placements.values()] if result.placements else [0]
         all_x = [p.x for p in result.placements.values()] if result.placements else [300]
-        src_y_start = max(all_y) + V_SPACING + 50
+        src_y_start = max(all_y) + 150
         src_x_start = min(all_x)
-        src_cols = min(4, len(sources))
+        # Use enough columns to fit in 2 rows max
+        src_cols = max(4, (len(sources) + 1) // 2)
         for i, name in enumerate(sources):
             if name not in result.placements:
                 row = i // src_cols
                 col = i % src_cols
                 result.placements[name] = Placement(
-                    x=_snap(src_x_start + col * 140),
-                    y=_snap(src_y_start + row * 140)
+                    x=_snap(src_x_start + col * 130),
+                    y=_snap(src_y_start + row * 130)
                 )
 
     # === Stage 5: Place subcircuit instances ===
@@ -564,10 +638,13 @@ def _place_block(result: PlacedCircuit, block: BuildingBlock, center_x: float, y
 
     if block.type == "inverter":
         cp, cn = block.components[0], block.components[1]
-        result.placements[cp] = Placement(x=_snap(center_x), y=_snap(PMOS_Y))
-        result.placements[cn] = Placement(x=_snap(center_x), y=_snap(NMOS_Y))
+        # Tighter vertical spacing for inverters
+        inv_pmos_y = y
+        inv_nmos_y = y + 180
+        result.placements[cp] = Placement(x=_snap(center_x), y=_snap(inv_pmos_y))
+        result.placements[cn] = Placement(x=_snap(center_x), y=_snap(inv_nmos_y))
         block.center_x = center_x
-        block.center_y = MID_Y
+        block.center_y = (inv_pmos_y + inv_nmos_y) / 2
     else:
         c1, c2 = block.components[0], block.components[1]
         flip_second = block.type.startswith("diff_pair") or block.type.startswith("cross_coupled")

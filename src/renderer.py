@@ -36,23 +36,12 @@ SYMBOL_MAP = {
 
 
 def _get_symbol(comp: Component) -> str:
-    """Get the xschem symbol path for a component."""
-    # Try exact model match first (SKY130)
-    model = comp.model
-    if model in SYMBOL_MAP:
-        return SYMBOL_MAP[model]
+    """Get the xschem symbol path for a component.
 
-    # Try partial match for SKY130 models
-    for key, sym in SYMBOL_MAP.items():
-        if isinstance(key, str) and key in model:
-            return sym
-
-    # Fall back to generic type+model match
-    key = (comp.type, comp.model)
-    if key in SYMBOL_MAP:
-        return SYMBOL_MAP[key]
-
-    # Last resort: generic by type
+    Uses clean generic symbols (nmos4/pmos4) for presentation-ready schematics.
+    The model info is preserved in attributes for simulation accuracy.
+    """
+    # Use generic symbols for clean presentation
     type_defaults = {
         "mosfet_n": "devices/nmos4.sym",
         "mosfet_p": "devices/pmos4.sym",
@@ -64,27 +53,45 @@ def _get_symbol(comp: Component) -> str:
         "bjt_npn": "devices/npn.sym",
         "diode": "devices/diode.sym",
     }
-    return type_defaults.get(comp.type, "devices/noconn.sym")
+    if comp.type in type_defaults:
+        return type_defaults[comp.type]
+
+    # For subcircuits, try SKY130 symbol paths
+    model = comp.model
+    if model in SYMBOL_MAP:
+        return SYMBOL_MAP[model]
+    for key, sym in SYMBOL_MAP.items():
+        if isinstance(key, str) and key in model:
+            return sym
+
+    return "devices/noconn.sym"
 
 
 def _format_attributes(comp: Component) -> str:
     """Format component attributes for xschem property string."""
     attrs = [f"name={comp.name}"]
 
-    # Add device parameters
-    for key, val in comp.params.items():
-        if key == "value" and val:
-            if comp.type in ("resistor", "capacitor"):
-                attrs.append(f"value={val}")
-            elif comp.type in ("voltage_source", "current_source"):
-                attrs.append(f"value={val}")
-        elif key in ("W", "L", "nf", "m", "mult", "model", "area"):
-            attrs.append(f"{key}={val}")
-
-    # SKY130 specific attributes
-    if comp.model.startswith("sky130"):
-        if "spiceprefix" not in comp.params:
+    if comp.type in ("mosfet_n", "mosfet_p"):
+        # Use lowercase w/l/m to match nmos4.sym/pmos4.sym template
+        w = comp.params.get("W", "5u")
+        l = comp.params.get("L", "0.18u")
+        m = comp.params.get("m", comp.params.get("mult", "1"))
+        nf = comp.params.get("nf", "1")
+        attrs.append(f"w={w}")
+        attrs.append(f"l={l}")
+        attrs.append(f"m={m}")
+        if nf != "1":
+            attrs.append(f"nf={nf}")
+        attrs.append(f"model={comp.model}")
+        if comp.model.startswith("sky130"):
             attrs.append("spiceprefix=X")
+    else:
+        # Other components: passives, sources, etc.
+        for key, val in comp.params.items():
+            if key == "value" and val:
+                attrs.append(f"value={val}")
+            elif key in ("W", "L", "nf", "m", "mult", "model", "area"):
+                attrs.append(f"{key}={val}")
 
     return "\n".join(attrs)
 

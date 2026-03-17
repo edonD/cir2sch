@@ -280,6 +280,101 @@ def _parse_block(lines: list[str], circuit: Circuit):
                         pass
 
 
+def _parse_dot_params(lines: list[str]) -> dict:
+    """Parse .param lines and return a dictionary of parameter values."""
+    params = {}
+    for line in lines:
+        stripped = line.strip()
+        if stripped.upper().startswith('.PARAM'):
+            # Remove .param prefix
+            rest = stripped[6:].strip()
+            # Parse key=value pairs
+            for match in re.finditer(r'(\w+)\s*=\s*([^\s]+)', rest):
+                key, val = match.group(1), match.group(2)
+                params[key] = val
+    return params
+
+
+def _resolve_param_expr(expr: str, params: dict) -> str:
+    """Resolve a parameter expression like {2*Wlogic} to a numeric string."""
+    if not expr:
+        return expr
+    # Strip braces
+    clean = expr.strip('{}')
+    if not clean:
+        return expr
+
+    # Build substitution environment
+    env = {}
+    for k, v in params.items():
+        try:
+            env[k] = _spice_value(v)
+        except (ValueError, TypeError):
+            pass
+
+    if not env:
+        return expr
+
+    try:
+        result = eval(clean, {"__builtins__": {}}, env)
+        return _format_eng(result)
+    except Exception:
+        return expr
+
+
+def _spice_value(s: str) -> float:
+    """Convert SPICE value string like '4u' to float."""
+    s = s.strip()
+    multipliers = {
+        'T': 1e12, 'G': 1e9, 'meg': 1e6, 'M': 1e6, 'k': 1e3,
+        'mil': 25.4e-6, 'm': 1e-3, 'u': 1e-6, 'n': 1e-9,
+        'p': 1e-12, 'f': 1e-15, 'a': 1e-18,
+    }
+    for suffix, mult in sorted(multipliers.items(), key=lambda x: -len(x[0])):
+        if s.endswith(suffix):
+            return float(s[:-len(suffix)]) * mult
+    return float(s)
+
+
+def _format_eng(val: float) -> str:
+    """Format a float in engineering notation for SPICE."""
+    abs_val = abs(val)
+    if abs_val == 0:
+        return "0"
+    import math
+    suffixes = [
+        (1e-15, 'f'), (1e-12, 'p'), (1e-9, 'n'), (1e-6, 'u'),
+        (1e-3, 'm'), (1, ''), (1e3, 'k'), (1e6, 'M'),
+    ]
+    # Find best suffix where scaled is in [0.1, 999]
+    best_suffix = ''
+    best_scaled = val
+    for threshold, suffix in suffixes:
+        scaled = abs_val / threshold
+        if 0.099 <= scaled <= 999.5:
+            best_suffix = suffix
+            best_scaled = val / threshold
+            # Prefer larger units (e.g., 1u over 1000n)
+            # Keep going to find a larger unit that still fits
+
+    rounded = round(best_scaled, 4)
+    if abs(rounded - round(rounded)) < 1e-6:
+        return f"{int(round(rounded))}{best_suffix}"
+    return f"{rounded:g}{best_suffix}"
+
+
+def _resolve_params(circuit: Circuit, params: dict):
+    """Resolve parameter expressions in component W/L values."""
+    if not params:
+        return
+    for comp in circuit.components.values():
+        for key in list(comp.params.keys()):
+            val = comp.params[key]
+            if isinstance(val, str) and '{' in val:
+                resolved = _resolve_param_expr(val, params)
+                comp.params[key] = resolved
+
+
 def parse_netlist(filepath: str) -> Circuit:
     """Parse a SPICE .cir file into a Circuit object.
 
@@ -369,9 +464,13 @@ def parse_netlist(filepath: str) -> Circuit:
         lines = subckt_blocks[name][1]
         subckt_blocks[name] = (pins, lines)
 
+    # Parse .param lines for parameter substitution
+    param_values = _parse_dot_params(merged)
+
     # Parse top-level
     top_circuit = Circuit(title=title)
     _parse_block(top_level_lines, top_circuit)
+    _resolve_params(top_circuit, param_values)
 
     # Count real (non-source) components at top level
     real_top_comps = sum(
@@ -405,6 +504,7 @@ def parse_netlist(filepath: str) -> Circuit:
         if pins:
             subckt_circuit.comments.append(f".subckt {best_name} {' '.join(pins)}")
         _parse_block(lines, subckt_circuit)
+        _resolve_params(subckt_circuit, param_values)
         return subckt_circuit
 
     # Fallback: return top-level even if sparse
