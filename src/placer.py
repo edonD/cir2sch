@@ -1062,9 +1062,11 @@ def _place_array_circuit(circuit: Circuit, array_info: dict) -> PlacedCircuit:
     grid = array_info["grid"]
     rows, cols = array_info["rows"], array_info["cols"]
 
-    # Compact spacing for array cells
-    cell_h, cell_v = 160, 120
-    array_left, array_top = 200, 0
+    # Wider spacing for array cells — subcircuit boxes need room for labels
+    cell_h, cell_v = 200, 150
+    # Leave space on left for row periphery (WL/WWL sources)
+    array_left = 500
+    array_top = 0
     array_comps = set(grid.values())
 
     for (r, c), name in grid.items():
@@ -1074,7 +1076,8 @@ def _place_array_circuit(circuit: Circuit, array_info: dict) -> PlacedCircuit:
         )
 
     periphery = [n for n in circuit.components if n not in array_comps]
-    col_per = defaultdict(list)
+    col_per_above = defaultdict(list)  # subcircuits above (precharge)
+    col_per_below = defaultdict(list)  # passives below (caps)
     row_per = defaultdict(list)
     unplaced = []
 
@@ -1083,47 +1086,59 @@ def _place_array_circuit(circuit: Circuit, array_info: dict) -> PlacedCircuit:
         pr = _find_array_row(name, circuit, grid, rows)
         pc_unique = _count_unique_cols(name, circuit, grid)
         pr_unique = _count_unique_rows(name, circuit, grid)
+        comp = circuit.components[name]
 
         # If connects to many columns but few rows → row periphery (e.g., wordline)
         # If connects to many rows but few columns → column periphery (e.g., bitline cap)
         if pr is not None and pc_unique > 2 and pr_unique <= 2:
             row_per[pr].append(name)
         elif pc is not None and pr_unique > 2 and pc_unique <= 2:
-            col_per[pc].append(name)
+            # Split column periphery: passives below, subcircuits above
+            if comp.type in ("capacitor", "resistor"):
+                col_per_below[pc].append(name)
+            else:
+                col_per_above[pc].append(name)
         elif pc is not None:
-            col_per[pc].append(name)
+            if comp.type in ("capacitor", "resistor"):
+                col_per_below[pc].append(name)
+            else:
+                col_per_above[pc].append(name)
         elif pr is not None:
             row_per[pr].append(name)
         else:
             unplaced.append(name)
 
-    # Column periphery: place above array, spread horizontally per column
-    for col, names in sorted(col_per.items()):
+    # Column periphery above: subcircuits (precharge) aligned with columns
+    for col, names in sorted(col_per_above.items()):
         for i, name in enumerate(names):
             result.placements[name] = Placement(
                 x=_snap(array_left + col * cell_h),
-                y=_snap(array_top - 80 - i * 100)
+                y=_snap(array_top - 100 - i * 100)
             )
 
-    # Row periphery: place to the right of array, compact
+    # Column periphery below: passives (capacitors) aligned with columns
+    array_bottom = array_top + (rows - 1) * cell_v
+    for col, names in sorted(col_per_below.items()):
+        for i, name in enumerate(names):
+            result.placements[name] = Placement(
+                x=_snap(array_left + col * cell_h),
+                y=_snap(array_bottom + 120 + i * 80)
+            )
+
+    # Row periphery: place to the LEFT of array (inputs flow left-to-right)
     for row, names in row_per.items():
         for i, name in enumerate(names):
             result.placements[name] = Placement(
-                x=_snap(array_left + cols * cell_h + 40 + i * 100),
+                x=_snap(array_left - 120 - i * 120),
                 y=_snap(array_top + row * cell_v)
             )
 
-    # Unplaced: compact grid below array
+    # Unplaced (supply sources etc): single row below everything
+    all_placed_y = [p.y for p in result.placements.values()] if result.placements else [0]
+    uy = max(all_placed_y) + 200
     ux = array_left
-    uy = array_top + rows * cell_v + 100
-    cols_limit = max(cols, 6)
-    col_idx = 0
-    for name in unplaced:
-        result.placements[name] = Placement(x=_snap(ux + col_idx * 120), y=_snap(uy))
-        col_idx += 1
-        if col_idx >= cols_limit:
-            col_idx = 0
-            uy += 120
+    for i, name in enumerate(unplaced):
+        result.placements[name] = Placement(x=_snap(ux + i * 140), y=_snap(uy))
 
     return result
 
