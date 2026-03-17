@@ -49,27 +49,26 @@ value={rload_val}}
 N 20 350 20 -10 {lab=yp_int}
 N 20 -10 20 -150 {lab=yp_int}
 N 20 -150 280 -150 {lab=yp_int}
-N 1500 -180 1500 -120 {lab=tail_node}
-N 1500 -120 1160 -120 {lab=tail_node}
+N 1520 -180 1520 -120 {lab=tail_node}
+N 1520 -120 1160 -120 {lab=tail_node}
 N 1160 -120 1030 -120 {lab=tail_node}
-N 300 -180 300 -370 {lab=mid1}
-N 300 -370 170 -370 {lab=mid1}
-N 170 -370 430 -370 {lab=mid1}
-N 300 -120 300 -180 {lab=src_b1}
-N 300 -180 1030 -180 {lab=src_b1}
-N 880 -180 880 -370 {lab=mid2}
-N 880 -370 770 -370 {lab=mid2}
-N 770 -370 1030 -370 {lab=mid2}
-N 880 -120 880 -180 {lab=src_b2}
-N 880 -180 1160 -180 {lab=src_b2}
-N 170 -430 170 -520 {lab=outn}
-N 170 -520 270 -520 {lab=outn}
-N 270 -520 270 -430 {lab=outn}
-N 270 -430 1030 -430 {lab=outn}
-N 430 -430 430 -520 {lab=outp}
-N 430 -520 530 -520 {lab=outp}
+N 320 -180 320 -370 {lab=mid1}
+N 320 -370 410 -370 {lab=mid1}
+N 410 -370 190 -370 {lab=mid1}
+N 320 -120 320 -180 {lab=src_b1}
+N 320 -180 1030 -180 {lab=src_b1}
+N 900 -180 900 -370 {lab=mid2}
+N 900 -370 790 -370 {lab=mid2}
+N 790 -370 1010 -370 {lab=mid2}
+N 900 -120 900 -180 {lab=src_b2}
+N 900 -180 1160 -180 {lab=src_b2}
+N 190 -430 190 -520 {lab=outn}
+N 190 -520 270 -520 {lab=outn}
+N 190 -430 1010 -430 {lab=outn}
+N 410 -430 410 -520 {lab=outp}
+N 410 -520 530 -520 {lab=outp}
 N 530 -520 530 -430 {lab=outp}
-N 530 -430 770 -430 {lab=outp}
+N 530 -430 790 -430 {lab=outp}
 C {devices/lab_pin.sym} 20 -310 0 0 {name=l_xp sig_type=std_logic lab=xp}
 C {devices/lab_pin.sym} 20 -250 0 0 {name=l_xp_int sig_type=std_logic lab=xp_int}
 C {devices/lab_pin.sym} 20 -210 0 0 {name=l_xp_int sig_type=std_logic lab=xp_int}
@@ -90,7 +89,7 @@ C {devices/lab_pin.sym} 20 450 0 0 {name=l_yn_int sig_type=std_logic lab=yn_int}
 C {devices/lab_pin.sym} 20 90 0 0 {name=l_yn_int sig_type=std_logic lab=yn_int}
 C {devices/lab_pin.sym} 860 -150 0 0 {name=l_yn_int sig_type=std_logic lab=yn_int}
 C {devices/lab_pin.sym} 1480 -150 0 0 {name=l_vbias_n sig_type=std_logic lab=vbias_n}
-C {devices/gnd.sym} 1500 -120 0 0 {name=l_vss lab=VSS}
+C {devices/gnd.sym} 1520 -120 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 1520 -150 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 320 -150 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 900 -150 0 0 {name=l_vss lab=VSS}

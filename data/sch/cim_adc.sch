@@ -63,47 +63,47 @@ W={Wcomp_latch}u
 L={Lcomp_latch}u
 nf=1
 spiceprefix=X}
-N 600 -180 600 -370 {lab=ntail}
-N 600 -370 770 -370 {lab=ntail}
-N 770 -370 1030 -370 {lab=ntail}
-N 770 -430 570 -430 {lab=d1}
-N 570 -430 570 -120 {lab=d1}
-N 570 -120 170 -120 {lab=d1}
+N 620 -180 620 -370 {lab=ntail}
+N 620 -370 790 -370 {lab=ntail}
+N 790 -370 1010 -370 {lab=ntail}
+N 790 -430 590 -430 {lab=d1}
+N 590 -430 590 -120 {lab=d1}
+N 590 -120 190 -120 {lab=d1}
 C {devices/lab_pin.sym} 580 -150 0 0 {name=l_clk sig_type=std_logic lab=clk}
 C {devices/lab_pin.sym} 550 -400 0 0 {name=l_clk sig_type=std_logic lab=clk}
 C {devices/lab_pin.sym} 660 -550 0 0 {name=l_clk sig_type=std_logic lab=clk}
 C {devices/lab_pin.sym} 390 -550 0 0 {name=l_clk sig_type=std_logic lab=clk}
 C {devices/lab_pin.sym} 130 -550 0 0 {name=l_clk sig_type=std_logic lab=clk}
-C {devices/gnd.sym} 600 -120 0 0 {name=l_vss lab=VSS}
+C {devices/gnd.sym} 620 -120 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 620 -150 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 790 -400 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 1010 -400 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 190 -150 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 410 -150 0 0 {name=l_vss lab=VSS}
 C {devices/lab_pin.sym} 750 -400 0 0 {name=l_inp sig_type=std_logic lab=inp}
-C {devices/lab_pin.sym} 1030 -430 0 0 {name=l_d2 sig_type=std_logic lab=d2}
-C {devices/lab_pin.sym} 680 -580 0 0 {name=l_d2 sig_type=std_logic lab=d2}
-C {devices/lab_pin.sym} 430 -120 0 0 {name=l_d2 sig_type=std_logic lab=d2}
+C {devices/lab_pin.sym} 1010 -430 0 0 {name=l_d2 sig_type=std_logic lab=d2}
+C {devices/lab_pin.sym} 700 -580 0 0 {name=l_d2 sig_type=std_logic lab=d2}
+C {devices/lab_pin.sym} 410 -120 0 0 {name=l_d2 sig_type=std_logic lab=d2}
 C {devices/lab_pin.sym} 1050 -400 0 0 {name=l_inm sig_type=std_logic lab=inm}
-C {devices/vdd.sym} 570 -370 0 0 {name=l_vdd lab=VDD}
+C {devices/vdd.sym} 590 -370 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 590 -400 0 0 {name=l_vdd lab=VDD}
-C {devices/vdd.sym} 680 -520 0 0 {name=l_vdd lab=VDD}
+C {devices/vdd.sym} 700 -520 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 700 -550 0 0 {name=l_vdd lab=VDD}
-C {devices/vdd.sym} 410 -520 0 0 {name=l_vdd lab=VDD}
+C {devices/vdd.sym} 430 -520 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 430 -550 0 0 {name=l_vdd lab=VDD}
-C {devices/vdd.sym} 150 -520 0 0 {name=l_vdd lab=VDD}
+C {devices/vdd.sym} 170 -520 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 170 -550 0 0 {name=l_vdd lab=VDD}
-C {devices/vdd.sym} 170 -370 0 0 {name=l_vdd lab=VDD}
+C {devices/vdd.sym} 190 -370 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 190 -400 0 0 {name=l_vdd lab=VDD}
-C {devices/vdd.sym} 430 -370 0 0 {name=l_vdd lab=VDD}
+C {devices/vdd.sym} 410 -370 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 410 -400 0 0 {name=l_vdd lab=VDD}
-C {devices/lab_pin.sym} 410 -580 0 0 {name=l_outn sig_type=std_logic lab=outn}
+C {devices/lab_pin.sym} 430 -580 0 0 {name=l_outn sig_type=std_logic lab=outn}
 C {devices/lab_pin.sym} 150 -400 0 0 {name=l_outn sig_type=std_logic lab=outn}
-C {devices/lab_pin.sym} 430 -430 0 0 {name=l_outn sig_type=std_logic lab=outn}
+C {devices/lab_pin.sym} 410 -430 0 0 {name=l_outn sig_type=std_logic lab=outn}
 C {devices/lab_pin.sym} 150 -150 0 0 {name=l_outn sig_type=std_logic lab=outn}
-C {devices/lab_pin.sym} 430 -180 0 0 {name=l_outn sig_type=std_logic lab=outn}
-C {devices/lab_pin.sym} 150 -580 0 0 {name=l_outp sig_type=std_logic lab=outp}
-C {devices/lab_pin.sym} 170 -430 0 0 {name=l_outp sig_type=std_logic lab=outp}
+C {devices/lab_pin.sym} 410 -180 0 0 {name=l_outn sig_type=std_logic lab=outn}
+C {devices/lab_pin.sym} 170 -580 0 0 {name=l_outp sig_type=std_logic lab=outp}
+C {devices/lab_pin.sym} 190 -430 0 0 {name=l_outp sig_type=std_logic lab=outp}
 C {devices/lab_pin.sym} 450 -400 0 0 {name=l_outp sig_type=std_logic lab=outp}
-C {devices/lab_pin.sym} 170 -180 0 0 {name=l_outp sig_type=std_logic lab=outp}
+C {devices/lab_pin.sym} 190 -180 0 0 {name=l_outp sig_type=std_logic lab=outp}
 C {devices/lab_pin.sym} 450 -150 0 0 {name=l_outp sig_type=std_logic lab=outp}

@@ -34,20 +34,20 @@ C {devices/res.sym} 460 -150 0 0 {name=Rcmfb
 value=1k}
 C {devices/capa.sym} 400 50 0 0 {name=Ccmfb
 value=10p}
-N 170 -180 170 -430 {lab=outn}
-N 170 -430 300 -430 {lab=outn}
-N 170 -120 170 -180 {lab=s1}
-N 170 -180 300 -180 {lab=s1}
-N 40 -180 40 -430 {lab=outp}
-N 40 -120 40 -180 {lab=s2}
-N 40 -180 600 -180 {lab=s2}
+N 190 -180 190 -430 {lab=outn}
+N 190 -430 320 -430 {lab=outn}
+N 190 -120 190 -180 {lab=s1}
+N 190 -180 300 -180 {lab=s1}
+N 60 -180 60 -430 {lab=outp}
+N 60 -120 60 -180 {lab=s2}
+N 60 -180 600 -180 {lab=s2}
 N 300 -120 600 -120 {lab=ntail}
 N 600 -120 600 -180 {lab=ntail}
-N 600 -180 740 -180 {lab=ntail}
+N 600 -180 760 -180 {lab=ntail}
 C {devices/lab_pin.sym} 150 -150 0 0 {name=l_inp sig_type=std_logic lab=inp}
 C {devices/gnd.sym} 190 -150 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 60 -150 0 0 {name=l_vss lab=VSS}
-C {devices/gnd.sym} 740 -120 0 0 {name=l_vss lab=VSS}
+C {devices/gnd.sym} 760 -120 0 0 {name=l_vss lab=VSS}
 C {devices/gnd.sym} 760 -150 0 0 {name=l_vss lab=VSS}
 C {devices/lab_pin.sym} 20 -150 0 0 {name=l_inn sig_type=std_logic lab=inn}
 C {devices/lab_pin.sym} 720 -150 0 0 {name=l_vbias_n sig_type=std_logic lab=vbias_n}
@@ -55,9 +55,9 @@ C {devices/lab_pin.sym} 280 -400 0 0 {name=l_pcm sig_type=std_logic lab=pcm}
 C {devices/lab_pin.sym} 20 -400 0 0 {name=l_pcm sig_type=std_logic lab=pcm}
 C {devices/lab_pin.sym} 460 -120 0 0 {name=l_pcm sig_type=std_logic lab=pcm}
 C {devices/lab_pin.sym} 400 20 0 0 {name=l_pcm sig_type=std_logic lab=pcm}
-C {devices/vdd.sym} 300 -370 0 0 {name=l_vdd lab=VDD}
+C {devices/vdd.sym} 320 -370 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 320 -400 0 0 {name=l_vdd lab=VDD}
-C {devices/vdd.sym} 40 -370 0 0 {name=l_vdd lab=VDD}
+C {devices/vdd.sym} 60 -370 0 0 {name=l_vdd lab=VDD}
 C {devices/vdd.sym} 60 -400 0 0 {name=l_vdd lab=VDD}
 C {devices/lab_pin.sym} 460 -180 0 0 {name=l_pcm_int sig_type=std_logic lab=pcm_int}
 C {devices/gnd.sym} 400 80 0 0 {name=l_0 lab=GND}

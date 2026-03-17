@@ -30,18 +30,19 @@ class Label:
     direction: int = 0
 
 
-# Pin offsets relative to component origin for xschem sky130 symbols
+# Pin offsets relative to component origin for xschem symbols
+# From nmos4.sym / pmos4.sym: drain at (20,-30), gate at (-20,0), source at (20,30), bulk at (20,0)
 MOSFET_PIN_OFFSETS = {
     "gate":   (-20, 0),
-    "drain":  (0, -30),
-    "source": (0, 30),
+    "drain":  (20, -30),
+    "source": (20, 30),
     "bulk":   (20, 0),
 }
 
 MOSFET_PIN_OFFSETS_FLIPPED = {
     "gate":   (20, 0),
-    "drain":  (0, -30),
-    "source": (0, 30),
+    "drain":  (-20, -30),
+    "source": (-20, 30),
     "bulk":   (-20, 0),
 }
 
