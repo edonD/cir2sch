@@ -377,18 +377,39 @@ def place_circuit(circuit: Circuit) -> PlacedCircuit:
 
         cur_x = max(px, tx, nx)
 
-    # === Stage 2: Place remaining PMOS/NMOS ===
-    px = cur_x
+    # === Stage 2: Place remaining PMOS/NMOS near their connections ===
     for name in pmos_free:
         if name not in result.placements and name not in context_placed:
-            result.placements[name] = Placement(x=_snap(px), y=_snap(PMOS_Y))
-            px += H_SPACING
+            pos = _find_centroid_of_neighbors(circuit, name, result)
+            if pos:
+                cx, cy = pos
+                px = _snap(cx)
+                py = _snap(PMOS_Y)
+                if _is_occupied(result, px, py, 120):
+                    px = _snap(cx + H_SPACING)
+                result.placements[name] = Placement(x=px, y=py)
+            else:
+                result.placements[name] = Placement(x=_snap(cur_x), y=_snap(PMOS_Y))
+                cur_x += H_SPACING
 
-    nx = cur_x
     for name in nmos_free:
         if name not in result.placements and name not in context_placed:
-            result.placements[name] = Placement(x=_snap(nx), y=_snap(NMOS_Y))
-            nx += H_SPACING
+            pos = _find_centroid_of_neighbors(circuit, name, result)
+            if pos:
+                cx, cy = pos
+                px = _snap(cx)
+                py = _snap(NMOS_Y)
+                # If the connected component is already at NMOS_Y, place below
+                if abs(cy - NMOS_Y) < 50:
+                    py = _snap(NMOS_Y + V_SPACING)
+                if _is_occupied(result, px, py, 120):
+                    px = _snap(cx + H_SPACING)
+                if _is_occupied(result, px, py, 120):
+                    py = _snap(py + V_SPACING // 2)
+                result.placements[name] = Placement(x=px, y=py)
+            else:
+                result.placements[name] = Placement(x=_snap(cur_x), y=_snap(NMOS_Y))
+                cur_x += H_SPACING
 
     # === Stage 3: Place passives smartly ===
     # Categorize passives:
